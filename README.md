@@ -1,21 +1,19 @@
-# GEVS Election 
+# EduLearn 
 Server - Spring Boot (Java)
 Client - React (Javascript)
 
-Welcome to the General Election Voting System (GEVS) designed for the upcoming election in the Valley of Shangri-La. Shangri-La, 
-a parliamentary democracy, relies on the outcomes of General Elections to form a new government. In this system, political 
-parties compete for an overall majority, and the party with the most Members of Parliament (MPs) assumes governance.
+An Educational Learning Platform for Computer Science Concepts aims to provide an engaging and competitive environment for users to enhance their understanding of computer science through interactive games and online code challenges. The platform encourages learning by enabling users to compete individually or against others in various types of questions, spanning both multiple-choice and algorithmic problem-solving styles.
 
 ## Features (Role based)
-Electoral Commission Officer
+Admin
 - **User Authentication**: Admins can log in and monitor election.
-- **View Results**: Admins can see election poll results grouped by constituencies as well as overall results via a Bar chart one the election ends.
-- **Manage Elections**: Admins can start, and stop elections. Only after starting an election would candidates be able to vote for candidates
+- **View Profile**: Admins can see election poll results grouped by constituencies as well as overall results via a Bar chart one the election ends.
+- **Manage Questions and Competitions**: Admins can start, and stop elections. Only after starting an election would candidates be able to vote for candidates
 
-- Voter
+- User
 - **User Authentication**: Register and log in securely to vote.
-- **UVC QR Code Scanning**: Users can scan a unique 8 digit QR code or manually enter their unique voter code.
-- **Voting**: Users can only vote for candidates within their constituencies and can not edit their votes after voting.
+- **Participate in Challenges**: Users can scan a unique 8 digit QR code or manually enter their unique voter code.
+- **Participate in Competitions**: Users can only vote for candidates within their constituencies and can not edit their votes after voting.
 - **ACL**: Only logged in voters can vote and view the voters dashboard. 
 Also, logged in voters can only see the option to vote for candidates within their constituency
 - 
@@ -54,12 +52,6 @@ password: shangrila2024$
 3. **Install/Download Dependencies and Start Application**: Please check the usage section for more details.
    N.B. The application uses Maven package manager, so ensure that it is installed before starting up the application.
 
-4. If there is any need to test different scenarios, log in to the database via any client (Workbench, Shell, PHPMyadmin) and run an update query on the election table to update the election status.
-   Election has 3 main statuses: NOT_STARTED, PENDING, and COMPLETED.
-
-## Demo
-a. Here is a link to the demo: <a href="https://www.loom.com/share/913982523bf8440cba7303038bed894c?sid=45eb670d-9569-41e0-a855-3e61d95cb05b">UOL Polls App Demo </a>
-
 ## Usage
 1. **Run the Application**: Execute the commands below
     a. Change directory to the `client/` folder by executing the command `cd client/`
@@ -68,9 +60,6 @@ a. Here is a link to the demo: <a href="https://www.loom.com/share/913982523bf84
     d. Execute the command `mvn clean install spring-boot:run -DskipTests` in the project directory.
 2. **Access the Application**: Open a web browser and visit `http://localhost:3000` to use the application. 
 Also verify that the server is running on port 9990 (default configurable port in application.properties)
-3. **For Tasks 2.1 and 2.2**: The OPEN DATA APIs have been exposed and can be accessed via: 
-   2.1 `http://localhost:9990/gevs/constituency/{constituencyName}` e.g.`http://localhost:9990/gevs/constituency/Shangri-la-Town`
-   2.2 `http://localhost:9990/gevs/result`
  
 
 ## Dependencies
