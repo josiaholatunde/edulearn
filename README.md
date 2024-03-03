@@ -1,0 +1,97 @@
+# GEVS Election 
+Server - Spring Boot (Java)
+Client - React (Javascript)
+
+Welcome to the General Election Voting System (GEVS) designed for the upcoming election in the Valley of Shangri-La. Shangri-La, 
+a parliamentary democracy, relies on the outcomes of General Elections to form a new government. In this system, political 
+parties compete for an overall majority, and the party with the most Members of Parliament (MPs) assumes governance.
+
+## Features (Role based)
+Electoral Commission Officer
+- **User Authentication**: Admins can log in and monitor election.
+- **View Results**: Admins can see election poll results grouped by constituencies as well as overall results via a Bar chart one the election ends.
+- **Manage Elections**: Admins can start, and stop elections. Only after starting an election would candidates be able to vote for candidates
+
+- Voter
+- **User Authentication**: Register and log in securely to vote.
+- **UVC QR Code Scanning**: Users can scan a unique 8 digit QR code or manually enter their unique voter code.
+- **Voting**: Users can only vote for candidates within their constituencies and can not edit their votes after voting.
+- **ACL**: Only logged in voters can vote and view the voters dashboard. 
+Also, logged in voters can only see the option to vote for candidates within their constituency
+- 
+- 
+**General**
+- The application handles validation form checks. Appropriate errors are displayed on the client when user enters an incorrect or invalid value
+- The application also ensures that the voter id is unique during registration, validates that the user's date of birth isn't in
+the future as no exact age requirement was given. The button to register or login become active once the form input is valid.
+- The application also handles routing the user (Voter or Electoral Commission Officer) to the appropriate dashboard when login is successful
+depending on the role of the user.
+- The application handles Inconclusive results for constituencies where there is a tie in the result and also handles HUNG parliament scenario
+no party fails to secure majority win in the number of seats.
+
+
+## Installation
+
+1. **Import the database schema file (ojo9.sql) into your preferred database**: This should create an MySQL database with the required 
+default records. The default schema file contains 2 voters with user login credentials below
+```agsl
+username/voter_id: kola@gmail.com
+password: password
+
+username/voter_id: amao@gmail.com
+password: password
+```
+
+This should also create an admin with user login credentials below
+```agsl
+username: election@shangrila.gov.sr
+password: shangrila2024$
+```
+2. **Database Setup**: Verify that the database credentials in the `application.properties` file within the `api` directory are valid.
+   If not, kindly modify the database name, database user credentials as required. The application by default connects to a MySQL database
+   and has the dependency for the required driver to connect to the database.
+
+3. **Install/Download Dependencies and Start Application**: Please check the usage section for more details.
+   N.B. The application uses Maven package manager, so ensure that it is installed before starting up the application.
+
+4. If there is any need to test different scenarios, log in to the database via any client (Workbench, Shell, PHPMyadmin) and run an update query on the election table to update the election status.
+   Election has 3 main statuses: NOT_STARTED, PENDING, and COMPLETED.
+
+## Demo
+a. Here is a link to the demo: <a href="https://www.loom.com/share/913982523bf8440cba7303038bed894c?sid=45eb670d-9569-41e0-a855-3e61d95cb05b">UOL Polls App Demo </a>
+
+## Usage
+1. **Run the Application**: Execute the commands below
+    a. Change directory to the `client/` folder by executing the command `cd client/`
+    b. Execute the command `npm install && npm start` in the project directory to install dependencies for the client application.
+    c. Open a new terminal and change directory to the `api/` folder by executing the command `cd api/`
+    d. Execute the command `mvn clean install spring-boot:run -DskipTests` in the project directory.
+2. **Access the Application**: Open a web browser and visit `http://localhost:3000` to use the application. 
+Also verify that the server is running on port 9990 (default configurable port in application.properties)
+3. **For Tasks 2.1 and 2.2**: The OPEN DATA APIs have been exposed and can be accessed via: 
+   2.1 `http://localhost:9990/gevs/constituency/{constituencyName}` e.g.`http://localhost:9990/gevs/constituency/Shangri-la-Town`
+   2.2 `http://localhost:9990/gevs/result`
+ 
+
+## Dependencies
+- **Maven**
+- **Java 17**
+- **React.js**
+- **Node >=14**
+
+## Technologies Used
+- **Spring Boot**: Framework for building web applications.
+- **JPA/Hibernate**: ORM for database interactions.
+- **Java Programming Language**: Primary language used for the server in the application.
+- **React.js**: Open source javascript library used for the client in the application.
+
+## Contributing
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/fooBar`).
+3. Commit your changes (`git commit -am 'Add some fooBar'`).
+4. Push to the branch (`git push origin feature/fooBar`).
+5. Create a new Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

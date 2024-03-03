@@ -1,0 +1,158 @@
+body {
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif, sans-serif; 
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.navbar a {
+  color: #fff !important;
+}
+
+.navbar-nav li {
+  margin: 0 .6rem !important;
+}
+
+input, select {
+  box-shadow: none !important;
+}
+
+.img-fluid {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.text-lightgrey {
+  opacity: 50%;
+}
+
+.theme-text {
+  font-size: 1.5rem !important;
+}
+
+.ml-12 {
+  margin-left: 1.2rem !important;
+}
+
+.mr12 {
+  margin-right: .3rem !important;
+}
+
+.bg-cool {
+  background-color: #161f2e !important;
+}
+
+.btn-cool {
+  background-color: #161f2e !important;
+  color: #fff !important;
+}
+
+.text-cool {
+  color: #161f2e !important;
+}
+
+.social-login {
+  margin-top: 1.5rem;
+}
+
+.or-signup-section {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-header {
+  display: inline-block; 
+  width: 50px;
+  margin: 0 10px;
+}
+
+.card-header-main {
+  font-size: 24px !important;
+}
+
+.input[type="submit"]:focus,
+.input[type="submit"]:active:focus,
+.input[type="submit"].focus,
+.input[type="submit"]:active.focus,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus,
+.btn-danger:focus,
+.btn-danger:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+input {
+  font-size: 14px !important;
+}
+
+input::placeholder {
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+input[type='email'], input[type='password'] {
+  padding-left: 2.5rem; /* Adjust the font size as needed */
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-rel-links {
+    text-align: right !important;
+  }
+
+  .navbar-rel-links li {
+    text-align: right !important;
+    display: flex;
+    justify-content: flex-end;
+    margin: .3rem .6rem !important;
+  }
+
+  .admin-action {
+    display: flex;
+    justify-content: space-between;
+    row-gap: .9rem !important;
+  }
+}
+
+
+
+.google-icon {
+  color: #DB4437; /* Google red color */
+}
+
+.facebook-icon {
+  color: #3b5998; /* Facebook blue color */
+}
+
+.github-icon {
+  color: #333; /* GitHub default color */
+}
+
+
+
+.login-form .input-icon, .register-form .input-icon {
+  position: relative;
+}
+
+.login-form .input-icon i, .register-form .input-icon i {
+  position: absolute;
+  left: 10px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.input-icon i.password {
+  right: 10px !important;
+  left: unset;
+  cursor: pointer;
+}
