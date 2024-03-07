@@ -12,6 +12,8 @@ import { LOGIN_USER } from './redux/actions/types';
 import Notification from './utils/Notifications';
 import setAuthToken from './utils/setAuthToken';
 import store from './store'
+import Profile from './components/Profile';
+import Leaderboard from './components/Leaderboard';
 
 
 const token = localStorage.getItem('token');
@@ -38,6 +40,8 @@ function App() {
               <Switch>
                 <Route path='/login' exact component={SignIn} />
                 <Route path='/register' exact component={Register} />
+                <Route path='/profile' exact component={Profile} />
+                <Route path='/leaderboard' exact component={Leaderboard} />
                 <PrivateRoute path='/dashboard' exact component={Dashboard} />
                 <PrivateRoute path='/' exact component={Dashboard} />
                 <Route component={NotFound} />

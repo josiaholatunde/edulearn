@@ -24,28 +24,35 @@ class Navbar extends Component {
                         <span className="navbar-toggler-icon" style={{ color: '#fff !important'}}></span>
                     </button>
     
-                    <div className="collapse navbar-collapse navbar-rel-links" id="navbarSupportedContent">
-                        {loggedInUser && (
-                            <ul className="navbar-nav mr-auto">
+                    <div className="collapse navbar-collapse navbar-rel-links justify-content-center" id="navbarSupportedContent">
+                        {true && (
+                            <ul className="navbar-nav mr-5">
                                  <li className="nav-item">
                                     <Link className="nav-link" to='/'>Home</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to='/challenge'>Challenge</Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to='/leaderboard'>Leaderboard</Link>
                                 </li>
                             </ul>
                         )}
                         <ul className='navbar-nav ml-auto'>
-                            {loggedInUser ? (
+                            {true ? (
                                 <Fragment>
-                                    <li className="nav-item d-flex align-items-center">
-                                        Hello {loggedInUser.username}
-                                        <div style={{ height: '2rem', width: '2rem' }} className='ml-2'>
-                                            <img src={loggedInUser.avatarURL || 'https://tylermcginnis.com/would-you-rather/sarah.jpg'} className='rounded-circle img-fluid' alt='Logged in user avatar' />
+                                    <li className="nav-item dropdown">
+                                        <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i className="bi bi-person-circle"></i>
+                                        </a>
+                                        <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <Link to='/profile' className="dropdown-item text-cool"  style={{ color: '#212529'}}>Profile</Link>
+                                            <Link className="dropdown-item text-cool" to="/challenges" style={{ color: '#212529'}}>My Challenges</Link>
+                                            <button  type='button'  className='dropdown-item btn btn-outline-light' onClick={this.handleLogOut} >
+                                                <i className="bi bi-box-arrow-right mr12"></i>
+                                                Logout
+                                            </button>
                                         </div>
-                                    </li>
-                                    <li className="nav-item ml-3">
-                                        <button  type='button' className='btn btn-outline-light' onClick={this.handleLogOut} >
-                                            <i className="bi bi-box-arrow-right mr12"></i>
-                                            Logout
-                                        </button>
                                     </li>
                                 </Fragment>
                             ) : (

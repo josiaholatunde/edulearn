@@ -1,4 +1,4 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { handleLoginUser } from "../redux/actions/authedActions";
@@ -11,9 +11,6 @@ const SignIn = ({ history, location, loading }) => {
 
   const dispatch = useDispatch();
 
-  const handleChange = ({ target: { name, value } }) =>
-    this.setState({ [name]: value });
-
   const loginUser = (e) => {
     e.preventDefault();
     dispatch(handleLoginUser({ username: email, password }, { history, location }));
@@ -24,7 +21,7 @@ const SignIn = ({ history, location, loading }) => {
     if (user) {
         history.push('/');
     }
-  }, [])
+  }, [history])
 
   const setErrorIfEmpty = (name, value) => {
     if (!value.trim()) {
@@ -56,7 +53,7 @@ const SignIn = ({ history, location, loading }) => {
               <div className="form-group mb-3 d-flex flex-column align-items-start">
                 <label htmlFor="email">Email<span className="text-danger">*</span></label>
                 <div className="input-icon w-100">
-                  <i class="bi bi-envelope"></i>
+                  <i className="bi bi-envelope"></i>
                   <input 
                   type='email' className='form-control' id="email" name="email" 
                   placeholder="Enter email address" value={email} onChange={({ target }) => {
@@ -69,18 +66,18 @@ const SignIn = ({ history, location, loading }) => {
               <div className="form-group mb-3 d-flex flex-column align-items-start">
                 <label htmlFor="password">Password<span className="text-danger">*</span></label>
                 <div className="input-icon w-100">
-                  <i class="bi bi-lock"></i>
+                  <i className="bi bi-lock"></i>
                   <input type='password' className='form-control' id="password" name="password" value={password} onChange={({ target })  => setPassword(target.value)} 
                   placeholder='Enter your password' />
                   <i className={`password bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} onClick={togglePasswordVisibility}></i>
                 </div>
               </div>
 
-              <div class="form-group d-flex justify-content-between align-items-center" style={{ fontSize: '12px'}}>
+              <div className="form-group d-flex justify-content-between align-items-center" style={{ fontSize: '12px'}}>
                 <label className="d-flex justify-content-between align-items-center">
                   <input type="checkbox" name="remember" />  <span className="ml-2"> Remember me</span>
                 </label>
-                <a href="#" className="text-cool">Forgot password?</a>
+                <Link to="/forgot-password" className="text-cool">Forgot password?</Link>
               </div>
 
         
