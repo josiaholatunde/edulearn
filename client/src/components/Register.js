@@ -47,9 +47,10 @@ class Register extends Component {
     } else if (!isValidEmail(email)) {
         showNotification('danger', 'The email is invalid')
         return;
-    }
+    } else if (!password) return showNotification('danger', 'The password field is invalid')
+    else if (password !== confirmPassword) return showNotification('danger', 'The confirm password field does not match')
 
-    const userToRegister = { firstName, lastName,  dateOfBirth, password, confirmPassword, email }
+    const userToRegister = { firstName, lastName, password, confirmPassword, email, studentNo }
     handleRegisterUser(userToRegister, { history });
   };
 
@@ -150,7 +151,7 @@ class Register extends Component {
                     Email<span className="text-danger">*</span>
                   </label>
                   <div className="input-icon w-100">
-                    <i class="bi bi-envelope"></i>
+                    <i className="bi bi-envelope"></i>
                     <input
                       type="email"
                       className="form-control"
@@ -170,7 +171,7 @@ class Register extends Component {
                     Password<span className="text-danger">*</span>
                   </label>
                   <div className="input-icon w-100">
-                    <i class="bi bi-lock"></i>
+                    <i className="bi bi-lock"></i>
                     <input
                     type="password"
                     className="form-control"
@@ -191,7 +192,7 @@ class Register extends Component {
                     Confirm Password<span className="text-danger">*</span>
                   </label>
                   <div className="input-icon w-100">
-                    <i class="bi bi-lock"></i>
+                    <i className="bi bi-lock"></i>
                     <input
                     type="password"
                     className="form-control"
