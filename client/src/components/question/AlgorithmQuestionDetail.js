@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 
 
-const AlgorithmQuestionDetail = ({ questions }) => {
+const AlgorithmQuestionDetail = ({ questions, history }) => {
 
 
     const question = (questions && questions.length > 0) && questions[0];
@@ -37,11 +37,11 @@ const AlgorithmQuestionDetail = ({ questions }) => {
                     </div>
 
                     <div className="question-body py-3">
-                        <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}}  onClick={() => history.push('/challenge/algorithms/details')}>
                             Attempt Challenge
                         </button>
 
-                        <button type="button" className="btn ml-3" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" className="btn ml-3" style={{ height: '40px', width: '200px'}}  >
                             View Solution
                         </button>
                     </div>

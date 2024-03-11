@@ -53,7 +53,7 @@ const QuestionDetails = ({ match, history }) => {
             }
         } loading={loading} setLoading={setLoading}  />
         else {
-            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) : (<AlgorithmQuestionDetail questions={questions} />)
+            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) : (<AlgorithmQuestionDetail questions={questions} history={history} />)
         }
     }
 

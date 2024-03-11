@@ -101,8 +101,8 @@ input::placeholder {
   font-size: 14px; /* Adjust the font size as needed */
 }
 
-input[type='email'], input[type='password'] {
-  padding-left: 2.5rem; /* Adjust the font size as needed */
+input[type='email'], input[type='password'], .password-input {
+  padding-left: 2.5rem !important; /* Adjust the font size as needed */
 }
 
 @media screen and (max-width: 600px) {
