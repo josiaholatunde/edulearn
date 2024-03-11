@@ -47,13 +47,22 @@ input, select {
   background-color: #161f2e !important;
 }
 
-.btn-cool {
+.btn-cool, .badge-cool {
   background-color: #161f2e !important;
   color: #fff !important;
 }
 
+.btn-light {
+  background-color: #fff !important;
+  color: #161f2e !important;
+}
+
 .text-cool {
   color: #161f2e !important;
+}
+
+.badge {
+  /* width: 7rem !important; */
 }
 
 .social-login {
@@ -289,4 +298,17 @@ input[type='email'], input[type='password'], .password-input {
   width: 100%;
   image-rendering: auto;
   object-fit: cover;
+}
+
+.code-mirror-wrapper {
+  height: 100% !important;
+}
+
+.CodeMirror-wrap {
+  height: 100% !important;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #fff !important;
+  color: #161f2e !important;
 }

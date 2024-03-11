@@ -47,7 +47,7 @@ function App() {
                 <Route path='/leaderboard' exact component={Leaderboard} />
                 <Route path='/questions' exact component={QuestionDetails} />
                 <Route path='/challenge' exact component={Challenge} />
-                <Route path='/challenge/algorithms/details' exact component={AlgorithmChallengeAttemptDetails} />
+                <Route path='/challenge/algorithms/:id/details' exact component={AlgorithmChallengeAttemptDetails} />
                 <PrivateRoute path='/dashboard' exact component={Dashboard} />
                 <PrivateRoute path='/' exact component={Dashboard} />
                 <Route component={NotFound} />

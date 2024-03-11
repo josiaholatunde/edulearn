@@ -18,7 +18,7 @@ const QuestionDetails = ({ match, history }) => {
     const [type, setType] = useState(QUESTION_TYPE.multiple_choice)
     const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
     const [challenge, setChallenge] = useState({})
-
+    const [mode, setChallengeMode ] = useState('individual')
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
 
     const location = useLocation()
@@ -29,6 +29,9 @@ const QuestionDetails = ({ match, history }) => {
             const type = queryParams.get('type')
             setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.multiple_choice)
             setQuestions(getQuestions(type))
+        }
+        if (!!queryParams.get('mode')) {
+            setChallengeMode(queryParams.get('mode'))
         }
     }, []);
 
@@ -53,7 +56,8 @@ const QuestionDetails = ({ match, history }) => {
             }
         } loading={loading} setLoading={setLoading}  />
         else {
-            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) : (<AlgorithmQuestionDetail questions={questions} history={history} />)
+            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
+            : (<AlgorithmQuestionDetail questions={questions} history={history} challengeMode={mode} />)
         }
     }
 

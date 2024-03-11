@@ -7,7 +7,7 @@ import { QUESTION_TYPE } from '../utils/constants';
 const Challenge = ({ history }) => {
     const [showQuestionStyle, setShowQuestionStyle] = useState(false)
     const [showOnlineUsers, setShowOnlineUsers] = useState(false)
-
+    const [ challengeMode, setChallengeMode ] = useState('individual')
     const handleCloseQuestionStyle = () => setShowQuestionStyle(false)
     const handleCloseOnlineUsers = () => setShowOnlineUsers(false)
 
@@ -27,12 +27,18 @@ const Challenge = ({ history }) => {
                         Start Challenge
                     </button>
                     <ul class="dropdown-menu">
-                        <li className='pointer' onClick={() => setShowQuestionStyle(true)}>
+                        <li className='pointer' onClick={() => {
+                            setShowQuestionStyle(true)
+                            setChallengeMode('individual')
+                        }}>
                             <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
                                Individual Challenge
                             </div>
                         </li>
-                        <li className='pointer' onClick={() => setShowOnlineUsers(true)}>
+                        <li className='pointer' onClick={() => {
+                            setShowOnlineUsers(true)
+                            setChallengeMode('group')
+                        }}>
                             <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
                                Group Challenge
                             </div>
@@ -49,14 +55,14 @@ const Challenge = ({ history }) => {
                         <div className='row p-3'>
                             <div className='col-lg-12'>
                                 <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" class="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.multiple_choice}`)} >
+                                    <button type="button" class="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.multiple_choice}&mode=${challengeMode}`)} >
                                         Multiple Choice
                                     </button>
                                 </div>
                             </div>
                             <div className='col-lg-12 my-3'>
                                 <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" class="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.algorithms}`)} >
+                                    <button type="button" class="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.algorithms}&mode=${challengeMode}`)} >
                                         Algorithms
                                     </button>
                                 </div>
