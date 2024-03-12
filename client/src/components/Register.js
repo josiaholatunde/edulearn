@@ -5,6 +5,7 @@ import { handleRegisterUser } from "../redux/actions/authedActions";
 import { redirectUserBackToHomeIfLoggedIn } from "../utils/api";
 import { showNotification } from "../utils/showNotification";
 import isValidEmail from "../utils/EmailUtil";
+import PasswordRequirements from "./auth/PasswordRequirements";
 
 class Register extends Component {
   state = {
@@ -16,7 +17,13 @@ class Register extends Component {
     showPassword: false,
     showConfirmPassword: false,
     errors: {},
-    showModal: false
+    showModal: false,
+    isLowerCase: false,
+    isUpperCase: false,
+    isSpecialChar: false,
+    isValidLength: false,
+    isNumber: false,
+    showPasswordRequirements: false
   };
 
   handleClose = () => this.setState({ showModal: false })
@@ -57,6 +64,11 @@ class Register extends Component {
   componentDidMount() {
     const { history } = this.props;
     redirectUserBackToHomeIfLoggedIn(history);
+    document.addEventListener("click", this.handleDocumentClick);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("click", this.handleDocumentClick);
   }
 
   isRegisterationFormInvalid = (e) => {
@@ -77,9 +89,65 @@ class Register extends Component {
   toggleConfirmPasswordVisibility = () => {
     this.setState({ ...this.state, showConfirmPassword: !this.state.showConfirmPassword })
   }
+  
+
+  handlePasswordRequirements = () => {
+    this.setState(prevState => ({
+      showPasswordRequirements: !prevState.showPasswordRequirements
+    }))
+  }
+
+  validatePasswordCallout = (event) => {
+    let value = event.target.value;
+
+    let lowerCaseLetters = /[a-z]/g;
+    if (value.match(lowerCaseLetters)) {
+      this.setState({ isLowerCase: true });
+    } else {
+      this.setState({ isLowerCase: false });
+    }
+
+    let upperCaseLetters = /[A-Z]/g;
+    if (value.match(upperCaseLetters)) {
+      this.setState({ isUpperCase: true });
+    } else {
+      this.setState({ isUpperCase: false });
+    }
+
+    let numbers = /[0-9]/g;
+    if (value.match(numbers)) {
+      this.setState({ isNumber: true });
+    } else {
+      this.setState({ isNumber: false });
+    }
+
+    let specialChar = /\W|_/g;
+    if (value.match(specialChar)) {
+      this.setState({ isSpecialChar: true });
+    } else {
+      this.setState({ isSpecialChar: false });
+    }
+
+    if (value.length >= 8) {
+      this.setState({ isValidLength: true });
+    } else {
+      this.setState({ isValidLength: false });
+    }
+    this.setState({ password: value })
+  };
+
+
+  handleDocumentClick = (e) => {
+    const tooltip = document.querySelector(".callout"); 
+    const passwordInput = document.getElementById("password");
+    if (tooltip && !tooltip.contains(e.target) && e.target !== passwordInput) {
+      this.setState({ showPasswordRequirements: false });
+    }
+  };
 
   render() {
-    const { firstName, lastName, studentNo, email, password, confirmPassword, errors, showPassword, showConfirmPassword } = this.state;
+    const { firstName, lastName, studentNo, email, password, confirmPassword, errors, showPassword, showConfirmPassword,
+    isLowerCase, isUpperCase, isSpecialChar, isNumber, isValidLength, showPasswordRequirements } = this.state;
     const { loading } = this.props
 
     return (
@@ -173,14 +241,26 @@ class Register extends Component {
                   <div className="input-icon w-100">
                     <i className="bi bi-lock"></i>
                     <input
-                    type="password"
-                    className="form-control"
+                    type={`${showPassword ? "text":  "password"}`}
+                    className="form-control password-input"
                     id="password"
                     name="password"
+                    onBlur={this.handlePasswordRequirements}
                     value={password}
-                    onChange={this.handleChange}
+                    onChange={this.validatePasswordCallout}
                     placeholder='Enter your password'
+                    onClick={this.handlePasswordRequirements}
                   />
+                   {showPasswordRequirements && ( // Render tooltip if showPasswordRequirements is true
+                    <PasswordRequirements
+                      isLowerCase={isLowerCase}
+                      isUpperCase={isUpperCase}
+                      isSpecialChar={isSpecialChar}
+                      isNumber={isNumber}
+                      isValidLength={isValidLength}
+                      position='top'
+                    />
+                  )}
                     <i className={`password bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} onClick={this.togglePasswordVisibility}></i>
                   </div>
 

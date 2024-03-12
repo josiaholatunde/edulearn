@@ -14,6 +14,10 @@ import setAuthToken from './utils/setAuthToken';
 import store from './store'
 import Profile from './components/Profile';
 import Leaderboard from './components/Leaderboard';
+import Challenge from './components/challenge/Challenge';
+import QuestionDetails from './components/question/QuestionDetails';
+import AlgorithmChallengeAttemptDetails from './components/question/AlgorithmChallengeAttemptDetails';
+import ChallengeDetails from './components/challenge/ChallengeDetails';
 
 
 const token = localStorage.getItem('token');
@@ -42,6 +46,10 @@ function App() {
                 <Route path='/register' exact component={Register} />
                 <Route path='/profile' exact component={Profile} />
                 <Route path='/leaderboard' exact component={Leaderboard} />
+                <Route path='/questions' exact component={QuestionDetails} />
+                <Route path='/challenge/:identifier/details' exact component={ChallengeDetails} />
+                <Route path='/challenge' exact component={Challenge} />
+                <Route path='/challenge/algorithms/:id/details' exact component={AlgorithmChallengeAttemptDetails} />
                 <PrivateRoute path='/dashboard' exact component={Dashboard} />
                 <PrivateRoute path='/' exact component={Dashboard} />
                 <Route component={NotFound} />

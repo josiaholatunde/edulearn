@@ -47,13 +47,22 @@ input, select {
   background-color: #161f2e !important;
 }
 
-.btn-cool {
+.btn-cool, .badge-cool {
   background-color: #161f2e !important;
   color: #fff !important;
 }
 
+.btn-light {
+  background-color: #fff !important;
+  color: #161f2e !important;
+}
+
 .text-cool {
   color: #161f2e !important;
+}
+
+.badge {
+  /* width: 7rem !important; */
 }
 
 .social-login {
@@ -101,8 +110,8 @@ input::placeholder {
   font-size: 14px; /* Adjust the font size as needed */
 }
 
-input[type='email'], input[type='password'] {
-  padding-left: 2.5rem; /* Adjust the font size as needed */
+input[type='email'], input[type='password'], .password-input {
+  padding-left: 2.5rem !important; /* Adjust the font size as needed */
 }
 
 @media screen and (max-width: 600px) {
@@ -235,6 +244,10 @@ input[type='email'], input[type='password'] {
 
 .certifications li { font-size: 15px;}
 
+.f-14 {
+  font-size: 14px !important;
+}
+
 .f-16 {
   font-size: 16px !important;
 }
@@ -255,4 +268,47 @@ input[type='email'], input[type='password'] {
 .leaderboard .dropdown-menu {
   transform: translate3d(-200px, 42px, 0px) !important;
   width: 300px !important;
+}
+
+/* .online-users-modal {
+  max-width: 600px !important;
+  margin: 0 auto;
+} */
+
+.question-body div, .question-body .option-container {
+  padding: .63rem 0;
+}
+
+.ml-7 {
+  margin-left: 5.5rem;
+}
+
+.text-grey {
+  color: rgba(51, 51, 51, 0.3);
+}
+
+.confetti-container {
+  height: 280px;
+  background-size: cover;
+  background-position: center;
+}
+
+.celebration-img {
+  height: 100%;
+  width: 100%;
+  image-rendering: auto;
+  object-fit: cover;
+}
+
+.code-mirror-wrapper {
+  height: 100% !important;
+}
+
+.CodeMirror-wrap {
+  height: 100% !important;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #fff !important;
+  color: #161f2e !important;
 }
