@@ -1,10 +1,10 @@
-package com.uol.mobileweb.gevs_election_polls;
+package com.uol.finalproject.edulearn;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class GevsElectionPollsApplicationTests {
+@SpringBootTest(classes = EduLearnApplication.class)
+class EduLearnApplicationTests {
 
     @Test
     void contextLoads() {

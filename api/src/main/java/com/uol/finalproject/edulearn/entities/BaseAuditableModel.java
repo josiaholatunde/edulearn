@@ -1,11 +1,11 @@
 package com.uol.finalproject.edulearn.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.uol.finalproject.edulearn.listeners.AuditingEntityListener;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.sql.Timestamp;
 
@@ -16,7 +16,7 @@ import java.sql.Timestamp;
 public class BaseAuditableModel {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @CreatedDate

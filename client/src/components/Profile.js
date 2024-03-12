@@ -1,18 +1,30 @@
 import React, { Fragment, useEffect, useState } from "react";
+import { connect } from "react-redux";
+import convertToPercentage from "../utils/levelCalculation";
 import EditBioForm from "./EditBioForm";
 import EditProfile from "./EditProfile";
 import StreakCalendar from "./StreakCalendar";
 
 const DEFAULT_AVATAR_URL =
   "https://tylermcginnis.com/would-you-rather/sarah.jpg";
-const Profile = () => {
-  const [user, setUser] = useState({});
+
+  const Profile = ({ user }) => {
+    
+    // const [user, setUser] = useState({});
     const [showEditProfileModal, setShowEditProfileModal] = useState(false)
     const [showEditBioModal, setShowEditBioModal] = useState(false)
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    setUser(user);
+  
+  
+    useEffect(() => {
+    // const user = JSON.parse(localStorage.getItem("user"));
+    // setUser(user);
   }, []);
+
+  const displayFullName = (user) => {
+    return `${user?.firstName} ${user?.lastName}`
+  }
+
+  const levelPercentage = convertToPercentage(user?.level || 10)
 
   return (
     <Fragment>
@@ -32,7 +44,7 @@ const Profile = () => {
             <div className="text-container ml-4">
               <div className="d-flex align-items-center mb-3 ">
                 <h5>Name: </h5>
-                <span className="ml-2">Olatunde Ogunboyejo</span>
+                <span className="ml-2">{ displayFullName(user) } </span>
               </div>
               <div className="d-flex align-items-center mb-3">
                 <h5>Occupation: </h5>
@@ -40,11 +52,11 @@ const Profile = () => {
               </div>
               <div className="d-flex align-items-center mb-3">
                 <h5>Location: </h5>
-                <span className="ml-2">United Kingdom</span>
+                <span className="ml-2"> { user?.location || 'N/A' } </span>
               </div>
               <div className="d-flex align-items-center">
                 <h5>University: </h5>
-                <span className="ml-2">University of Leicester</span>
+                <span className="ml-2"> { user?.university || 'N/A' } </span>
               </div>
             </div>
           </div>
@@ -61,7 +73,7 @@ const Profile = () => {
                         <h4 className="bio-header-text">Bio</h4>
                         <i className="mdi mdi-pencil pointer" onClick={() => setShowEditBioModal(true) }></i>
                     </div>
-                    <p>It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here,</p>
+                    <p> { user?.biography || 'You need to add a biography' } </p>
                 </div>
                 <div className="badges-section mb-3">
                     <h4 className="bio-header-text">Badges</h4>
@@ -77,7 +89,7 @@ const Profile = () => {
                 <div className="skills-section mb-3">
                     <h4 className="bio-header-text">Skills</h4>
                     <div className="skill-container">
-                        <span>HTML,CSS,Java,Javascript</span>
+                        <p style={{ fontSize: '14px'}}> { user?.skills || 'Click on the edit button to add a skill' } </p>
                         
                     </div>
                 </div>
@@ -101,9 +113,9 @@ const Profile = () => {
                 <div className="current-level card p-3">
                     <h5>Current Level</h5>
                     <div className="progress my-2">
-                        <div className="progress-bar" role="progressbar" style={{"width": '75%'}} aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                        <div className="progress-bar text-cool bg-cool" role="progressbar" style={{"width": `${levelPercentage}%`}} aria-valuenow={levelPercentage} aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <span className="">Level 10</span>
+                    <span className=""> Level { user?.level || 10 }</span>
                 </div>
 
                 <div className="current-level card p-3 mt-5">
@@ -168,11 +180,12 @@ const Profile = () => {
 
                 <div className="certifications card p-2 mt-5">
                     <h5>Certifications</h5>
-                    <ul className="text-left">
-                        <li className="mb-2">Andela with Google Web Development</li>
-                        <li className="mb-2">AWS Solutions Architect</li>
-                        <li className="mb-2">Google Cloud Solutions Architect</li>
-                        <li className="mb-2">Google Cloud Practitioner Architect</li>
+                    <ul className="text-left mt-3">
+                        { user?.certifications && user?.certifications.length == 0 ? 
+                          (<h6>User has not added any certification</h6>) :
+                          (user?.certifications.map(certification => 
+                            (<li className="mb-2">{ certification?.name } </li>)))
+                        }
                     </ul>
                 </div>
             </div>
@@ -184,4 +197,11 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+
+const mapStateToProps = ({ authedUser }) => {
+  console.log('authed user', authedUser)
+  return ({
+    user: authedUser?.user?.studentUser
+  })
+}
+export default connect(mapStateToProps, null)(Profile);

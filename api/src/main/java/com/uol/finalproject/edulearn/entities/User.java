@@ -9,11 +9,13 @@ import lombok.NoArgsConstructor;
 
 @Entity(name = "users")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseAuditableModel {
 
     private String username;
+
     private String password;
 
     @Builder.Default
@@ -23,7 +25,7 @@ public class User extends BaseAuditableModel {
     private RoleType roleType;
 
     @OneToOne
-    @JoinColumn(name = "student_user_id", referencedColumnName = "id")
+    @JoinColumn(name = "student_user_id")
     private StudentUser studentUser;
 
 

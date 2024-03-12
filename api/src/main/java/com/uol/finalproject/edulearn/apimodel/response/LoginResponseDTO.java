@@ -1,22 +1,23 @@
 package com.uol.finalproject.edulearn.apimodel.response;
 
+import com.uol.finalproject.edulearn.apimodel.UserDTO;
 import com.uol.finalproject.edulearn.entities.User;
 
 public class LoginResponseDTO {
 
 
-    private User user;
+    private UserDTO user;
 
     private String token;
 
     private Long expiresIn;
 
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
@@ -37,7 +38,7 @@ public class LoginResponseDTO {
     }
 
 
-    public LoginResponseDTO(User user, String token, Long expiresIn) {
+    public LoginResponseDTO(UserDTO user, String token, Long expiresIn) {
         this.user = user;
         this.token = token;
         this.expiresIn = expiresIn;

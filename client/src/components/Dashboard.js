@@ -2,6 +2,10 @@ import React, { useEffect, useState } from 'react'
 import AdminDashboard from './AdminDashboard'
 import UserDashboard from './UserDashboard'
 
+const APPLICATION_ROLES = {
+    STUDENT_USER: 'STUDENT_USER',
+    ADMIN: 'ADMIN'
+}
 const Dashboard = () => {
 
     const [user, setUser] = useState({})
@@ -13,7 +17,7 @@ const Dashboard = () => {
 
 
     return <div className=''>
-        { user?.roleType === 'VOTER' ?  <UserDashboard /> : <AdminDashboard />}
+        { user?.roleType === APPLICATION_ROLES.STUDENT_USER ?  <UserDashboard /> : <AdminDashboard />}
        
     </div>
 

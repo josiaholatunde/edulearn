@@ -1,9 +1,10 @@
 package com.uol.finalproject.edulearn.advice;
 
-import com.uol.mobileweb.gevs_election_polls.apimodel.response.BaseApiResponseDTO;
-import com.uol.mobileweb.gevs_election_polls.exceptions.AuthenticationException;
-import com.uol.mobileweb.gevs_election_polls.exceptions.BadRequestException;
-import com.uol.mobileweb.gevs_election_polls.exceptions.ResourceNotFoundException;
+import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
+import com.uol.finalproject.edulearn.exceptions.AuthenticationException;
+import com.uol.finalproject.edulearn.exceptions.AuthorizationException;
+import com.uol.finalproject.edulearn.exceptions.BadRequestException;
+import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,13 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
         System.out.println(request);
         return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<?> handleAuthorizationException(AuthorizationException ex, HttpServletRequest request) {
+        System.out.println(request);
+        return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadRequestException.class)

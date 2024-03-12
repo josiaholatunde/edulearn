@@ -97,7 +97,7 @@ input, select {
 .btn:active.focus,
 .btn.active.focus,
 .btn-danger:focus,
-.btn-danger:active {
+.btn-danger:active, textarea {
     outline: none !important;
     box-shadow: none !important;
 }
