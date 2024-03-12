@@ -1,5 +1,7 @@
 import React from 'react';
 import { Table } from 'antd';
+import { Link } from 'react-router-dom';
+import data from '../../utils/challenges';
 
 const columns = [
   {
@@ -9,8 +11,8 @@ const columns = [
   },
   {
     title: 'Type',
-    dataIndex: 'type',
-    key: 'type',
+    dataIndex: 'friendlyType',
+    key: 'friendlyType',
   },
   {
     title: 'Level',
@@ -35,48 +37,9 @@ const columns = [
   {
     title: 'Action',
     dataIndex: 'action',
-    key: 'action'
+    key: 'action',
+    render: (_, challenge) => <Link to={`/challenge/${challenge.title}/details?type=${challenge.type}&mode=individual`} className='text-cool'>Details</Link>
   },
-];
-
-const data = [
-  {
-    key: '1',
-    title: 'Databases',
-    type: 'Multiple Choice',
-    level: '10',
-    startDate: '22/02/2024',
-    endDate: '22/03/2024',
-    submissions: 102,
-  },
-  {
-    key: '2',
-    title: 'Mock Test',
-    type: 'Algorithms',
-    level: '9',
-    startDate: '22/02/2024',
-    endDate: '22/03/2024',
-    submissions: 1020,
-  },
-  {
-    key: '3',
-    title: 'Dynamic Programming',
-    type: 'Algorithms',
-    level: '4',
-    startDate: '22/02/2024',
-    endDate: '22/03/2024',
-    submissions: 20,
-  },
-  {
-    key: '4',
-    title: 'Graph Theory',
-    type: 'Multiple Choice',
-    level: '9',
-    startDate: '22/02/2024',
-    endDate: '22/03/2024',
-    submissions: 200
-  },
-  // Add more data as needed
 ];
 
 const ChallengeDataTable = () => {

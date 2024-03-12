@@ -131,7 +131,7 @@ const AlgorithmChallengeAttemptDetails = () => {
                     <div>
                         { 
                             userAttempts === 0 ? 
-                            (<h6>You need to attempt the problem before viewing the solution</h6>):
+                            (<h6>Switch to the problem description tab to attempt the problem before viewing the solution</h6>):
                             (<AlgorithmSolution question={question} />)
                         }
                     </div>

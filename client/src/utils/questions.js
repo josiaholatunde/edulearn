@@ -1,6 +1,7 @@
 const questionBank = [
     {
         id: 1,
+        category: 'sorting',
         title: "What is the time complexity of the Quick sort algorithm in the worst case ?",
         type: 'multiple_choice',
         options: [
@@ -28,6 +29,7 @@ const questionBank = [
     },
     {
         id: 2,
+        category: 'sorting',
         title: "What is the time complexity of the Merge sort algorithm in the worst case ?",
         type: 'multiple_choice',
         options: [
@@ -55,6 +57,7 @@ const questionBank = [
     },
     {
         id: 3,
+        category: 'sorting',
         title: "What is the time complexity of the Partition function of the quick sort algorithm in the worst case ?",
         type: 'multiple_choice',
         options: [
@@ -81,7 +84,8 @@ const questionBank = [
         ],
     },
     {
-        id: 1,
+        id: 4,
+        category: 'search',
         title: "Which of the following algorithms is the most efficient for searching for an item within a sorted array ?",
         type: 'multiple_choice',
         options: [
@@ -108,8 +112,9 @@ const questionBank = [
         ],
     },
     {
-        id: 4,
+        id: 5,
         title: "Longest Common Subsequence",
+        category: 'dynamic_programming',
         type: 'algorithms',
         level: 10,
         introduction: 'You are given two strings, A and B. Your task is to find the length of the longest common subsequence (LCS) between the two strings. A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.',
@@ -148,8 +153,35 @@ const questionBank = [
             relevantResources: ['https://www.geeksforgeeks.org/dynamic-programming/']
 
         },
-        tags: ['Algorithmic']
-        
+        tags: ['Algorithmic']  
+    },
+    {
+        id: 6,
+        category: 'databases',
+        title: "Which of these is a valid DDL (Data definition language) statement ?",
+        type: 'multiple_choice',
+        options: [
+            {
+                id: 1,
+                title: "SELECT",
+                value: "SELECT",
+            },
+            {
+                id: 2,
+                title: "UPDATE",
+                value: "UPDATE",
+            },
+            {
+                id: 3,
+                title: "ALTER",
+                value: "ALTER",
+            },
+            {
+                id: 4,
+                title: "DELETE",
+                value: "DELETE",
+            },
+        ],
     },
 ];
 
