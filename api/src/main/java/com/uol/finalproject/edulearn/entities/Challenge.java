@@ -33,6 +33,9 @@ public class Challenge extends BaseAuditableModel {
     private long submissions;
     private long totalParticipants;
 
+    @Enumerated(EnumType.STRING)
+    private RoleType createdBy;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")

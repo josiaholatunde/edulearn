@@ -22,6 +22,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static jakarta.servlet.DispatcherType.ERROR;
@@ -51,25 +53,12 @@ public class SecurityConfig {
         http.cors(c -> c.disable()).authorizeHttpRequests(auth ->
                 auth.dispatcherTypeMatchers(FORWARD, ERROR).permitAll()
                         .requestMatchers(APPLICATION_OPEN_APIS).permitAll()
-                        .requestMatchers(AUTH_WHITELIST).permitAll()
+                        .requestMatchers("/**").permitAll()
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
         ).csrf(c -> c.disable());
         http.addFilterBefore(authJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-    }
-
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .cors(c -> c.disable())
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers( new AntPathRequestMatcher("swagger-ui/**")).permitAll()
-                        .requestMatchers( new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
-                        .requestMatchers( new AntPathRequestMatcher("v3/api-docs/**")).permitAll()
-                        .requestMatchers( new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
-                        .anyRequest().authenticated());
-        return httpSecurity.build();
     }
 
     @Bean
@@ -91,9 +80,9 @@ public class SecurityConfig {
     protected FilterRegistrationBean corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000/"));
+        config.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowedMethods(Arrays.asList("*"));
         config.setAllowCredentials(true);
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));

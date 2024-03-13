@@ -1,6 +1,7 @@
 package com.uol.finalproject.edulearn.services.impl;
 
 import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
+import com.uol.finalproject.edulearn.apimodel.UserDTO;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.User;
 import com.uol.finalproject.edulearn.exceptions.AuthorizationException;
@@ -43,8 +44,15 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNotBlank(studentUserDTO.getUniversity())) studentUser.setUniversity(studentUserDTO.getUniversity());
         if (Strings.isNotBlank(studentUserDTO.getFirstName())) studentUser.setFirstName(studentUserDTO.getFirstName());
         if (Strings.isNotBlank(studentUserDTO.getLastName())) studentUser.setLastName(studentUserDTO.getLastName());
+        if (Strings.isNotBlank(studentUserDTO.getLocation())) studentUser.setLocation(studentUserDTO.getLocation());
 
         return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
+    }
+
+    @Override
+    public UserDTO getUserDetails(String userId) {
+        User user = userRepository.findByUsername(userId).orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        return UserDTO.fromUser(user);
     }
 
     private boolean isLoggedInUserAuthorized(StudentUserDTO studentUserDTO) {

@@ -50,4 +50,6 @@ public class StudentUser extends BaseAuditableModel {
         BeanUtils.copyProperties(registerStudentUserDTO, studentUser);
         return studentUser;
     }
+
+
 }
