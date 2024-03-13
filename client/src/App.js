@@ -12,7 +12,7 @@ import { LOGIN_USER } from './redux/actions/types';
 import Notification from './utils/Notifications';
 import setAuthToken from './utils/setAuthToken';
 import store from './store'
-import Profile from './components/Profile';
+import Profile from './components/user-profile/Profile';
 import Leaderboard from './components/Leaderboard';
 import Challenge from './components/challenge/Challenge';
 import QuestionDetails from './components/question/QuestionDetails';

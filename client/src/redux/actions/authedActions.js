@@ -91,11 +91,10 @@ export const logOutUser = (history) => dispatch => {
 }
 
 
-export const logOutUserOnTokenExpiration = () => async dispatch =>  {
+export const logOutUserOnTokenExpiration = ()  =>  {
     localStorage.setItem('user', null)
     localStorage.setItem('token', null)
-    dispatch(logOutUser())
-    dispatch(handleClearUserState())  
+    // dispatch(logOutUser())
 }
 
 

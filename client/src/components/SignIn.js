@@ -17,8 +17,8 @@ const SignIn = ({ history, location, loading }) => {
   };
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
+    const userToken = localStorage.getItem('token');
+    if (!!userToken && userToken !== 'null') {
         history.push('/');
     }
   }, [history])
@@ -67,7 +67,7 @@ const SignIn = ({ history, location, loading }) => {
                 <label htmlFor="password">Password<span className="text-danger">*</span></label>
                 <div className="input-icon w-100">
                   <i className="bi bi-lock"></i>
-                  <input type='password' className='form-control' id="password" name="password" value={password} onChange={({ target })  => setPassword(target.value)} 
+                  <input type={showPassword ? 'text' : 'password'} className='form-control password-input' id="password" name="password" value={password} onChange={({ target })  => setPassword(target.value)} 
                   placeholder='Enter your password' />
                   <i className={`password bi ${showPassword ? 'bi-eye-slash' : 'bi-eye'}`} onClick={togglePasswordVisibility}></i>
                 </div>

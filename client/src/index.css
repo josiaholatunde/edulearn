@@ -50,6 +50,7 @@ input, select {
 .btn-cool, .badge-cool {
   background-color: #161f2e !important;
   color: #fff !important;
+  border:  1px solid #161f2e !important;
 }
 
 .btn-light {
