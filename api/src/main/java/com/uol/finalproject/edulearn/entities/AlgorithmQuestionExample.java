@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,7 @@ public class AlgorithmQuestionExample extends BaseAuditableModel {
 
     @ManyToOne
     @JoinColumn(name = "algorithm_question_id", referencedColumnName = "id")
+    @JsonIgnore
     private AlgorithmQuestion algorithmQuestion;
 
 }

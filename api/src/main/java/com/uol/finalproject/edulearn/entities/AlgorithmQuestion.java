@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -39,7 +40,11 @@ public class AlgorithmQuestion extends BaseAuditableModel {
 
     @OneToOne
     @JoinColumn(name = "question_id")
+    @JsonIgnore
     private Question question;
+
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion")
+    private List<AlgorithmQuestionExample> examples = new ArrayList<>();
 
 
 

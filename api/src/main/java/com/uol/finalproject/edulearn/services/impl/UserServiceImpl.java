@@ -4,6 +4,7 @@ import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.UserDTO;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.User;
+import com.uol.finalproject.edulearn.exceptions.AuthenticationException;
 import com.uol.finalproject.edulearn.exceptions.AuthorizationException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.StudentUserRepository;
@@ -63,6 +64,16 @@ public class UserServiceImpl implements UserService {
             return loggedInUserEmail.equals(studentUserDTO.getEmail());
         }
         return false;
+    }
+
+    @Override
+    public UserDetails getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            return ((UserDetails) authentication.getPrincipal());
+        }
+        throw new AuthenticationException("User is not authorized to access resource");
     }
 
 }

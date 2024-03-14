@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
 import jakarta.persistence.*;
@@ -30,6 +31,13 @@ public class Question extends BaseAuditableModel {
     private int level = 10;
 
     @ManyToMany(mappedBy = "challengeQuestions")
+    @JsonIgnore
     private List<Challenge> challenges = new ArrayList<>();
+
+    @OneToOne(mappedBy = "question")
+    private AlgorithmQuestion algorithmQuestion;
+
+    @OneToOne(mappedBy = "question")
+    private MultipleChoiceQuestion multipleChoiceQuestion;
 
 }
