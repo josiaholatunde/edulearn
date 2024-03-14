@@ -5,7 +5,8 @@ import React, { Fragment } from 'react'
 const AlgorithmQuestionDetail = ({ questions, history, challengeMode }) => {
 
 
-    const question = (questions && questions.length > 0) && questions[0];
+    console.log('questions object', questions)
+    const question = (questions && questions.length > 0) && questions[0]?.algorithmQuestion;
 
     return !question ? (<h1>No question...</h1>) : (<Fragment>
             <div className="row">

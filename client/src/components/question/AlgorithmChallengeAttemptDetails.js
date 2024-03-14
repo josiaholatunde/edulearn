@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { connect } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import questionBank from '../../utils/questions';
 import CodeEditor from '../code-editor/CodeEditor';
@@ -6,7 +7,7 @@ import AlgorithmSolution from './AlgorithmSolution';
 
 
 
-const AlgorithmChallengeAttemptDetails = () => {
+const AlgorithmChallengeAttemptDetails = ({ challengeDetail }) => {
     const [activeTab, setActiveTab] = useState("description");
     const [question, setQuestion ] = useState({})
     const [language, setLanguage] = useState('python')
@@ -37,7 +38,8 @@ const AlgorithmChallengeAttemptDetails = () => {
 
     useEffect(() => {
         const questionId = pathParams.id;
-        const question = questionBank.find(question => question.id == questionId)
+        // const question = questionBank.find(question => question.id == questionId)
+        const question = challengeDetail?.challengeQuestions[0]?.algorithmQuestion
         setQuestion(question)
         populateUserCodeInput(question)
 
@@ -159,6 +161,11 @@ const AlgorithmChallengeAttemptDetails = () => {
 
 }
 
+const mapStateToProps = ({ challenges: { challengeDetail }, loading }) => {
+    return ({
+        challengeDetail,
+        loading
+    })
+}
 
-
-export default AlgorithmChallengeAttemptDetails
+export default connect(mapStateToProps)(AlgorithmChallengeAttemptDetails)

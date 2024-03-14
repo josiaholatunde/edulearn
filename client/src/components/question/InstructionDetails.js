@@ -10,7 +10,7 @@ const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruct
     }
 
     const displayDescription = () => {
-        if (questionType === QUESTION_TYPE.multiple_choice) {
+        if (questionType === QUESTION_TYPE.MULTIPLE_CHOICE) {
             return `Welcome to ${getQuizTitle()}! Test your knowledge with these multiple-choice questions. Choose the correct answer for each question and see how well you understand computer science concepts. Good luck!`
         }
         return `Welcome to this algorithm challenge! Test your knowledge of algorithms with these algorithm questions. Read the problem statement, write code to pass the test cases and see how well you understand the efficiency of various algorithms. Good luck!`

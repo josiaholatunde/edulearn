@@ -38,18 +38,24 @@ const columns = [
     title: 'Action',
     dataIndex: 'action',
     key: 'action',
-    render: (_, challenge) => <Link to={`/challenge/${challenge.title}/details?type=${challenge.type}&mode=individual`} className='text-cool'>Details</Link>
+    render: (_, challenge) => <Link to={`/challenge/${challenge.id}/details?type=${challenge.type}&mode=individual`} className='text-cool'>Details</Link>
   },
 ];
 
-const ChallengeDataTable = () => {
+const ChallengeDataTable = ({ challenges, currentPage, setCurrentPage, loading, totalItems}) => {
   return (
     <div className='row mt-5'>
         <div className='col'>
         <Table
             columns={columns}
-            dataSource={data}
-            pagination={{ pageSize: 10 }} // Adjust pageSize as needed
+            dataSource={challenges}
+            pagination={{ 
+              pageSize: 5,
+              current: currentPage,
+              onChange: setCurrentPage,
+              total: totalItems
+             }}  
+             loading={loading}
         />
         </div>
     </div>

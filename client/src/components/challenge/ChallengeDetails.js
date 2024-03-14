@@ -8,16 +8,18 @@ import { useLocation } from 'react-router-dom'
 import { useParams } from 'react-router'
 import data from "../../utils/challenges";
 import InstructionDetails from "../question/InstructionDetails";
+import { connect, useDispatch } from "react-redux";
+import { getChallengeDetails } from "../../redux/actions/challengeActions";
 
 
 
-const ChallengeDetails = ({ match, history }) => {
+const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill(null));
     const [questions, setQuestions] = useState([]);
     const [showSuccessModal, setShowSuccessModal ] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [type, setType] = useState(QUESTION_TYPE.multiple_choice)
+    const [type, setType] = useState(QUESTION_TYPE.MULTIPLE_CHOICE)
     const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
@@ -26,39 +28,31 @@ const ChallengeDetails = ({ match, history }) => {
     const pathParams = useParams();
     const challengeIdentifier = pathParams.identifier;
 
+    const dispatch = useDispatch()
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
     
     useEffect(() => {
         if (!!queryParams.get('type')) {
             const type = queryParams.get('type')
-            setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.multiple_choice)
-            setQuestions(getQuestions(type))
+            setType(type == QUESTION_TYPE.ALGORITHMS ? QUESTION_TYPE.ALGORITHMS : QUESTION_TYPE.MULTIPLE_CHOICE)
         }
         if (!!queryParams.get('mode')) {
             setChallengeMode(queryParams.get('mode'))
         }
-
-        console.log('ccc', challengeIdentifier)
         if (challengeIdentifier && mode) {
-            const challenge = getChallenge(challengeIdentifier)
-            setChallenge(challenge)
-            setQuestions(challenge?.questions || [])
+            getChallenge(challengeIdentifier)
         } 
-    }, [queryParams]);
+        if (!!challenge) {
+            setChallenge(challengeDetail)
+            setQuestions(challengeDetail?.challengeQuestions)
+        } 
+    }, [challengeIdentifier, mode, challengeDetail?.title]);
 
     const getChallenge = (challengeIdentifier) => {
-        return data.find(challenge => challenge.title == challengeIdentifier)
+        dispatch(getChallengeDetails(challengeIdentifier))
     }
 
-
-
-    const getQuestions = (challengeId, type) => {
-        if (!challengeId || challengeId == 'random') return questionBank.filter(question => question.type === type)
-        return questionBank.filter(question => question.category == challengeId && question.type === type)
-    }
-
-    
 
     const handleCloseSuccessModal = () => {
         setShowSuccessModal(false)
@@ -66,7 +60,8 @@ const ChallengeDetails = ({ match, history }) => {
     }
 
 
-    const renderQuestionDetails = () => {
+    const renderQuestionDetails = (challengeDetail) => {
+        const challengeQuestions = challengeDetail?.challengeQuestions
         if (shouldShowInstruction) return <InstructionDetails questionType={type} setShouldShowInstruction={() => {
             setTimeout(() => {
                 setLoading(false)
@@ -75,11 +70,12 @@ const ChallengeDetails = ({ match, history }) => {
             }
         } loading={loading} setLoading={setLoading}  />
         else {
-            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
-            : (<AlgorithmQuestionDetail questions={questions} history={history} challengeMode={mode} />)
+            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail questions={challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
+            : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} />)
         }
     }
 
+    console.log('challenge ', challenge, 'challenge details', challengeDetail)
     return (
         <Fragment>
             <div
@@ -87,16 +83,16 @@ const ChallengeDetails = ({ match, history }) => {
                 style={{ height: "192px" }}
             >
                 <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
-                    <h3>{ challenge?.title || DEFAULT_CHALLENGE_TITLE } </h3>
+                    <h3>{ challengeDetail?.title || DEFAULT_CHALLENGE_TITLE } </h3>
                     <div>
                         <i className="bi bi-envelope-open"></i>{" "}
-                        <span className="f-14">{ challenge?.submissions } submissions received</span>
+                        <span className="f-14">{ challengeDetail?.submissions } submissions received</span>
                     </div>
                 </div>
             </div>
 
             {
-                renderQuestionDetails()
+                renderQuestionDetails(challengeDetail)
             }
 
             {
@@ -133,4 +129,11 @@ const ChallengeDetails = ({ match, history }) => {
     );
 };
 
-export default ChallengeDetails;
+const mapStateToProps = ({ challenges: { challengeDetail }, loading }) => {
+    return ({
+        challengeDetail,
+        loading
+    })
+}
+
+export default connect(mapStateToProps, { getChallengeDetails  })(ChallengeDetails);

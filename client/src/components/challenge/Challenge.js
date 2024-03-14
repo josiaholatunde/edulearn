@@ -1,15 +1,47 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ChallengeDataTable from './ChallengeDataTable'
 import Modal from 'react-bootstrap/Modal';
 import OnlineUsersDataTable from '../OnlineUsersDataTable';
 import { QUESTION_TYPE } from '../../utils/constants';
+import { connect, useDispatch } from 'react-redux';
+import { getChallenges } from '../../redux/actions/challengeActions';
+import moment from 'moment'
 
-const Challenge = ({ history }) => {
+const mapChallenge = (challenges, currentPage, pageSize) => {
+    const pageStart = currentPage * pageSize;
+    return challenges?.map((challenge, index) => ({
+        key: pageStart + (index + 1),
+        position: pageStart + (index + 1),
+        title: challenge?.title,
+        friendlyType: challenge?.friendlyType,
+        type: challenge?.type,
+        level: challenge?.level || 'N/A',
+        startDate: moment(challenge?.startDate).format('MMMM Do YYYY, h:mm:ss a') || 'N/A',
+        endDate: moment(challenge.endDate).format('MMMM Do YYYY, h:mm:ss a'),
+        submissions: challenge?.submissions,
+        id: challenge?.id
+    }))
+}
+
+
+const Challenge = ({ history, loading, total, challenges }) => {
     const [showQuestionStyle, setShowQuestionStyle] = useState(false)
     const [showOnlineUsers, setShowOnlineUsers] = useState(false)
     const [ challengeMode, setChallengeMode ] = useState('individual')
+    const [page, setCurrentPage] = useState(1)
+    const [size, setSize] = useState(5)
+
+
+    const dispatch = useDispatch()
+
+
     const handleCloseQuestionStyle = () => setShowQuestionStyle(false)
     const handleCloseOnlineUsers = () => setShowOnlineUsers(false)
+
+
+    useEffect(() => {
+        dispatch(getChallenges({ page, size }))
+    }, [page])
 
 
     const routeToPath = (path) => {
@@ -46,7 +78,13 @@ const Challenge = ({ history }) => {
                     </ul>
                     </div>
                 </div>
-                <ChallengeDataTable />
+                <ChallengeDataTable
+                    challenges={challenges} 
+                    currentPage={page}
+                    setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
+                    loading={loading}
+                    totalItems={total}
+                 />
                 <Modal show={showQuestionStyle} onHide={handleCloseQuestionStyle} size='md' centered className="question-style-modal" >
                     <Modal.Header closeButton={handleCloseQuestionStyle}>
                     <Modal.Title className='pl-3 text-center w-100'>Choose Question Type</Modal.Title>
@@ -55,14 +93,14 @@ const Challenge = ({ history }) => {
                         <div className='row p-3'>
                             <div className='col-lg-12'>
                                 <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.multiple_choice}&mode=${challengeMode}`)} >
+                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.MULTIPLE_CHOICE}&mode=${challengeMode}`)} >
                                         Multiple Choice
                                     </button>
                                 </div>
                             </div>
                             <div className='col-lg-12 my-3'>
                                 <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.algorithms}&mode=${challengeMode}`)} >
+                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => routeToPath(`/questions?type=${QUESTION_TYPE.ALGORITHMS}&mode=${challengeMode}`)} >
                                         Algorithms
                                     </button>
                                 </div>
@@ -88,5 +126,13 @@ const Challenge = ({ history }) => {
     )
 }
 
-export default Challenge
+const mapStateToProps = ({ challenges: { challenges, total, currentPage, pageSize }, loading }) => {
+    return ({
+        challenges: mapChallenge(challenges, currentPage, pageSize),
+        total,
+        loading
+    })
+}
+
+export default connect(mapStateToProps, {  getChallenges })(Challenge)
 

@@ -1,6 +1,7 @@
 package com.uol.finalproject.edulearn.repositories;
 
 import com.uol.finalproject.edulearn.entities.Challenge;
+import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.User;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import org.springframework.data.domain.Page;
@@ -15,4 +16,5 @@ import java.util.Optional;
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     Page<Challenge> findAllByStudentUser_EmailOrCreatedBy(String email, RoleType createdBy, Pageable pageable);
+    Page<Challenge> findAllByStudentUserAndLevelOrCreatedBy(StudentUser studentUser, long level, RoleType createdBy, Pageable pageable);
 }

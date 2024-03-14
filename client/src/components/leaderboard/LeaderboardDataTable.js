@@ -44,7 +44,7 @@ const LeaderboardDataTable = ({ users, currentPage, setCurrentPage, loading, tot
               onChange: setCurrentPage,
               total: totalItems
              }} 
-             loading={loading}
+            loading={loading}
              
         />
         </div>

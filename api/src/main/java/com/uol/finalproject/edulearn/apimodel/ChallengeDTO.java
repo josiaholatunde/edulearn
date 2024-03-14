@@ -24,6 +24,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ChallengeDTO {
 
+    private Long id;
+
     private String title;
 
     private String category;

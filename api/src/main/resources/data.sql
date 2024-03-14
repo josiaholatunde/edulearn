@@ -18,6 +18,10 @@ VALUES
     ('What does SQL stand for ?', 'databases', 10, current_timestamp(), current_timestamp()),
     ('What does ACID stand for in database transactions?', 'databases', 10, current_timestamp(), current_timestamp());
 
+
+INSERT INTO questions(title, category, level, created_at, updated_at)
+VALUES ('Longest Common Subsequence','dynamic_programming',10, current_timestamp(), current_timestamp());
+
 -- Insert multiple choice questions for Challenge 1: Databases
 INSERT INTO multiple_choice_questions (question_id, has_multiple_answers, created_at, updated_at)
 VALUES
@@ -88,4 +92,7 @@ VALUES(1,
                                    };",
        'O(n)', 'O(n)', 'https://www.geeksforgeeks.org/dynamic-programming/', current_timestamp(), current_timestamp());
 
+
+INSERT INTO challenge_questions(challenge_id, question_id)
+VALUES (1, 5);
 -- COMMIT;
