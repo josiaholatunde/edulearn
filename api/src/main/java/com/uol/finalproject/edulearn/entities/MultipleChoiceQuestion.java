@@ -12,24 +12,20 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "questions")
+@Entity(name = "multiple_choice_questions")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Question extends BaseAuditableModel {
+public class MultipleChoiceQuestion extends BaseAuditableModel {
 
-    private String title;
+    private boolean hasMultipleAnswers;
 
-    private String category;
+    @OneToOne
+    @JoinColumn(name = "question_id")
+    private Question question;
 
-    @Enumerated(EnumType.STRING)
-    private QuestionType type;
-
-    @Builder.Default
-    private int level = 10;
-
-    @ManyToMany(mappedBy = "challengeQuestions")
-    private List<Challenge> challenges = new ArrayList<>();
+    @OneToMany
+    private List<MultipleChoiceOption> options = new ArrayList<>();
 
 }

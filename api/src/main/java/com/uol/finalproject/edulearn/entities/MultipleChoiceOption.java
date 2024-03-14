@@ -1,7 +1,6 @@
 package com.uol.finalproject.edulearn.entities;
 
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
-import com.uol.finalproject.edulearn.entities.enums.QuestionType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,24 +11,18 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "questions")
+@Entity(name = "multiple_choice_question_options")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Question extends BaseAuditableModel {
+public class MultipleChoiceOption extends BaseAuditableModel {
 
     private String title;
 
-    private String category;
+    private String value;
 
-    @Enumerated(EnumType.STRING)
-    private QuestionType type;
-
-    @Builder.Default
-    private int level = 10;
-
-    @ManyToMany(mappedBy = "challengeQuestions")
-    private List<Challenge> challenges = new ArrayList<>();
-
+    @ManyToOne
+    @JoinColumn(name = "multiple_choice_question_id", referencedColumnName = "id")
+    private MultipleChoiceQuestion question;
 }

@@ -117,9 +117,12 @@ const questionBank = [
         category: 'dynamic_programming',
         type: 'algorithms',
         level: 10,
-        introduction: 'You are given two strings, A and B. Your task is to find the length of the longest common subsequence (LCS) between the two strings. A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.',
-        inputDescription: 'Two strings A and B, each consisting of lowercase English letters.',
-        outputDescription: 'An integer representing the length of the longest common subsequence between A and B.',
+        introduction: 
+        'You are given two strings, A and B. Your task is to find the length of the longest common subsequence (LCS) between the two strings. A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.',
+        inputDescription: 
+        'Two strings A and B, each consisting of lowercase English letters.',
+        outputDescription: 
+        'An integer representing the length of the longest common subsequence between A and B.',
         examples: [
             {
                 id: 1,
@@ -134,11 +137,15 @@ const questionBank = [
                 explanation: 'There is no common subsequence between the two strings.'
             },
         ],
-        pythonSampleCode: 'def longestCommonSubsequence(n):\n\tpass #todo',
-        javascriptSampleCode: 'const longestCommonSubsequence = (n) => {\n\t //todo \n}',
-        javaSampleCode: "class Solution {\n\tpublic int longestCommonSubsequence(String n) {\n\t\t//todo;\n\t}\n}",
+        pythonSampleCode: 
+        'def longestCommonSubsequence(n):\n\tpass #todo',
+        javascriptSampleCode: 
+        'const longestCommonSubsequence = (n) => {\n\t //todo \n}',
+        javaSampleCode: 
+        "class Solution {\n\tpublic int longestCommonSubsequence(String n) {\n\t\t//todo;\n\t}\n}",
         solution: {
-            description: 'The first step is to build a hash map element -> its frequency. In Java, we use the data structure HashMap. Python provides a dictionary subclass Counter to initialize the hash map we need directly from the input array. This step takes O(N)\mathcal{O}(N)O(N) time where N is a number of elements in the list',
+            description: 
+            'The first step is to build a hash map element -> its frequency. In Java, we use the data structure HashMap. Python provides a dictionary subclass Counter to initialize the hash map we need directly from the input array. This step takes O(N)\mathcal{O}(N)O(N) time where N is a number of elements in the list',
             solutionCode: `const isPrime = (n) => {
                             if (n < 2) return false;
                             

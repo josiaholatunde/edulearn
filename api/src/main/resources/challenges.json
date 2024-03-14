@@ -1,0 +1,160 @@
+[
+  {
+    "key": "1",
+    "title": "Databases",
+    "category": "databases",
+    "friendlyType": "Multiple Choice",
+    "type": "multiple_choice",
+    "level": "10",
+    "startDate": "22/02/2024",
+    "endDate": "22/03/2024",
+    "submissions": 102,
+    "questions": [
+      {
+        "id": 1,
+        "category": "databases",
+        "title": "Which of these is a valid DDL (Data definition language) statement ?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "id": 1,
+            "title": "SELECT",
+            "value": "SELECT"
+          },
+          {
+            "id": 2,
+            "title": "UPDATE",
+            "value": "UPDATE"
+          },
+          {
+            "id": 3,
+            "title": "ALTER",
+            "value": "ALTER"
+          },
+          {
+            "id": 4,
+            "title": "DELETE",
+            "value": "DELETE"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "category": "databases",
+        "title": "Which of the following is not a type of database model?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "id": 1,
+            "title": "Relational",
+            "value": "Relational"
+          },
+          {
+            "id": 2,
+            "title": "Hierarchical",
+            "value": "Hierarchical"
+          },
+          {
+            "id": 3,
+            "title": "Network",
+            "value": "Network"
+          },
+          {
+            "id": 4,
+            "title": "Linear",
+            "value": "Linear"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "category": "databases",
+        "title": "What does SQL stand for ?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "id": 1,
+            "title": "Structured Query Language",
+            "value": "Structured Query Language"
+          },
+          {
+            "id": 2,
+            "title": "Hierarchical",
+            "value": "Hierarchical"
+          },
+          {
+            "id": 3,
+            "title": "Sequential Query Language",
+            "value": "Sequential Query Language"
+          },
+          {
+            "id": 4,
+            "title": " Standard Query Language",
+            "value": " Standard Query Language"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "category": "databases",
+        "title": "What does ACID stand for in database transactions?",
+        "type": "multiple_choice",
+        "options": [
+          {
+            "id": 1,
+            "title": "Atomicity, Consistency, Isolation, Durability",
+            "value": "Atomicity, Consistency, Isolation, Durability"
+          },
+          {
+            "id": 2,
+            "title": "All Columns Identified Directly",
+            "value": "Hierarchical"
+          },
+          {
+            "id": 3,
+            "title": "Automated Control of Information and Data",
+            "value": "Sequential Query Language"
+          },
+          {
+            "id": 4,
+            "title": "Atomic, Continuous, Immediate, Dynamic",
+            "value": "Atomic, Continuous, Immediate, Dynamic"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "key": "2",
+    "title": "Mock Test",
+    "category": "search",
+    "friendlyType": "Algorithms",
+    "type": "algorithms",
+    "level": "9",
+    "startDate": "22/02/2024",
+    "endDate": "22/03/2024",
+    "submissions": 1020
+  },
+  {
+    "key": "3",
+    "title": "Dynamic Programming",
+    "category": "dynamic_programming",
+    "friendlyType": "Algorithms",
+    "type": "algorithms",
+    "level": "4",
+    "startDate": "22/02/2024",
+    "endDate": "22/03/2024",
+    "submissions": 20
+  },
+  {
+    "key": "4",
+    "title": "Graph Theory",
+    "category": "graph_theory",
+    "friendlyType": "Multiple Choice",
+    "type": "multiple_choice",
+    "level": "9",
+    "startDate": "22/02/2024",
+    "endDate": "22/03/2024",
+    "submissions": 200
+  }
+]
