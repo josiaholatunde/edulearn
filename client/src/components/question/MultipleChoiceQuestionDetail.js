@@ -54,7 +54,7 @@ const MultipleChoiceQuestionDetail = ({ questions, setShowSuccessModal }) => {
                             {questions[currentQuestion].title}
                         </h6>
                         <ol type="a" className="mt-3 pl-1">
-                            {questions[currentQuestion].options.map((option, index) => (
+                            {questions[currentQuestion]?.multipleChoiceQuestion?.options.map((option, index) => (
                                 <Fragment key={index}>
                                     <div
                                         className="option-container d-flex align-items-center"

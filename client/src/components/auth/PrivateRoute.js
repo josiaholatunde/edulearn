@@ -1,7 +1,7 @@
 import React from 'react'
 import {  Redirect, Route } from 'react-router-dom'
 import { connect } from 'react-redux'
-import { showNotification } from '../utils/showNotification'
+import { showNotification } from '../../utils/showNotification'
 
 const PrivateRoute = ({ authedUser, isUserLoggedIn, component: Component, ...rest}) => {
 

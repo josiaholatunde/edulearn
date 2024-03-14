@@ -16,7 +16,7 @@ public class EduLearnApplication implements ApplicationRunner {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    private static final String DEFAULT_ADMIN_USERNAME = "admin@edulearn";
+    private static final String DEFAULT_ADMIN_USERNAME = "admin@edulearn.ng";
     private static final String DEFAULT_ADMIN_PASSWORD = "password";
 
 

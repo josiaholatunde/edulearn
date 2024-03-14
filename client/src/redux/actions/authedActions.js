@@ -25,7 +25,7 @@ export const handleLoginUser = (userToLogin, { history }) => dispatch => {
 
     setTimeout(async () => {
         try {
-            const { data } = await axios.post('/login', userToLogin)
+            const { data } = await axios.post('/auth/login', userToLogin)
             if (data) {
                 const { token, user } = data && data.data
                 setAuthToken(token);
@@ -56,7 +56,7 @@ export const handleRegisterUser = (userToRegister, { history }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
-            const { data } = await axios.post('/register/voter', userToRegister)
+            const { data } = await axios.post('/auth/register', userToRegister)
             if (data) {
                 const user = data.data
                 dispatch({ type: CREATE_USER, payload: user })
@@ -91,11 +91,10 @@ export const logOutUser = (history) => dispatch => {
 }
 
 
-export const logOutUserOnTokenExpiration = () => async dispatch =>  {
+export const logOutUserOnTokenExpiration = ()  =>  {
     localStorage.setItem('user', null)
     localStorage.setItem('token', null)
-    dispatch(logOutUser())
-    dispatch(handleClearUserState())  
+    // dispatch(logOutUser())
 }
 
 

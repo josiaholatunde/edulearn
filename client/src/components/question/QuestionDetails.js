@@ -15,7 +15,7 @@ const QuestionDetails = ({ match, history }) => {
     const [questions, setQuestions] = useState([]);
     const [showSuccessModal, setShowSuccessModal ] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [type, setType] = useState(QUESTION_TYPE.multiple_choice)
+    const [type, setType] = useState(QUESTION_TYPE.MULTIPLE_CHOICE)
     const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
@@ -27,7 +27,7 @@ const QuestionDetails = ({ match, history }) => {
     useEffect(() => {
         if (!!queryParams.get('type')) {
             const type = queryParams.get('type')
-            setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.multiple_choice)
+            setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.MULTIPLE_CHOICE)
             setQuestions(getQuestions(type))
         }
         if (!!queryParams.get('mode')) {
@@ -56,7 +56,7 @@ const QuestionDetails = ({ match, history }) => {
             }
         } loading={loading} setLoading={setLoading}  />
         else {
-            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
+            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
             : (<AlgorithmQuestionDetail questions={questions} history={history} challengeMode={mode} />)
         }
     }

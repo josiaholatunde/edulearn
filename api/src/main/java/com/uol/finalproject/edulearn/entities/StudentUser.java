@@ -8,9 +8,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@Entity
+@Entity(name = "student_users")
 @Builder
 @Data
 @NoArgsConstructor
@@ -25,12 +26,33 @@ public class StudentUser extends BaseAuditableModel {
 
     private String email;
 
-    @Column(name = "student_no")
-    private String studentNo;
+    @Builder.Default
+    private int level = 10;
+
+    private String biography;
+    private String location;
+    private String skills;
+    private String university;
+
+    @Builder.Default
+    private long points = Long.valueOf(100);
+
+    @OneToOne(mappedBy = "studentUser")
+    private User user;
+
+    @OneToMany
+    @Builder.Default
+    private List<Challenge> challenges = new ArrayList<>();
+
+    @OneToMany
+    @Builder.Default
+    private List<UserCertification> certifications = new ArrayList<>();
 
     public static StudentUser fromRegisterStudent(RegisterStudentUserDTO registerStudentUserDTO) {
         StudentUser studentUser = StudentUser.builder().build();
         BeanUtils.copyProperties(registerStudentUserDTO, studentUser);
         return studentUser;
     }
+
+
 }
