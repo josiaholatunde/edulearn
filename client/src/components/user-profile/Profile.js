@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import convertToPercentage from "../../utils/levelCalculation";
 import EditBioForm from "./EditBioForm";
 import EditProfile from "./EditProfile";
-import StreakCalendar from "../StreakCalendar";
+import StreakCalendar from "./StreakCalendar";
 
 const DEFAULT_AVATAR_URL =
   "https://tylermcginnis.com/would-you-rather/sarah.jpg";

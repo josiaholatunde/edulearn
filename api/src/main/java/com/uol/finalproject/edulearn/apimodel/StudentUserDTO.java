@@ -35,11 +35,14 @@ public class StudentUserDTO {
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
+    private String fullName;
+    private String points;
 
 
     public static StudentUserDTO fromStudentUser(StudentUser studentUser) {
         StudentUserDTO studentUserDTO = StudentUserDTO.builder().build();
         BeanUtils.copyProperties(studentUser, studentUserDTO);
+        studentUserDTO.setFullName(String.format("%s %s", studentUserDTO.firstName, studentUserDTO.lastName));
         return studentUserDTO;
     }
 }

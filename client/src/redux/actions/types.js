@@ -9,7 +9,7 @@ export const LOGIN_USER = 'LOGIN_USER'
 export const CREATE_USER = 'CREATE_USER'
 
 
-
+export const GET_LEADER_BOARD = 'GET_LEADER_BOARD'
 
 
 export const SET_LOADING = 'SET_LOADING'

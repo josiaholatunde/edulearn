@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { handleRegisterUser } from "../redux/actions/authedActions";
-import { redirectUserBackToHomeIfLoggedIn } from "../utils/api";
-import { showNotification } from "../utils/showNotification";
-import isValidEmail from "../utils/EmailUtil";
-import PasswordRequirements from "./auth/PasswordRequirements";
+import { handleRegisterUser } from "../../redux/actions/authedActions";
+import { redirectUserBackToHomeIfLoggedIn } from "../../utils/api";
+import { showNotification } from "../../utils/showNotification";
+import isValidEmail from "../../utils/EmailUtil";
+import PasswordRequirements from "./PasswordRequirements";
 
 class Register extends Component {
   state = {

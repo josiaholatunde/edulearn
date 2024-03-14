@@ -34,6 +34,9 @@ public class StudentUser extends BaseAuditableModel {
     private String skills;
     private String university;
 
+    @Builder.Default
+    private long points = Long.valueOf(100);
+
     @OneToOne(mappedBy = "studentUser")
     private User user;
 

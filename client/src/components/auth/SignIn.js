@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
-import { handleLoginUser } from "../redux/actions/authedActions";
+import { handleLoginUser } from "../../redux/actions/authedActions";
 
 const SignIn = ({ history, location, loading }) => {
   const [email, setEmail] = useState("");

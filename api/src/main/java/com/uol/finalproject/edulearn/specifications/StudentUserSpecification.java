@@ -30,7 +30,7 @@ public class StudentUserSpecification {
             Predicate[] predicates = allSearchPredicates.toArray(new Predicate[0]);
 
             Predicate combinedPredicate = builder.and(predicates);
-            query.orderBy(builder.asc(root.get("level")));
+            query.orderBy(builder.asc(root.get("level")), builder.desc(root.get("points")));
             return combinedPredicate;
         };
     }
