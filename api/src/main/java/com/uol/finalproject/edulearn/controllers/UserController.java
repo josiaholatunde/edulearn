@@ -6,7 +6,11 @@ import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.UserDTO;
 import com.uol.finalproject.edulearn.services.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(value = "/api/users")
@@ -25,5 +29,10 @@ public class UserController {
     @GetMapping("/{userId}")
     public UserDTO editUser(@PathVariable String userId) {
         return userService.getUserDetails(userId);
+    }
+
+    @GetMapping("/online/active")
+    public Page<StudentUserDTO> getOnlineUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+       return userService.getActiveUsersOnline(PageRequest.of(page, size));
     }
 }

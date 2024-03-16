@@ -1,6 +1,6 @@
 import { showNotification } from "../../utils/showNotification"
 import { hideLoading, showLoading } from "./shared"
-import { UPDATE_USER } from "./types"
+import { GET_ONLINE_USERS, UPDATE_USER } from "./types"
 import axios from '../../utils/axiosConfig'
 
 export const ADD_USER='ADD_USER'
@@ -46,5 +46,34 @@ export const getUserDetails = (userEmail) => async dispatch => {
         dispatch(hideLoading())
         let errorMessage = error.response && error.response.data.message;
         showNotification('danger', errorMessage || 'Error occurred while updating user profile')
+    }
+}
+
+
+
+
+export const getOnlineActiveUserDetails = (page, size) => async dispatch => {
+    dispatch(showLoading())
+    try {
+        page = (page - 1) < 0 ? 0 : (page - 1)
+        let pageSize = size || 5
+        let queryParams = `page=${page}&size=${pageSize}`
+
+        const { data } = await axios.get(`/users/online/active?${queryParams}`)
+        if (data) {
+            const users = data?.data?.content
+            dispatch({ 
+                type: GET_ONLINE_USERS, 
+                onlineUsers: users,
+                total: data?.data?.totalElements, 
+                page, 
+                size
+             })
+            dispatch(hideLoading())
+        }
+    } catch (error) {
+        dispatch(hideLoading())
+        let errorMessage = error.response && error.response.data.message;
+        showNotification('danger', errorMessage || 'Error occurred while retrieving online users')
     }
 }

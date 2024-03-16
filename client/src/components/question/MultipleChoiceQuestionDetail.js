@@ -1,19 +1,37 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
+import { connect, useDispatch } from 'react-redux';
+import { submitChallengeResponse } from '../../redux/actions/challengeActions';
 import questionBank from '../../utils/questions';
 
 
-const MultipleChoiceQuestionDetail = ({ questions, setShowSuccessModal }) => {
+const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessModal, loading }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill(null));
-    const [loading, setLoading] = useState(false)
+    // const [loading, setLoading] = useState(false)
+    const [userResponse, setUserResponses] = useState({})
+    // const [ questions, setQuestions ] = useState([])
+
+    const dispatch = useDispatch()
 
 
+    
 
     const handleOptionChange = (questionIndex, optionIndex) => {
         const newAnswers = [...answers];
         newAnswers[questionIndex] = optionIndex;
         setAnswers(newAnswers);
     };
+
+
+    const handleOptionSelect = (questionId, optionId) => {
+        const updatedResponses = {...userResponse };
+        if (!!updatedResponses[questionId]) {
+          updatedResponses[questionId].push(optionId);
+        } else {
+          updatedResponses[questionId] = [optionId];
+        }
+        setUserResponses(updatedResponses);
+      };
 
     const handlePrevious = () => {
         if (currentQuestion > 0) {
@@ -30,31 +48,34 @@ const MultipleChoiceQuestionDetail = ({ questions, setShowSuccessModal }) => {
 
     const submitQuiz = () => {
         //submit answers
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
+        console.log('answers ', answers)
+        const request = {
+            challengeId,
+            userResponse
+        }
+        dispatch(submitChallengeResponse(request, () => {
             setShowSuccessModal(true);
-        },3000)
+        }))
+        
        
     }
 
-
-    return (questions && questions.length === 0) ? (<h6 className='mt-5'>Oops! There are no questions in this challenge. Kindly contact Admin...</h6>) : (<Fragment>
+    
+    return (!questions || questions?.length === 0) ? (<h6 className='mt-5'>Oops! There are no questions in this challenge. Kindly contact Admin...</h6>) : (<Fragment>
             <div className="row">
                 <div className="question-container col-lg-12 text-left mt-5 ml-0 pl-0">
                     <div className="question-header d-flex justify-content-between">
                         <h5 className="question-title">{`Question ${currentQuestion + 1
                             }`}</h5>
-                        <span className="question-range">{`${currentQuestion + 1} of ${questions.length
-                            }`}</span>
+                        <span className="question-range">{`${currentQuestion + 1} of ${questions?.length}`}</span>
                     </div>
                     <div className="question-body py-3">
                         <h6 className="question-text">
                             {" "}
-                            {questions[currentQuestion].title}
+                            { questions && questions[currentQuestion].title}
                         </h6>
                         <ol type="a" className="mt-3 pl-1">
-                            {questions[currentQuestion]?.multipleChoiceQuestion?.options.map((option, index) => (
+                            {questions &&  questions[currentQuestion]?.multipleChoiceQuestion?.options.map((option, index) => (
                                 <Fragment key={index}>
                                     <div
                                         className="option-container d-flex align-items-center"
@@ -66,9 +87,10 @@ const MultipleChoiceQuestionDetail = ({ questions, setShowSuccessModal }) => {
                                             id={`option${option.id}`}
                                             name="option"
                                             checked={answers[currentQuestion] === index}
-                                            onChange={() =>
+                                            onChange={() => {
                                                 handleOptionChange(currentQuestion, index)
-                                            }
+                                                handleOptionSelect(questions[currentQuestion]?.id, option?.id)
+                                            }}
                                         />
                                         <label
                                             className="pointer ml-2 mb-0 pb-0"
@@ -94,7 +116,7 @@ const MultipleChoiceQuestionDetail = ({ questions, setShowSuccessModal }) => {
                             Previous
                         </div>
                         <div
-                            className={`ml-7 f-14 pointer ${currentQuestion === questions.length - 1 ? 'text-grey': ''}`}
+                            className={`ml-7 f-14 pointer ${currentQuestion === questions?.length - 1 ? 'text-grey': ''}`}
                             onClick={handleNext}
                             disabled={currentQuestion === questions.length - 1}
                         >
@@ -121,5 +143,9 @@ const MultipleChoiceQuestionDetail = ({ questions, setShowSuccessModal }) => {
 }
 
 
-
-export default MultipleChoiceQuestionDetail
+const mapStateToProps = ({ loading }) => {
+    return ({
+        loading
+    })
+}
+export default connect(mapStateToProps, { submitChallengeResponse  })(MultipleChoiceQuestionDetail)

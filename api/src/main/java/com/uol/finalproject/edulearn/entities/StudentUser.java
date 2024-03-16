@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +34,13 @@ public class StudentUser extends BaseAuditableModel {
     private String location;
     private String skills;
     private String university;
+
+    @Column(name = "is_logged_in")
+    @Builder.Default
+    private boolean userLoginStatus = false;
+
+    @Column(name = "last_logged_in_at")
+    private Timestamp lastLoggedInAt;
 
     @Builder.Default
     private long points = Long.valueOf(100);

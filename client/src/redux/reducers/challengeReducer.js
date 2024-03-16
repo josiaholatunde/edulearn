@@ -1,4 +1,4 @@
-import { GET_CHALLENGES, GET_CHALLENGE_DETAILS } from "../actions/types"
+import { GET_CHALLENGES, GET_CHALLENGE_DETAILS, GET_CHALLENGE_RESULT } from "../actions/types"
 
 
 export default function challengeReducer(state={}, action) {
@@ -15,6 +15,11 @@ export default function challengeReducer(state={}, action) {
             return {
                 ...state,
                 challengeDetail: action.challenge
+            }
+        case GET_CHALLENGE_RESULT:
+            return {
+                ...state,
+                challengeResult: action.challengeResult
             }
         
         default:

@@ -12,12 +12,16 @@ import com.uol.finalproject.edulearn.repositories.UserRepository;
 import com.uol.finalproject.edulearn.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -74,6 +78,14 @@ public class UserServiceImpl implements UserService {
             return ((UserDetails) authentication.getPrincipal());
         }
         throw new AuthenticationException("User is not authorized to access resource");
+    }
+
+
+    @Override
+    public Page<StudentUserDTO> getActiveUsersOnline(PageRequest pageRequest) {
+        Page<StudentUser> onlineUsers = studentUserRepository.findAllByUserLoginStatusAndUser_IsActive(true, true, pageRequest);
+
+        return new PageImpl<>(onlineUsers.stream().map(StudentUserDTO::fromStudentUser).collect(Collectors.toList()), pageRequest, onlineUsers.getTotalElements());
     }
 
 }

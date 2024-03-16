@@ -38,7 +38,6 @@ const AlgorithmChallengeAttemptDetails = ({ challengeDetail }) => {
 
     useEffect(() => {
         const questionId = pathParams.id;
-        // const question = questionBank.find(question => question.id == questionId)
         const question = challengeDetail?.challengeQuestions[0]?.algorithmQuestion
         setQuestion(question)
         populateUserCodeInput(question)
