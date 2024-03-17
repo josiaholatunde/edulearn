@@ -67,8 +67,12 @@ public class Challenge extends BaseAuditableModel {
     private List<ChallengeSubmission> challengeSubmissions = new ArrayList<>();
 
 
-    @OneToMany(mappedBy = "challenge")
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChallengeParticipant> challengeParticipants = new ArrayList<>();
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChallengeInvitation> challengeInvitations = new ArrayList<>();
 
 }

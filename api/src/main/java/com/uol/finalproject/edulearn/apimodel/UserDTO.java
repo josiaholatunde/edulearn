@@ -21,6 +21,8 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 public class UserDTO {
 
+    private long id;
+
     private String username;
 
     private boolean isActive;

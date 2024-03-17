@@ -21,10 +21,9 @@ const mapOnlineUsers = (onlineUsers, currentPage, pageSize) => {
 
 
 
-const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total }) => {
+const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total, selectedUserIds, setSelectedUserIds }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [size, setSize] = useState(5)
-  const [selectedUserIds, setSelectedUserIds ] = useState([])
 
 
   const columns = [
@@ -32,7 +31,7 @@ const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total }
       title: '',
       dataIndex: 'title',
       key: 'title',
-      render: (text, record) => <input type="checkbox" checked={record.id} onChange={() => handleCheckboxChange(record.id)} className='pointer' />,
+      render: (text, record) => <input type="checkbox" checked={selectedUserIds.includes(record.id)} onChange={() => handleCheckboxChange(record.id)} className='pointer' />,
     },
     {
       title: 'Name',
@@ -52,6 +51,7 @@ const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total }
   ];
 
   const handleCheckboxChange = (id) => {
+    console.log('iii', id, selectedUserIds)
     if (selectedUserIds.includes(id)) {
       setSelectedUserIds(selectedUserIds.filter(userId => userId !== id));
     } else {
@@ -66,6 +66,7 @@ const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total }
     dispatch(getOnlineActiveUserDetails(currentPage, size ))
   }, [currentPage])
   
+  console.log('ifemandi', onlineUsers)
   return (
     <div className='row mt-3 w-100'>
         <div className='col-lg-12'>

@@ -4,10 +4,7 @@ import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.entities.*;
-import com.uol.finalproject.edulearn.entities.enums.ChallengeStatus;
-import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
-import com.uol.finalproject.edulearn.entities.enums.QuestionType;
-import com.uol.finalproject.edulearn.entities.enums.RoleType;
+import com.uol.finalproject.edulearn.entities.enums.*;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.ChallengeService;
@@ -86,6 +83,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challenge = challengeRepository.save(challenge);
 
         saveChallengeParticipants(challenge, challengeDTO);
+        saveChallengeInvites(challenge, challengeDTO);
         assignChallengeQuestions(challenge);
 
         return ChallengeDTO.fromChallenge(challenge);
@@ -100,6 +98,20 @@ public class ChallengeServiceImpl implements ChallengeService  {
                     .studentUser(studentUser)
                     .build();
             challenge.getChallengeParticipants().add(challengeParticipant);
+        }
+        challengeRepository.save(challenge);
+    }
+
+    private void saveChallengeInvites(Challenge challenge, ChallengeDTO challengeDTO) {
+
+        for (Long currentUserId: challengeDTO.getChallengeUsers()) {
+            StudentUser studentUser = studentUserRepository.findById(currentUserId).orElseThrow(() -> new ResourceNotFoundException("One or more invalid student user ids"));
+            ChallengeInvitation challengeInvitation = ChallengeInvitation.builder()
+                    .challenge(challenge)
+                    .studentUser(studentUser)
+                    .status(ChallengeInviteStatus.PENDING)
+                    .build();
+            challenge.getChallengeInvitations().add(challengeInvitation);
         }
         challengeRepository.save(challenge);
     }

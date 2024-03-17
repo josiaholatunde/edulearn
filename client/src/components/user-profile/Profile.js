@@ -6,6 +6,7 @@ import EditCertificationForm from "./CertificationForm";
 import EditProfile from "./EditProfile";
 import StreakCalendar from "./StreakCalendar";
 import { getUserDetails } from "../../redux/actions/userActions";
+import DeleteCertificationModal from "./DeleteCertificationModal";
 
 const DEFAULT_AVATAR_URL =
   "https://tylermcginnis.com/would-you-rather/sarah.jpg";
@@ -17,9 +18,9 @@ const CERTIFICATION_FORM_MODE = {
 
   const Profile = ({ user }) => {
     
-    // const [user, setUser] = useState({});
     const [showEditProfileModal, setShowEditProfileModal] = useState(false)
     const [showEditBioModal, setShowEditBioModal] = useState(false)
+    const [showDeleteCertificationModal, setShowDeleteCertificationModal ] = useState(false)
     const [certificationFormMode, setCertificationFormMode ] = useState(CERTIFICATION_FORM_MODE.CREATE)
     const [showEditCertificationModal, setShowEditCertificationModal] = useState(false)
     const [ currentCertification, setCurrentCertification ] = useState(null)
@@ -44,8 +45,10 @@ const CERTIFICATION_FORM_MODE = {
   }
 
   const handleDeleteCertification = (certification) => {
-    
+    setCurrentCertification(certification)
+    setShowDeleteCertificationModal(true)
   }
+
 
   return (
     <Fragment>
@@ -201,13 +204,13 @@ const CERTIFICATION_FORM_MODE = {
 
                 <div className="certifications card p-2 mt-5">
                     <div className="d-flex justify-content-between align-items-center">
-                      <h5 className="mb-0">Certifications</h5>
+                      <h5 className="mb-0 ml-0 pl-3">Certifications</h5>
                       <i className="mdi mdi-plus mdi-24px pointer" onClick={() => {
                         setCertificationFormMode(CERTIFICATION_FORM_MODE.CREATE)
                         setShowEditCertificationModal(true) 
                       }}></i>
                     </div>
-                    <ul className="text-left mt-3">
+                    <ul className="text-left mt-3 ml-0 pl-3">
                         { user?.certifications && user?.certifications.length == 0 ? 
                           (<h6>User has not added any certification</h6>) :
                           (user?.certifications.map(certification => 
@@ -225,6 +228,7 @@ const CERTIFICATION_FORM_MODE = {
         </div>
         <EditProfile showModal={showEditProfileModal} handleClose = {() => setShowEditProfileModal(false)} />
         <EditBioForm showModal={showEditBioModal} handleClose = {() => setShowEditBioModal(false)} />
+        <DeleteCertificationModal currentCertification={currentCertification} showModal={showDeleteCertificationModal} handleClose = {() => setShowDeleteCertificationModal(false)}  />
         <EditCertificationForm currentCertification={currentCertification} formMode={certificationFormMode} showModal={showEditCertificationModal} handleClose = {() => setShowEditCertificationModal(false)}  />
       </div>
     </Fragment>

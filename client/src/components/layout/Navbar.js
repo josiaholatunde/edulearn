@@ -27,11 +27,14 @@ class Navbar extends Component {
                     <div className="collapse navbar-collapse navbar-rel-links justify-content-center" id="navbarSupportedContent">
                         {true && (
                             <ul className="navbar-nav mr-5">
-                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/'>Home</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/challenge'>Challenge</Link>
+                                <li className="nav-item dropdown">
+                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Challenges
+                                    </a>
+                                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                            <Link className="dropdown-item text-cool" to="/challenge" style={{ color: '#212529'}}>My Challenges</Link>
+                                            <Link to='/challenge-invites' className="dropdown-item text-cool"  style={{ color: '#212529'}}>Challenge Invites</Link>
+                                    </div>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to='/leaderboard'>Leaderboard</Link>

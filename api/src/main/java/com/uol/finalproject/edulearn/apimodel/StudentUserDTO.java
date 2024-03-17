@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentUserDTO {
 
+    private long id;
     private String firstName;
 
     private String lastName;

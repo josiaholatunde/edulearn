@@ -52,7 +52,7 @@ public class StudentUser extends BaseAuditableModel {
     @Builder.Default
     private List<Challenge> challenges = new ArrayList<>();
 
-    @OneToMany(mappedBy = "studentUser", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "studentUser", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserCertification> certifications = new ArrayList<>();
 
@@ -60,6 +60,10 @@ public class StudentUser extends BaseAuditableModel {
         StudentUser studentUser = StudentUser.builder().build();
         BeanUtils.copyProperties(registerStudentUserDTO, studentUser);
         return studentUser;
+    }
+
+    public String getFullName() {
+        return String.format("%s %s", firstName, lastName);
     }
 
 

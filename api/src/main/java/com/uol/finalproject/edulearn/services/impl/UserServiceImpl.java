@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService {
 
         if (!studentUserDTO.getCertifications().isEmpty()) {
             studentUserDTO.getCertifications().forEach(certification -> certification.setStudentUser(studentUser));
-            studentUser.setCertifications(studentUserDTO.getCertifications());
+            studentUser.getCertifications().clear();
+            studentUser.getCertifications().addAll(studentUserDTO.getCertifications());
         }
 
         return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
