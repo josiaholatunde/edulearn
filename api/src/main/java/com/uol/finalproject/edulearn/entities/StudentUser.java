@@ -52,7 +52,7 @@ public class StudentUser extends BaseAuditableModel {
     @Builder.Default
     private List<Challenge> challenges = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "studentUser", cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserCertification> certifications = new ArrayList<>();
 

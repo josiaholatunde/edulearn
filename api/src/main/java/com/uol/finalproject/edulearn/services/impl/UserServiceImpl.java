@@ -51,6 +51,11 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNotBlank(studentUserDTO.getLastName())) studentUser.setLastName(studentUserDTO.getLastName());
         if (Strings.isNotBlank(studentUserDTO.getLocation())) studentUser.setLocation(studentUserDTO.getLocation());
 
+        if (!studentUserDTO.getCertifications().isEmpty()) {
+            studentUserDTO.getCertifications().forEach(certification -> certification.setStudentUser(studentUser));
+            studentUser.setCertifications(studentUserDTO.getCertifications());
+        }
+
         return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
     }
 

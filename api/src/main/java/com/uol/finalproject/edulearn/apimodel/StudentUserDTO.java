@@ -30,6 +30,8 @@ public class StudentUserDTO {
     private String location;
     private String skills;
     private String university;
+
+    @Builder.Default
     private List<UserCertification> certifications = new ArrayList<>();
 
     private Timestamp createdAt;

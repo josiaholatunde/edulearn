@@ -10,4 +10,6 @@ public interface LeaderboardService {
 
 
     Page<StudentUserDTO> getLeaderboard(UserSpecificationSearchCriteria specificationSearchCriteria);
+
+    Page<StudentUserDTO> getLeaderBoardForChallenge(long challengeId);
 }

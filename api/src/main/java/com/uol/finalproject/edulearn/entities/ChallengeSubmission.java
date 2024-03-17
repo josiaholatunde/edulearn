@@ -7,11 +7,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "challenge_submissions")
+@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "challenge_submissions")
 public class ChallengeSubmission extends BaseAuditableModel {
 
     private float score;

@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import convertToPercentage from "../../utils/levelCalculation";
 import EditBioForm from "./EditBioForm";
+import EditCertificationForm from "./AddCertificationForm";
 import EditProfile from "./EditProfile";
 import StreakCalendar from "./StreakCalendar";
 
@@ -13,6 +14,7 @@ const DEFAULT_AVATAR_URL =
     // const [user, setUser] = useState({});
     const [showEditProfileModal, setShowEditProfileModal] = useState(false)
     const [showEditBioModal, setShowEditBioModal] = useState(false)
+    const [showEditCertificationModal, setShowEditCertificationModal] = useState(false)
   
   
     useEffect(() => {
@@ -179,7 +181,10 @@ const DEFAULT_AVATAR_URL =
                 </div>
 
                 <div className="certifications card p-2 mt-5">
-                    <h5>Certifications</h5>
+                    <div className="d-flex justify-content-between align-items-center">
+                      <h5 className="mb-0">Certifications</h5>
+                      <i className="mdi mdi-plus mdi-24px pointer" onClick={() => setShowEditCertificationModal(true) }></i>
+                    </div>
                     <ul className="text-left mt-3">
                         { user?.certifications && user?.certifications.length == 0 ? 
                           (<h6>User has not added any certification</h6>) :
@@ -192,6 +197,7 @@ const DEFAULT_AVATAR_URL =
         </div>
         <EditProfile showModal={showEditProfileModal} handleClose = {() => setShowEditProfileModal(false)} />
         <EditBioForm showModal={showEditBioModal} handleClose = {() => setShowEditBioModal(false)} />
+        <EditCertificationForm showModal={showEditCertificationModal} handleClose = {() => setShowEditCertificationModal(false)}  />
       </div>
     </Fragment>
   );

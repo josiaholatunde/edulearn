@@ -27,4 +27,10 @@ public class LeaderBoardController {
     public Page<StudentUserDTO> getLeaderBoard(UserSpecificationSearchCriteria specificationSearchCriteria) {
         return leaderboardService.getLeaderboard(specificationSearchCriteria);
     }
+
+
+    @GetMapping("/challenge/{challengeId}")
+    public Page<StudentUserDTO> getLeaderBoardForChallenge(@PathVariable int challengeId) {
+        return leaderboardService.getLeaderBoardForChallenge(challengeId);
+    }
 }
