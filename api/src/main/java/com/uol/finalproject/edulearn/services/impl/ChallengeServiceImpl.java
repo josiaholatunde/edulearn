@@ -85,9 +85,23 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challenge.setParticipantType(challengeDTO.getParticipantType());
         challenge = challengeRepository.save(challenge);
 
+        saveChallengeParticipants(challenge, challengeDTO);
         assignChallengeQuestions(challenge);
 
         return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void saveChallengeParticipants(Challenge challenge, ChallengeDTO challengeDTO) {
+
+        for (Long currentUserId: challengeDTO.getChallengeUsers()) {
+            StudentUser studentUser = studentUserRepository.findById(currentUserId).orElseThrow(() -> new ResourceNotFoundException("One or more invalid student user ids"));
+            ChallengeParticipant challengeParticipant = ChallengeParticipant.builder()
+                    .challenge(challenge)
+                    .studentUser(studentUser)
+                    .build();
+            challenge.getChallengeParticipants().add(challengeParticipant);
+        }
+        challengeRepository.save(challenge);
     }
 
     private static String deduceChallengeTitle(ChallengeDTO challengeDTO, StudentUser studentUser) {

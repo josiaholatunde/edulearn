@@ -8,7 +8,8 @@ import { getOnlineActiveUserDetails } from '../redux/actions/userActions';
 const mapOnlineUsers = (onlineUsers, currentPage, pageSize) => {
   const pageStart = currentPage * pageSize;
   return onlineUsers?.map((user, index) => ({
-      key: index,
+      id: user?.id,
+      key: pageStart + (index + 1),
       position: pageStart + (index + 1),
       name: user.fullName,
       level: user?.level,
@@ -16,36 +17,48 @@ const mapOnlineUsers = (onlineUsers, currentPage, pageSize) => {
       points: user?.points || 100
   }))
 }
-const columns = [
-  {
-    title: '',
-    dataIndex: 'title',
-    key: 'title',
-    render: (text, record) => <input type="checkbox" checked={record.selected} onChange={() => handleCheckboxChange(record.key)} className='pointer' />,
-  },
-  {
-    title: 'Name',
-    dataIndex: 'name',
-    key: 'name',
-  },
-  {
-    title: 'Level',
-    dataIndex: 'level',
-    key: 'level',
-  },
-  {
-    title: 'XP',
-    dataIndex: 'points',
-    key: 'points',
-  }
-];
 
-const handleCheckboxChange = () => {}
+
 
 
 const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [size, setSize] = useState(5)
+  const [selectedUserIds, setSelectedUserIds ] = useState([])
+
+
+  const columns = [
+    {
+      title: '',
+      dataIndex: 'title',
+      key: 'title',
+      render: (text, record) => <input type="checkbox" checked={record.id} onChange={() => handleCheckboxChange(record.id)} className='pointer' />,
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Level',
+      dataIndex: 'level',
+      key: 'level',
+    },
+    {
+      title: 'XP',
+      dataIndex: 'points',
+      key: 'points',
+    }
+  ];
+
+  const handleCheckboxChange = (id) => {
+    if (selectedUserIds.includes(id)) {
+      setSelectedUserIds(selectedUserIds.filter(userId => userId !== id));
+    } else {
+      setSelectedUserIds([...selectedUserIds, id]);
+    }
+  }
+
 
   const dispatch = useDispatch()
 
@@ -70,7 +83,9 @@ const OnlineUsersDataTable = ({ showQuestionStyle, loading, onlineUsers, total }
           />
         </div>
         <div className='col-lg-12'>
-          <button type="button" class="btn btn-cool" onClick={showQuestionStyle}>
+          <button type="button" className="btn btn-cool" onClick={() => {
+            showQuestionStyle(selectedUserIds)
+          }}>
             Start Challenge
           </button>
         </div>

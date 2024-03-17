@@ -52,6 +52,8 @@ public class ChallengeDTO {
 
     private List<Question> challengeQuestions = new ArrayList<>();
 
+    private List<Long> challengeUsers = new ArrayList<>();
+
 
     public static ChallengeDTO fromChallenge(Challenge challenge) {
         ChallengeDTO challengeDTO = ChallengeDTO.builder().build();

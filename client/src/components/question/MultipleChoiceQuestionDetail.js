@@ -6,7 +6,7 @@ import questionBank from '../../utils/questions';
 
 const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessModal, loading }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [answers, setAnswers] = useState(Array(questionBank.length).fill(null));
+    const [answers, setAnswers] = useState(Array(questionBank.length).fill([]));
     // const [loading, setLoading] = useState(false)
     const [userResponse, setUserResponses] = useState({})
     // const [ questions, setQuestions ] = useState([])
@@ -18,20 +18,37 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
 
     const handleOptionChange = (questionIndex, optionIndex) => {
         const newAnswers = [...answers];
-        newAnswers[questionIndex] = optionIndex;
+        let updatedAnswer = [...newAnswers[questionIndex]];
+        const index = updatedAnswer.indexOf(optionIndex);
+        if (index === -1) {
+            if (hasMultipleAnswers()) updatedAnswer.push(optionIndex);
+            else updatedAnswer = [optionIndex]
+        } else {
+            updatedAnswer.splice(index, 1);
+        }
+        newAnswers[questionIndex] = updatedAnswer;
         setAnswers(newAnswers);
     };
 
 
     const handleOptionSelect = (questionId, optionId) => {
-        const updatedResponses = {...userResponse };
-        if (!!updatedResponses[questionId]) {
-          updatedResponses[questionId].push(optionId);
-        } else {
-          updatedResponses[questionId] = [optionId];
-        }
-        setUserResponses(updatedResponses);
-      };
+        setUserResponses(prevResponses => {
+            let updatedResponses = { ...prevResponses };
+    
+            if (!updatedResponses[questionId]) {
+                updatedResponses[questionId] = [optionId];
+            } else {
+                const optionIndex = updatedResponses[questionId].indexOf(optionId);
+                if (optionIndex === -1) {
+                    if (hasMultipleAnswers()) updatedResponses[questionId].push(optionId);
+                    else updatedResponses[questionId] = [optionId]
+                } else {
+                    updatedResponses[questionId].splice(optionIndex, 1);
+                }
+            }
+            return updatedResponses;
+        });
+    };
 
     const handlePrevious = () => {
         if (currentQuestion > 0) {
@@ -56,8 +73,16 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
         dispatch(submitChallengeResponse(request, () => {
             setShowSuccessModal(true);
         }))
+          
+    }
+
+    const hasMultipleAnswers = () => {
+        return !!questions[currentQuestion].multipleChoiceQuestion.hasMultipleAnswers
+    }
+
+
+    const renderQuestion = () => {
         
-       
     }
 
     
@@ -74,33 +99,39 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
                             {" "}
                             { questions && questions[currentQuestion].title}
                         </h6>
+                        {
+                            questions[currentQuestion].imageUrl && (<div className='image-container' style={{ height: '250px', width: '100%'}}>
+                                <img src={questions[currentQuestion]?.imageUrl} alt='Quiz Image' style={{ height: '100%', width: '100%', objectFit: 'cover', imageRendering: 'auto' }} />
+                            </div>)
+                        }
+                        
                         <ol type="a" className="mt-3 pl-1">
-                            {questions &&  questions[currentQuestion]?.multipleChoiceQuestion?.options.map((option, index) => (
-                                <Fragment key={index}>
-                                    <div
-                                        className="option-container d-flex align-items-center"
-                                        key={option.id}
+                        {questions && questions[currentQuestion]?.multipleChoiceQuestion?.options.map((option, index) => (
+                            <Fragment key={index}>
+                                <div
+                                    className="option-container d-flex align-items-center"
+                                    key={option.id}
+                                >
+                                    <input
+                                        type={`${!!questions[currentQuestion].multipleChoiceQuestion.hasMultipleAnswers ? 'checkbox' : 'radio'}`}
+                                        className="form-contro"
+                                        id={`option${option.id}`}
+                                        name="option"
+                                        checked={answers[currentQuestion]?.includes(option.id)}
+                                        onChange={() => {
+                                            handleOptionChange(currentQuestion, option?.id)
+                                            handleOptionSelect(questions[currentQuestion]?.id, option?.id)
+                                        }}
+                                    />
+                                    <label
+                                        className="pointer ml-2 mb-0 pb-0"
+                                        htmlFor={`option${option.id}`}
                                     >
-                                        <input
-                                            type="radio"
-                                            className="form-contro"
-                                            id={`option${option.id}`}
-                                            name="option"
-                                            checked={answers[currentQuestion] === index}
-                                            onChange={() => {
-                                                handleOptionChange(currentQuestion, index)
-                                                handleOptionSelect(questions[currentQuestion]?.id, option?.id)
-                                            }}
-                                        />
-                                        <label
-                                            className="pointer ml-2 mb-0 pb-0"
-                                            htmlFor={`option${option.id}`}
-                                        >
-                                            {option.value}
-                                        </label>
-                                    </div>
-                                </Fragment>
-                            ))}
+                                        {option.value}
+                                    </label>
+                                </div>
+                            </Fragment>
+                        ))}
                         </ol>
                     </div>
                 </div>

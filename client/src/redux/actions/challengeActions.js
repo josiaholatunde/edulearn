@@ -93,3 +93,24 @@ export const submitChallengeResponse = (challengeResponse, callBack) => dispatch
     }, 1000)
 }
 
+
+
+export const createChallenge = (challengeRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.post(`/challenges`, challengeRequest)
+            if (data) {
+                console.log('immm after call', data)
+                const challengeId = data?.data?.id
+                dispatch(hideLoading())
+                if (callBack) callBack(challengeId)
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while creating challenge')
+        }
+    }, 1000)
+}
