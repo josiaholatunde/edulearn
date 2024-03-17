@@ -3,9 +3,10 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { connect, useDispatch } from 'react-redux';
 import { handleProfileUpdate } from '../../redux/actions/userActions';
+import { showNotification } from '../../utils/showNotification';
 
 
-const AddCertificationForm = ({ showModal, handleClose, user, loading }) => {
+const CertificationForm = ({ showModal, handleClose, user, loading, formMode, currentCertification }) => {
     const [name, setName] = useState('')
     const [issuingOrganization, setIssuingOrganization] = useState('')
     const [issueDate, setIssueDate] = useState('')
@@ -13,18 +14,48 @@ const AddCertificationForm = ({ showModal, handleClose, user, loading }) => {
 
     const dispatch = useDispatch()
 
+
+    useEffect(() => {
+        if (!!currentCertification) {
+            setName(currentCertification?.name || '')
+            setIssuingOrganization(currentCertification?.issuingOrganization || '')
+            setIssueDate(currentCertification?.issueDate || '')
+            setExpirationDate(currentCertification?.expirationDate || '')
+        }
+    }, [currentCertification])
+
     const handleUpdate = () => {
-        const certification = {
+        const certificationToUpdate = {
+            ...currentCertification,
             name,
             issuingOrganization,
             issueDate,
             expirationDate
         }
-        if (!user.certifications) user.certifications = []
-        user.certifications.push(certification)
+
+        if (formMode === 'EDIT') {
+            certificationToUpdate.id = currentCertification.id;
+        }
+        
+        if (doesCertificationExist(certificationToUpdate)) {
+            return showNotification('danger', 'Certification name already exists')
+        }
+       
+        if (!user.certifications) user.certifications = [ certificationToUpdate ]
+        else {
+            if (formMode === 'EDIT') {
+                const indexOfCertification = user?.certifications.findIndex(cert => cert.id === currentCertification?.id)
+                user.certifications[indexOfCertification] = certificationToUpdate;
+            } else user.certifications.push(certificationToUpdate)
+        }
+        
         dispatch(handleProfileUpdate(user, () => {
             handleClose()
         }))
+    }
+
+    const doesCertificationExist = (certification) => {
+        return !!user?.certifications.find(cert => cert.name === certification.name && cert.id !== certification?.id)
     }
 
     const isInvalid = () => {
@@ -36,7 +67,7 @@ const AddCertificationForm = ({ showModal, handleClose, user, loading }) => {
 
     return <Modal show={showModal} onHide={handleClose} size='lg' centered className="edit-profile-modal" >
         <Modal.Header closeButton={handleClose}>
-        <Modal.Title className='pl-3'>Add Certification</Modal.Title>
+        <Modal.Title className='pl-3'>{formMode === 'CREATE' ? 'Add' : 'Edit' } Certification</Modal.Title>
         </Modal.Header>
         <Modal.Body className="d-flex justify-content-center align-items-center">
             <form className='w-100 p-3'>
@@ -68,7 +99,7 @@ const AddCertificationForm = ({ showModal, handleClose, user, loading }) => {
         <Modal.Footer>
             <Button variant="primary" className='btn-cool' disabled={isInvalid()} onClick={handleUpdate}>
                 { loading && (<span className="spinner-border spinner-border-sm mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>) }
-                Update
+                {formMode === 'CREATE' ? 'Add' : 'Update' }
             </Button>
             <Button variant="primary" className='btn btn-light' style={{ border: '1px solid #161f2e'}} onClick={handleClose}>
                 Cancel
@@ -85,4 +116,4 @@ const mapStateToProps = ({ authedUser, loading }) => {
     }
 }
 
-export default connect(mapStateToProps, { handleProfileUpdate })(AddCertificationForm)
+export default connect(mapStateToProps, { handleProfileUpdate })(CertificationForm)
