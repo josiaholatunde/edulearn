@@ -25,6 +25,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 
@@ -93,5 +94,33 @@ public class AuthServiceImpl implements AuthService {
         BeanUtils.copyProperties(studentUser, studentUserDTO);
 
         return new BaseApiResponseDTO("Successfully registered student user", studentUserDTO, null);
+    }
+
+
+    @Override
+    public BaseApiResponseDTO authenticateUserOauth(String authProvider, String userEmail, OAuth2User oAuth2User) {
+        User user = null;
+        if (!studentUserRepository.existsByEmail(userEmail)) {
+            StudentUser studentUser = studentUserRepository.save(StudentUser.builder()
+                            .email(userEmail)
+                            .firstName(oAuth2User.getAttribute("given_name"))
+                            .lastName(oAuth2User.getAttribute("family_name"))
+                    .build());
+
+             user =userRepository.save(User.builder()
+                    .username(userEmail)
+                    .isActive(true)
+                    .roleType(RoleType.STUDENT_USER)
+                    .studentUser(studentUser)
+                    .authProvider(authProvider)
+                    .build());
+
+        } else {
+            user = userRepository.findByUsername(userEmail).orElseThrow(() -> new AuthenticationException("Could not find user email"));
+        }
+        String jwtToken = jwtUtils.generateJwtToken(user, false);
+        UserDTO userDTO = buildUserDTO(user);
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(userDTO, jwtToken, jwtUtils.convertJwtExpiryToMilliSeconds());
+        return new BaseApiResponseDTO(SUCCESS_LOGIN_CREDENTIALS_MESSAGE, loginResponseDTO, null);
     }
 }

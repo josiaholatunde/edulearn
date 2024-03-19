@@ -39,6 +39,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
     private final ChallengeSubmissionRepository challengeSubmissionRepository;
     private final UserChallengeAnswerRepository challengeAnswerRepository;
+    private final ChallengeInviteRepository challengeInviteRepository;
     private final UserService userService;
 
     @Value("${default.multiple.choice.questions:10}")
@@ -192,9 +193,15 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challengeSubmission.setTotalQuestions(totalQuestions);
         challengeSubmissionRepository.save(challengeSubmission);
 
+        expirePendingChallengeInvites(challenge);
+
         challenge.setSubmissions(challenge.getSubmissions() + 1);
         challengeRepository.save(challenge);
 
         return ChallengeSubmissionDTO.fromChallengeSubmission(challengeSubmission);
+    }
+
+    private void expirePendingChallengeInvites(Challenge challenge) {
+        challengeInviteRepository.expirePendingChallengeInvites(challenge);
     }
 }

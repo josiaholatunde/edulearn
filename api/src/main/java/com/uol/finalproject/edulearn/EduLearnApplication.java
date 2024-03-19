@@ -35,7 +35,13 @@ public class EduLearnApplication implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         if (!userRepository.findByUsername(DEFAULT_ADMIN_USERNAME).isPresent()) {
-            User admin = new User(DEFAULT_ADMIN_USERNAME, passwordEncoder.encode(DEFAULT_ADMIN_PASSWORD), true, RoleType.ADMIN, null);
+            User admin = User.builder()
+                    .username(DEFAULT_ADMIN_USERNAME)
+                    .authProvider(null)
+                    .password(passwordEncoder.encode(DEFAULT_ADMIN_PASSWORD))
+                    .isActive(true)
+                    .roleType(RoleType.ADMIN)
+                    .build();
             userRepository.save(admin);
         }
     }

@@ -58,7 +58,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
 
     const handleCloseSuccessModal = () => {
         setShowSuccessModal(false)
-        history.push('/challenge')
+        history.push('/challenges')
     }
 
     const handleViewScore = () => {

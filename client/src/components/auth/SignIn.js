@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import { handleLoginUser } from "../../redux/actions/authedActions";
+import { handleGoogleLogin } from "../../redux/actions/oauthActions";
+import { useGoogleLogin } from '@react-oauth/google';
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const SignIn = ({ history, location, loading }) => {
   const [email, setEmail] = useState("");
@@ -10,6 +13,11 @@ const SignIn = ({ history, location, loading }) => {
   const [showPassword, setShowPassword] = useState(false)
 
   const dispatch = useDispatch();
+
+  const login = useGoogleLogin({
+    onSuccess: tokenResponse => dispatch(handleGoogleLogin(tokenResponse, history)),
+    flow: 'auth-code'
+  });
 
   const loginUser = (e) => {
     e.preventDefault();
@@ -103,7 +111,7 @@ const SignIn = ({ history, location, loading }) => {
               <div className="social-login my-3">
                 <i className="bi bi-github github-icon"></i>
                 <i className="bi bi-facebook facebook-icon mx-3 my-3"></i>
-                <i className="bi bi-google google-icon"></i>
+                <GoogleLoginButton onSuccess={(response) => dispatch(handleGoogleLogin(response.tokenId))} />
               </div>
               <p>
                 Don't have an account ?
@@ -127,6 +135,6 @@ const mapStateToProps = (state) => {
     loading: state.loading
   };
 };
-export default connect(mapStateToProps, { handleLoginUser })(
+export default connect(mapStateToProps, { handleLoginUser, handleGoogleLogin })(
   withRouter(SignIn)
 );

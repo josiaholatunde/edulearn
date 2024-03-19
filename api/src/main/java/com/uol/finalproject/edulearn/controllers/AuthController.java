@@ -5,10 +5,7 @@ import com.uol.finalproject.edulearn.apimodel.request.RegisterStudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
 import com.uol.finalproject.edulearn.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,5 +26,10 @@ public class AuthController {
     @PostMapping("/register")
     public BaseApiResponseDTO registerUser(@RequestBody RegisterStudentUserDTO registerStudentUserDTO) {
         return authService.registerStudentUser(registerStudentUserDTO);
+    }
+
+    @GetMapping("/google")
+    public String googleLogin() {
+        return "redirect:/oauth2/authorization/google";
     }
 }

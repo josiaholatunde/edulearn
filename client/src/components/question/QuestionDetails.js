@@ -45,7 +45,7 @@ const QuestionDetails = ({  history, challengeResult }) => {
 
     const handleCloseSuccessModal = () => {
         setShowSuccessModal(false)
-        history.push('/challenge')
+        history.push('/challenges')
     }
 
 

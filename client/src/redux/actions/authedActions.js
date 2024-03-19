@@ -20,6 +20,13 @@ export function clearUserInLocalStorage() {
 }
 
 
+
+
+
+
+
+
+
 export const handleLoginUser = (userToLogin, { history }) => dispatch => {
     dispatch(showLoading())
 
@@ -38,7 +45,7 @@ export const handleLoginUser = (userToLogin, { history }) => dispatch => {
                 })
                 storeUserCredentialsInLocalStorage({ user, token });
                 showNotification('success', 'Successfully logged in user')
-                history.push('/dashboard')
+                history.push('/challenges')
             }
             dispatch(hideLoading())
         } catch (error) {
@@ -72,6 +79,8 @@ export const handleRegisterUser = (userToRegister, { history }) => dispatch => {
     }, 1000)
 
 }
+
+
 
 export const storeUserCredentialsInLocalStorage = ({ user, token }) => {
     if (user) {

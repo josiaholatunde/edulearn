@@ -8,11 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity(name = "challenge_invitations")
+@Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "challenge_invitations")
 public class ChallengeInvitation extends BaseAuditableModel {
 
     @ManyToOne

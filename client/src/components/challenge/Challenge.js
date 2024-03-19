@@ -92,7 +92,7 @@ const Challenge = ({ history, loading, total, challenges }) => {
     return (
         <div className='mt-6 challenge'>
             <div className='challenge-header d-flex justify-content-between'>
-                <h1 className='f-32'>Challenge</h1>
+                <h1 className='f-32 mb-0 d-flex align-items-center'>Challenge</h1>
                 <div className="btn-group">
                     <button type="button" className="btn btn-cool dropdown-toggle" style={{ height: '40px'}} data-bs-toggle="dropdown" aria-expanded="false">
                         Start Challenge

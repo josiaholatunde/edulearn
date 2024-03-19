@@ -38,7 +38,7 @@ const columns = [
     title: 'Action',
     dataIndex: 'action',
     key: 'action',
-    render: (_, challenge) => <Link to={`/challenge/${challenge.id}/details?type=${challenge.type}&mode=individual`} className='text-cool'>Details</Link>
+    render: (_, challenge) => <Link to={`/challenge/${challenge.id}/details?type=${challenge.type}&mode=individual`} className='text-cool' style={{ fontWeight: '480'}}>Details</Link>
   },
 ];
 
