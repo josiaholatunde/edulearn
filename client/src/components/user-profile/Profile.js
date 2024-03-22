@@ -85,7 +85,7 @@ const CERTIFICATION_FORM_MODE = {
             </div>
           </div>
         </div>
-        <div className="col-lg-2"><button className="btn btn-md btn-cool mt-5 f-16" onClick={() => setShowEditProfileModal(true) }>
+        <div className="col-lg-2 d-flex justify-content-end align-items-start"><button className="btn btn-md btn-cool mt-5 f-16" onClick={() => setShowEditProfileModal(true) }>
             <i className="mdi mdi-pencil mr-1"></i>Edit Profile</button> 
         </div>
       </div>
@@ -133,7 +133,7 @@ const CERTIFICATION_FORM_MODE = {
                     </div>
                 </div>
             </div>
-            <div className="col-lg-5 text-left">
+            <div className="col-lg-6 text-left">
                 <div className="current-level card p-3">
                     <h5>Current Level</h5>
                     <div className="progress my-2">
@@ -196,7 +196,7 @@ const CERTIFICATION_FORM_MODE = {
                     </div>
                 </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-3 px-0">
                 <div className="current-level card p-3">
                     <h5>Streak</h5>
                     <StreakCalendar />

@@ -17,7 +17,7 @@ class Navbar extends Component {
         console.log('Logged in user', loggedInUser)
         return (
                 <nav className="navbar navbar-expand-lg navbar-light bg-cool text-white sticky-top" >
-                <div className='container'>
+                <div className='container px-0'>
                     <Link className="navbar-brand" to="/challenges">
                         EduLearn
                     </Link>
@@ -45,7 +45,7 @@ class Navbar extends Component {
                         <ul className='navbar-nav ml-auto'>
                             {loggedInUser ? (
                                 <Fragment>
-                                    <li className="nav-item dropdown">
+                                    <li className="nav-item dropdown" style={{ marginRight: '0px !important'}}>
                                         <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <i className="bi bi-person-circle"></i>
                                         </a>

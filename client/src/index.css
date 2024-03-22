@@ -313,3 +313,27 @@ input[type='email'], input[type='password'], .password-input {
   background-color: #fff !important;
   color: #161f2e !important;
 }
+
+.react-calendar__month-view__weekdays__weekday {
+  font-size: 10px !important;
+}
+
+.react-calendar__navigation__label__labelText react-calendar__navigation__label__labelText--from {
+  font-size: 14px !important;
+}
+
+.social-login i {
+  font-size: 24px; /* Adjust the font size as needed */
+  margin: 0 10px; /* Add some horizontal margin between icons */
+}
+
+.google-icon {
+  display: inline !important;
+  font-size: 24px; 
+  margin-right: 10px; 
+}
+
+iframe[title='Sign in with Google Button'] {
+  top: -35px !important;
+  left: 305px !important;
+}

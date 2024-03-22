@@ -28,7 +28,7 @@ const AlgorithmQuestionDetail = ({ questions, history, challengeMode }) => {
                         <h5 className="question-title">Examples:</h5>
                         <ul className="question-range">
                             {
-                                question?.examples && question.examples.length > 0 && question.examples.map(example => (<div>
+                                question?.examples && question.examples.length > 0 && question.examples.map(example => (<div key={example.id}>
                                     <li>Input: { example.input } </li>
                                     <div>Output: { example.output } </div>
                                     <div className='pt-0'>Explanation: { example.explanation } </div>

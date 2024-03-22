@@ -17,6 +17,7 @@ export function setAuthedUser(id) {
 export function clearUserInLocalStorage() {
     localStorage.setItem('user', null);
     localStorage.setItem('token', null);
+    localStorage.setItem('authProvider', null);
 }
 
 
@@ -82,12 +83,15 @@ export const handleRegisterUser = (userToRegister, { history }) => dispatch => {
 
 
 
-export const storeUserCredentialsInLocalStorage = ({ user, token }) => {
+export const storeUserCredentialsInLocalStorage = ({ user, token }, authProvider) => {
     if (user) {
         localStorage.setItem('user', JSON.stringify(user))
     }
     if (token) {
         localStorage.setItem('token', token)
+    }
+    if (authProvider) {
+        localStorage.setItem('authProvider', authProvider)
     }
 }
 
@@ -103,6 +107,7 @@ export const logOutUser = (history) => dispatch => {
 export const logOutUserOnTokenExpiration = ()  =>  {
     localStorage.setItem('user', null)
     localStorage.setItem('token', null)
+    localStorage.setItem('authProvider', null)
     // dispatch(logOutUser())
 }
 

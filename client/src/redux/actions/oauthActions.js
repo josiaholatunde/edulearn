@@ -11,13 +11,17 @@ let apiBaseUri = process.env.REACT_APP_API_DEFAULT_BASE_URL
 export const handleGoogleLogin = (tokenResponse, history) => async dispatch => {
         try {
             console.log('api url', apiBaseUri, 'token ', tokenResponse)
+            const token = tokenResponse.credential
             const { data } = await axios.get(`${apiBaseUri}/login/oauth2/code/google`, {
                 headers: {
-                    Authorization: `Bearer ${tokenResponse}`,
+                    Authorization: `Bearer ${token}`,
+                    'sign-in-mode': 'GOOGLE',
+                    'Access-Control-Allow-Headers': 'Accept'
                 },
             })
             if (data) {
-                const { token, user } = data && data.data
+                const { user } = data && data.data
+                
                 setAuthToken(token);
                 dispatch({
                     type: LOGIN_USER,
@@ -26,7 +30,7 @@ export const handleGoogleLogin = (tokenResponse, history) => async dispatch => {
                         token
                     }
                 })
-                storeUserCredentialsInLocalStorage({ user, token });
+                storeUserCredentialsInLocalStorage({ user, token }, 'GOOGLE');
                 showNotification('success', 'Successfully logged in user')
                 history.push('/challenges')
             }

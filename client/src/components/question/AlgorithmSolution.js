@@ -33,8 +33,8 @@ const AlgorithmSolution = ({ question: { solution } }) => {
             <div>Relevant Resources</div>
             <ul className='py-3'>
                 { 
-                    solution.relevantResources && solution.relevantResources.length === 0 ? (<h6>There are no relevant resources for this question</h6>) :
-                    (solution.relevantResources.map(resource => (<li> 
+                    solution && solution.relevantResources && solution.relevantResources?.length === 0 ? (<h6>There are no relevant resources for this question</h6>) :
+                    (solution?.relevantResources.map(resource => (<li> 
                         <a href={resource} className='text-cool'> { resource } </a> 
                         </li>)))
                 }

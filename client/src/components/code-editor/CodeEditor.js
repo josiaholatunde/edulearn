@@ -100,17 +100,17 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
             <ul className="nav nav-pills bg-cool">
             { examples && examples.length > 0 && examples.map(example => 
                 
-                <li className="nav-item" role="presentation">
+                <li className="nav-item" role="presentation" key={example.id}>
                     <div className='nav-link' data-bs-toggle="pill" data-bs-target={`#pills-${example.id}`} type="button" role="tab" aria-controls={`pills-${example.id}`} aria-selected="true">
                         Test Case { example.id }
                     </div>
                 </li>)
             }
             </ul>
-            <div class="tab-content mt-3" id="pills-tabContent">
+            <div className="tab-content mt-3" id="pills-tabContent">
                 { examples && examples.length > 0 && examples.map(example => 
                     
-                    (<div className="tab-pane fade" id={`pills-${example.id}`} role="tabpanel" aria-labelledby={`pills-${example.id}-tab`}>
+                    (<div key={example.id} className="tab-pane fade" id={`pills-${example.id}`} role="tabpanel" aria-labelledby={`pills-${example.id}-tab`}>
                         <div>Input: { example.input } </div>
                         <div className='my-3'>Expected: { example.output } </div>
                         {userCodeOutput && <div >Output: { userCodeOutput } </div> }

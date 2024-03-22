@@ -5,6 +5,7 @@ import { handleLoginUser } from "../../redux/actions/authedActions";
 import { handleGoogleLogin } from "../../redux/actions/oauthActions";
 import { useGoogleLogin } from '@react-oauth/google';
 import GoogleLoginButton from "./GoogleLoginButton";
+import GithubLoginButton from "./GithubLoginButton";
 
 const SignIn = ({ history, location, loading }) => {
   const [email, setEmail] = useState("");
@@ -12,12 +13,14 @@ const SignIn = ({ history, location, loading }) => {
   const [errors, setErrors] = useState({})
   const [showPassword, setShowPassword] = useState(false)
 
+  const handleSuccess = (response) => {
+    const { id_token } = response.getAuthResponse();
+    dispatch(handleGoogleLogin(id_token, history))
+  };
+
   const dispatch = useDispatch();
 
-  const login = useGoogleLogin({
-    onSuccess: tokenResponse => dispatch(handleGoogleLogin(tokenResponse, history)),
-    flow: 'auth-code'
-  });
+  const login =  tokenResponse => dispatch(handleGoogleLogin(tokenResponse, history))
 
   const loginUser = (e) => {
     e.preventDefault();
@@ -110,8 +113,11 @@ const SignIn = ({ history, location, loading }) => {
               </div>
               <div className="social-login my-3">
                 <i className="bi bi-github github-icon"></i>
+                {/* <GithubLoginButton /> */}
                 <i className="bi bi-facebook facebook-icon mx-3 my-3"></i>
-                <GoogleLoginButton onSuccess={(response) => dispatch(handleGoogleLogin(response.tokenId))} />
+                {/* <i className="bi bi-google google-icon pointer" onClick={login} ></i> */}
+                <GoogleLoginButton handleSuccess={login} />
+               
               </div>
               <p>
                 Don't have an account ?

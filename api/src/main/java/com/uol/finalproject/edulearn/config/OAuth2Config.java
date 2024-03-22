@@ -1,5 +1,9 @@
 package com.uol.finalproject.edulearn.config;
 
+import com.fasterxml.jackson.core.JsonFactory;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.gson.GsonFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +15,7 @@ import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 public class OAuth2Config {
@@ -31,25 +36,34 @@ public class OAuth2Config {
 //    private String facebookClientSecret;
 
 
-    @Bean
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        return new InMemoryClientRegistrationRepository(Arrays.asList(getGoogleClientRegistration()
-                ));
-    }
+//    @Bean
+//    public ClientRegistrationRepository clientRegistrationRepository() {
+//        return new InMemoryClientRegistrationRepository(Arrays.asList(getGoogleClientRegistration()
+//                ));
+//    }
 
-    private ClientRegistration getGoogleClientRegistration() {
-        return ClientRegistration.withRegistrationId("google")
-                .clientId(googleClientId)
-                .clientSecret(googleClientSecret)
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_JWT)
-                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("http://localhost:9990/login/oauth2/code/google")
-                .scope("openid", "profile", "email")
-                .authorizationUri("https://accounts.google.com/o/oauth2/auth")
-                .tokenUri("https://www.googleapis.com/oauth2/v3/token")
-                .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
-                .userNameAttributeName(IdTokenClaimNames.SUB)
-                .clientName("Google")
+//    private ClientRegistration getGoogleClientRegistration() {
+//        return ClientRegistration.withRegistrationId("google")
+//                .clientId(googleClientId)
+//                .clientSecret(googleClientSecret)
+//                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_JWT)
+//                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+//                .redirectUri("http://localhost:9990/login/oauth2/code/google")
+//                .scope("openid", "profile", "email")
+//                .authorizationUri("https://accounts.google.com/o/oauth2/auth")
+//                .tokenUri("https://www.googleapis.com/oauth2/v3/token")
+//                .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
+//                .userNameAttributeName(IdTokenClaimNames.SUB)
+//                .clientName("Google")
+//                .build();
+//    }
+
+
+    @Bean
+    public GoogleIdTokenVerifier googleIdTokenVerifier() {
+        return new GoogleIdTokenVerifier
+                .Builder(new NetHttpTransport(), GsonFactory.getDefaultInstance())
+                .setAudience(Collections.singletonList(googleClientId))
                 .build();
     }
 

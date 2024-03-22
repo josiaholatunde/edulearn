@@ -2,6 +2,7 @@ package com.uol.finalproject.edulearn.services;
 
 import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.UserDTO;
+import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
 import com.uol.finalproject.edulearn.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,4 +21,6 @@ public interface UserService {
     UserDetails getLoggedInUser();
 
     Page<StudentUserDTO> getActiveUsersOnline(PageRequest pageRequest);
+
+    BaseApiResponseDTO getUserDetails();
 }

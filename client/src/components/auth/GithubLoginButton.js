@@ -1,10 +1,9 @@
 import React from 'react';
-import { useGoogleLogin } from 'react-google-login';
-import { GoogleLogin } from '@react-oauth/google';
+import { GithubLogin } from 'react-github-login';
 // import { BiGoogle } from 'react-icons/bi';
 
-const GoogleLoginButton = ({ handleSuccess, handleFailure }) => {
-    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const GithubLoginButton = ({ handleSuccess, handleFailure }) => {
+    const clientId = process.env.REACT_APP_GITHUB_CLIENT_ID;
 
     // const { signIn } = useGoogleLogin({
     //     clientId,
@@ -12,7 +11,7 @@ const GoogleLoginButton = ({ handleSuccess, handleFailure }) => {
     // });
 
     return (
-        <GoogleLogin
+        <GithubLogin
             width='24px'
             clientId={clientId}
             onSuccess={handleSuccess}
@@ -28,4 +27,4 @@ const GoogleLoginButton = ({ handleSuccess, handleFailure }) => {
     );
 };
 
-export default GoogleLoginButton;
+export default GithubLoginButton;

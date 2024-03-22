@@ -2,6 +2,8 @@ package com.uol.finalproject.edulearn.services.impl;
 
 import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.UserDTO;
+import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
+import com.uol.finalproject.edulearn.apimodel.response.LoginResponseDTO;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.User;
 import com.uol.finalproject.edulearn.exceptions.AuthenticationException;
@@ -22,6 +24,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.uol.finalproject.edulearn.util.Constants.INVALID_LOGIN_CREDENTIALS_MESSAGE;
+import static com.uol.finalproject.edulearn.util.Constants.SUCCESS_LOGIN_CREDENTIALS_MESSAGE;
 
 @Service
 @RequiredArgsConstructor
@@ -92,6 +97,17 @@ public class UserServiceImpl implements UserService {
         Page<StudentUser> onlineUsers = studentUserRepository.findAllByUserLoginStatusAndUser_IsActive(true, true, pageRequest);
 
         return new PageImpl<>(onlineUsers.stream().map(StudentUserDTO::fromStudentUser).collect(Collectors.toList()), pageRequest, onlineUsers.getTotalElements());
+    }
+
+    @Override
+    public BaseApiResponseDTO getUserDetails() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userName = authentication.getName();
+
+        User user = findByUsername(userName).orElseThrow(() -> new AuthenticationException(INVALID_LOGIN_CREDENTIALS_MESSAGE));
+
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(UserDTO.fromUser(user), null, null);
+        return new BaseApiResponseDTO(SUCCESS_LOGIN_CREDENTIALS_MESSAGE, loginResponseDTO, null);
     }
 
 }
