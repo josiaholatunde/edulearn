@@ -5,6 +5,7 @@ import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.UserDTO;
+import com.uol.finalproject.edulearn.apimodel.request.AlgorithmChallengeQuestionUserResponse;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.UserService;
@@ -43,4 +44,5 @@ public class ChallengeController {
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(@RequestBody ChallengeUserResponse challengeUserResponse) throws Exception {
         return challengeService.saveChallengeQuestionResponses(challengeUserResponse);
     }
+
 }

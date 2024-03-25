@@ -7,6 +7,7 @@ import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
+import com.uol.finalproject.edulearn.services.AlgorithmChallengeService;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final UserChallengeAnswerRepository challengeAnswerRepository;
     private final ChallengeInviteRepository challengeInviteRepository;
     private final UserService userService;
+    private final AlgorithmChallengeService algorithmChallengeService;
 
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
@@ -154,6 +156,10 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challengeSubmission.setStudentUser(retrieveStudentUser());
         challengeSubmission.setChallenge(challenge);
         challengeSubmissionRepository.save(challengeSubmission);
+
+        if (challenge.getType() == ChallengeType.ALGORITHMS) {
+            return algorithmChallengeService.saveChallengeQuestionResponses(challengeSubmission, challenge, challengeUserResponse);
+        }
 
         int noOfCorrectAnswers = 0;
         int totalQuestions = challenge.getChallengeQuestions().size();

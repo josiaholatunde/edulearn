@@ -10,6 +10,7 @@ import AlgorithmSolution from './AlgorithmSolution';
 const AlgorithmChallengeAttemptDetails = ({ challengeDetail }) => {
     const [activeTab, setActiveTab] = useState("description");
     const [question, setQuestion ] = useState({})
+    const [ questionLevel, setQuestionLevel ] = useState(10)
     const [language, setLanguage] = useState('python')
     const [userCodeInput, setUserCodeInput] = useState('')
     const [userCodeOutput, setUserCodeOutput] = useState('')
@@ -40,13 +41,14 @@ const AlgorithmChallengeAttemptDetails = ({ challengeDetail }) => {
         const questionId = pathParams.id;
         const question = challengeDetail?.challengeQuestions[0]?.algorithmQuestion
         setQuestion(question)
+        setQuestionLevel(challengeDetail?.challengeQuestions[0]?.level)
         populateUserCodeInput(question)
 
         if (!!queryParams.get('mode')) {
             setChallengeMode(queryParams.get('mode'))
         }
         if (queryParams.get('tab') == 'solution') setActiveTab('solution')
-    }, [language])
+    }, [language, challengeDetail?.title])
 
     const handleRunCode = () => {
         setIsRunCodeLoading(true)
@@ -69,8 +71,8 @@ const AlgorithmChallengeAttemptDetails = ({ challengeDetail }) => {
 
 
     return <div className='row mt-5 text-left h-100'>
-        <div className='col-md-5 h-100'>
-            <div className='challenge-title mb-2' style={{ fontSize: '24px'}}> { question?.title } </div>
+        <div className='col-md-5 h-100 pl-0 ml-0'>
+            {/* <div className='challenge-title mb-2' style={{ fontSize: '24px'}}> { question?.title } </div> */}
             
             <div className="card">
                 <div className="card-header">
@@ -97,7 +99,7 @@ const AlgorithmChallengeAttemptDetails = ({ challengeDetail }) => {
                     {activeTab === "description" && (
                     <div>
                         <div className="challenge-tags d-flex align-items-center">
-                            <div className='badge badge-cool p-2'> Level {question?.level }</div>
+                            <div className='badge badge-cool p-2'> Level { questionLevel }</div>
                             <div className='mx-2 badge badge-cool p-2'> { question?.type == 'algorithms' ? 'Algorithms' : 'Multiple Choice' }</div>
                             <div className='badge badge-cool p-2'> { mode } </div>
                         </div>

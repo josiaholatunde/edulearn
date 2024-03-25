@@ -1,6 +1,7 @@
 package com.uol.finalproject.edulearn.apimodel.request;
 
 
+import com.uol.finalproject.edulearn.entities.enums.ProgrammingLanguage;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,9 @@ public class ChallengeUserResponse {
 
     private long challengeId;
 
+    private ProgrammingLanguage language;
+
     private Map<Long, List<Long>> userResponse = new HashMap<>();
+
+    private Map<Long, String> algorithmResponse = new HashMap<>();
 }
