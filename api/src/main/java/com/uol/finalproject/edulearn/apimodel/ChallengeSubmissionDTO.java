@@ -29,6 +29,9 @@ public class ChallengeSubmissionDTO {
 
     private int totalQuestions;
 
+    @Builder.Default
+    private List<AlgoTestCaseResult> algoResult = new ArrayList<>();
+
 
     public static ChallengeSubmissionDTO fromChallengeSubmission(ChallengeSubmission challengeSubmission) {
         ChallengeSubmissionDTO challengeSubmissionDTO = ChallengeSubmissionDTO.builder().build();

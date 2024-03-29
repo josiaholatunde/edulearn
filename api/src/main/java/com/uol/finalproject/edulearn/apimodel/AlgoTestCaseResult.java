@@ -16,4 +16,5 @@ public class AlgoTestCaseResult {
     private String userOutput;
     private String expectedOutput;
     private boolean isTestCasePassed;
+    private String compilationError;
 }

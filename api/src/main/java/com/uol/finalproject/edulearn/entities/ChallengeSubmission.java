@@ -21,6 +21,8 @@ public class ChallengeSubmission extends BaseAuditableModel {
 
     private int totalQuestions;
 
+    private String time;
+
     @ManyToOne
     @JoinColumn(name = "challenge_id")
     @JsonIgnore

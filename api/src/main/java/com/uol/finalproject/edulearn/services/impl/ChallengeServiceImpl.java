@@ -7,7 +7,6 @@ import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
-import com.uol.finalproject.edulearn.services.AlgorithmChallengeService;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -37,12 +36,11 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final ChallengeRepository challengeRepository;
     private final StudentUserRepository studentUserRepository;
     private final QuestionRepository questionRepository;
-    private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
     private final ChallengeSubmissionRepository challengeSubmissionRepository;
-    private final UserChallengeAnswerRepository challengeAnswerRepository;
     private final ChallengeInviteRepository challengeInviteRepository;
     private final UserService userService;
-    private final AlgorithmChallengeService algorithmChallengeService;
+    private final AlgorithmChallengeServiceImpl algorithmChallengeService;
+    private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
 
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
@@ -157,43 +155,17 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challengeSubmission.setChallenge(challenge);
         challengeSubmissionRepository.save(challengeSubmission);
 
+        ChallengeSubmissionDTO challengeSubmissionDTO = null;
         if (challenge.getType() == ChallengeType.ALGORITHMS) {
-            return algorithmChallengeService.saveChallengeQuestionResponses(challengeSubmission, challenge, challengeUserResponse);
+            challengeSubmissionDTO = algorithmChallengeService.saveChallengeQuestionResponses(challengeSubmission, challenge, challengeUserResponse);
+        } else {
+            challengeSubmissionDTO = multipleChoiceChallengeService.saveChallengeQuestionResponses(challengeSubmission, challenge, challengeUserResponse);
         }
+        handlePostChallengeProcess(challenge, challengeSubmission, challengeSubmissionDTO.getTotalCorrect(), challengeSubmissionDTO.getTotalQuestions(), challengeSubmissionDTO.getScore());
+        return challengeSubmissionDTO;
+    }
 
-        int noOfCorrectAnswers = 0;
-        int totalQuestions = challenge.getChallengeQuestions().size();
-
-        for (Map.Entry<Long, List<Long>> entry : challengeUserResponse.getUserResponse().entrySet()) {
-            long questionId = entry.getKey();
-            Question question = questionRepository.findById(questionId)
-                    .orElseThrow(() -> new ResourceNotFoundException("One or more invalid question ids"));
-
-            List<MultipleChoiceOption> answerOptions = question.getMultipleChoiceQuestion().getAnswers().stream()
-                    .map(MultipleChoiceAnswer::getOption)
-                    .collect(Collectors.toList());
-            if (answerOptions.isEmpty()) throw new Exception("Answer not configured for question. Kindly contact admin");
-
-            int noOfValidAnswers = (int) entry.getValue().stream()
-                    .filter(optionId -> multipleChoiceOptionRepository.existsById(optionId))
-                    .filter(optionId -> answerOptions.stream().anyMatch(option -> option.getId().equals(optionId)))
-                    .count();
-
-            if (noOfValidAnswers == answerOptions.size()) noOfCorrectAnswers += 1;
-
-            entry.getValue().forEach(optionId -> {
-                MultipleChoiceOption option = multipleChoiceOptionRepository.findById(optionId)
-                        .orElseThrow(() -> new ResourceNotFoundException("One or more invalid option ids"));
-
-                UserChallengeAnswers challengeAnswer = new UserChallengeAnswers();
-                challengeAnswer.setOption(option);
-                challengeAnswer.setQuestion(question);
-                challengeAnswer.setChallengeSubmission(challengeSubmission);
-                challengeAnswerRepository.save(challengeAnswer);
-            });
-        }
-
-        float percentage = (noOfCorrectAnswers / (float) totalQuestions) * 100;
+    private void handlePostChallengeProcess(Challenge challenge, ChallengeSubmission challengeSubmission, int noOfCorrectAnswers, int totalQuestions, float percentage) {
         challengeSubmission.setScore(percentage);
         challengeSubmission.setTotalCorrect(noOfCorrectAnswers);
         challengeSubmission.setTotalQuestions(totalQuestions);
@@ -203,8 +175,6 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         challenge.setSubmissions(challenge.getSubmissions() + 1);
         challengeRepository.save(challenge);
-
-        return ChallengeSubmissionDTO.fromChallengeSubmission(challengeSubmission);
     }
 
     private void expirePendingChallengeInvites(Challenge challenge) {

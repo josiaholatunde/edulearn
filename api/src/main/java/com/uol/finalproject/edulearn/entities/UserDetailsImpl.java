@@ -22,6 +22,10 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends  GrantedAuthority> authorities;
 
+    public UserDetailsImpl(String email) {
+        this.email = email;
+    }
+
     public UserDetailsImpl(Long id, String email, String password,
                            boolean isEnabled, Collection<? extends GrantedAuthority> authorities) {
 
