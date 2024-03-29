@@ -147,6 +147,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
     @Override
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(ChallengeUserResponse challengeUserResponse) throws Exception {
+        //validate request
         Challenge challenge = challengeRepository.findById(challengeUserResponse.getChallengeId())
                 .orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
 

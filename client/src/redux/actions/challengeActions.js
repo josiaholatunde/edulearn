@@ -87,7 +87,9 @@ export const submitChallengeResponse = (challengeResponse, callBack) => dispatch
             }
         } catch (error) {
             dispatch(hideLoading())
+            console.error('error ', error)
             let errorMessage = error.response && error.response.data.message;
+            console.error('error msg', errorMessage)
             showNotification('danger', errorMessage || 'Error occurred while submitting challenge response')
         }
     }, 1000)

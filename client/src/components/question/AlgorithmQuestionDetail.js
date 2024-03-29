@@ -15,14 +15,18 @@ const AlgorithmQuestionDetail = ({ questions, history, challengeMode }) => {
                         <h5 className="question-title">Introduction</h5>
                         <p className="question-range">{ question?.introduction }</p>
                     </div>
-                    <div className="question-body py-3">
+                    {
+                      question && question.inputDescription  && (<div className="question-body py-3">
                         <h5 className="question-title">Input</h5>
                         <p className="question-range">{ question?.inputDescription }</p>
-                    </div>
-                    <div className="question-body py-3">
-                        <h5 className="question-title">Output</h5>
-                        <p className="question-range">{ question?.outputDescription }</p>
-                    </div>
+                    </div>)
+                    }
+                    {
+                        question && question.outputDescription && (<div className="question-body py-3">
+                            <h5 className="question-title">Output</h5>
+                            <p className="question-range">{ question?.outputDescription }</p>
+                        </div>)
+                    }
 
                     <div className="question-body py-3">
                         <h5 className="question-title">Examples:</h5>

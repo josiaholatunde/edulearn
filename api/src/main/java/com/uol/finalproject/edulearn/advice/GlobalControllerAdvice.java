@@ -1,16 +1,18 @@
 package com.uol.finalproject.edulearn.advice;
 
+import com.uol.finalproject.edulearn.apimodel.AlgoTestCaseResult;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
-import com.uol.finalproject.edulearn.exceptions.AuthenticationException;
-import com.uol.finalproject.edulearn.exceptions.AuthorizationException;
-import com.uol.finalproject.edulearn.exceptions.BadRequestException;
-import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
+import com.uol.finalproject.edulearn.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
@@ -20,6 +22,18 @@ public class GlobalControllerAdvice {
     public ResponseEntity<?> handleResourceNotFoundException(ResourceNotFoundException ex, HttpServletRequest request) {
         System.out.println(request);
         return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage()), HttpStatus.NOT_FOUND);
+    }
+
+
+    @ExceptionHandler(AlgorithmQuestionResultException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> handleAlgorithmResultException(AlgorithmQuestionResultException ex, HttpServletRequest request) {
+        System.out.println(request);
+        return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage(), ChallengeSubmissionDTO.builder()
+                .algoResult(Collections.singletonList(AlgoTestCaseResult.builder()
+                                .compilationError(ex.getMessage())
+                        .build()))
+                .build(), new ArrayList<>()), HttpStatus.OK);
     }
 
 

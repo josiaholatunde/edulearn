@@ -22,12 +22,6 @@ export function clearUserInLocalStorage() {
 
 
 
-
-
-
-
-
-
 export const handleLoginUser = (userToLogin, { history }) => dispatch => {
     dispatch(showLoading())
 

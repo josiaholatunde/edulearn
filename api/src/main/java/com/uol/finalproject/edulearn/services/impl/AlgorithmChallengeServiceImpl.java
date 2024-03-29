@@ -12,6 +12,8 @@ import com.uol.finalproject.edulearn.apimodel.*;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.ProgrammingLanguage;
+import com.uol.finalproject.edulearn.exceptions.AlgorithmQuestionResultException;
+import com.uol.finalproject.edulearn.exceptions.BadRequestException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.QuestionRepository;
 import com.uol.finalproject.edulearn.services.ChallengeEvaluatorService;
@@ -119,14 +121,15 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
         switch (language) {
             case JAVA:
                 return appendMainMethodToUserSolutionInJava(question.getAlgorithmQuestion(), userSolution);
+            default:
+                throw new BadRequestException("Language is not currently supported");
         }
-        return new ArrayList<>();
     }
 
     private List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolutionInJava(AlgorithmQuestion question, String userSolution) throws Exception {
         ParseResult<CompilationUnit> cu = new JavaParser().parse(userSolution);
 
-        cu.getResult().orElseThrow(() -> new Exception("Failed to parse user solution"));
+        cu.getResult().orElseThrow(() -> new AlgorithmQuestionResultException("Failed to parse user solution"));
 
         List<Pair<AlgorithmQuestionExample, String>> allExamplesForCodeJudge = new ArrayList<>();
 
@@ -136,7 +139,7 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
             CompilationUnit compilationUnitExample = cuExample.getResult().orElseThrow(() -> new Exception("Failed to parse user solution"));
 
             TypeDeclaration<?> mainClass = compilationUnitExample.getClassByName("Main")
-                    .orElseThrow(() -> new Exception("Main class not found"));
+                    .orElseThrow(() -> new AlgorithmQuestionResultException("Main class not found", example.getId()));
 
             MethodDeclaration mainMethodExample = new MethodDeclaration();
             mainMethodExample.setName("main");

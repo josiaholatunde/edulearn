@@ -65,9 +65,16 @@ public class ChallengeDTO {
         }
 
         if (!challenge.getChallengeQuestions().isEmpty()) {
+            if (ChallengeType.ALGORITHMS == challenge.getType()) {
+                populateSampleProgrammingLanguages(challenge);
+            }
             challengeDTO.setChallengeQuestions(challenge.getChallengeQuestions());
         }
         return challengeDTO;
+    }
+
+    private static void populateSampleProgrammingLanguages(Challenge challenge) {
+        return;
     }
 
 }

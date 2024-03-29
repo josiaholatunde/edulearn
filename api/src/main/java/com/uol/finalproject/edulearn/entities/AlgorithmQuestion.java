@@ -62,11 +62,12 @@ public class AlgorithmQuestion extends BaseAuditableModel {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion")
     private List<AlgorithmSolution> solutions = new ArrayList<>();
 
+    private String returnType;
+
 
     public List<MethodArgument> parseJsonToMethodArguments() {
         ObjectMapper objectMapper = new ObjectMapper();
         MethodArgumentWrapper methodArgumentWrapper = objectMapper.convertValue(getMethodArguments(), MethodArgumentWrapper.class);
         return methodArgumentWrapper.getArguments();
     }
-
 }
