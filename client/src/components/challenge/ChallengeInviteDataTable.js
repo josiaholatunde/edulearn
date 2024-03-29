@@ -1,0 +1,75 @@
+import React, { Fragment } from 'react';
+import { Table } from 'antd';
+import { useDispatch } from 'react-redux';
+import { updateChallengeInvite } from '../../redux/actions/challengeInviteActions';
+
+
+
+const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrentPage, loading, totalItems}) => {
+  
+  const dispatch = useDispatch()
+  
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'title',
+      key: 'title',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'friendlyType',
+      key: 'friendlyType',
+    },
+    {
+      title: 'Created By',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+    },
+    {
+      title: 'Action',
+      dataIndex: 'action',
+      key: 'action',
+      render: (_, challenge) => (<div className='join-challenge'>
+              {
+                !['ACCEPTED', 'DECLINED'].includes(challenge?.status) && (<Fragment>
+                  <i className="mdi mdi-check mdi-24px pointer text-cool" onClick={() => handleUpdateInvite(challenge, 'ACCEPTED')} /> 
+                  <i className="mdi mdi-close mdi-24px pointer text-cool ml-2" onClick={() => handleUpdateInvite(challenge, 'DECLINED')} />
+                </Fragment>)
+              }
+      </div>)
+    },
+  ];
+
+
+  const handleUpdateInvite = (challenge, action) => {
+    challenge.status = action
+    dispatch(updateChallengeInvite(challenge, () => {
+      history.push(`/challenge/${challenge.id}/details?type=${challenge.type}&mode=individual`)
+    }))
+  }
+
+  return (
+    <div className='row mt-5'>
+        <div className='col'>
+        <Table
+            columns={columns}
+            dataSource={challenges}
+            pagination={{ 
+              pageSize: 5,
+              current: currentPage,
+              onChange: setCurrentPage,
+              total: totalItems
+             }}  
+             loading={loading}
+        />
+        </div>
+    </div>
+  );
+};
+
+export default ChallengeInviteDataTable;

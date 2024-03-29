@@ -1,8 +1,17 @@
 package com.uol.finalproject.edulearn.filters;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.uol.finalproject.edulearn.entities.enums.AuthProvider;
+import com.uol.finalproject.edulearn.services.JwtValidator;
+import com.uol.finalproject.edulearn.services.impl.DefaultJwtValidator;
+import com.uol.finalproject.edulearn.services.impl.GoogleJwtValidator;
 import com.uol.finalproject.edulearn.util.JwtUtils;
+import jakarta.annotation.PostConstruct;
 import org.apache.logging.log4j.util.Strings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +36,24 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private UserDetailsService userDetailService;
 
+    private final GoogleIdTokenVerifier googleIdTokenVerifier;
+    private final DefaultJwtValidator defaultJwtValidator;
+    private final GoogleJwtValidator googleJwtValidator;
+    private final Map<AuthProvider, JwtValidator> jwtValidatorMap = new HashMap<>();
+
+    @PostConstruct
+    public void init() {
+        jwtValidatorMap.put(AuthProvider.GOOGLE, googleJwtValidator);
+        jwtValidatorMap.put(AuthProvider.SYSTEM, defaultJwtValidator);
+    }
+
     @Autowired
-    public AuthTokenFilter(JwtUtils jwtUtils, UserDetailsService userDetailService) {
+    public AuthTokenFilter(JwtUtils jwtUtils, UserDetailsService userDetailService, GoogleIdTokenVerifier googleIdToken, DefaultJwtValidator defaultJwtValidator, GoogleJwtValidator googleJwtValidator) {
         this.jwtUtils = jwtUtils;
         this.userDetailService = userDetailService;
+        this.googleIdTokenVerifier = googleIdToken;
+        this.defaultJwtValidator = defaultJwtValidator;
+        this.googleJwtValidator = googleJwtValidator;
     }
 
 
@@ -39,8 +62,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = retrieveJwtFromRequestHeader(httpServletRequest);
-            if (jwt != null && jwtUtils.validateJwt(jwt)) {
-                String email = jwtUtils.getUsernameFromJwt(jwt);
+            AuthProvider authProvider = AuthProvider.GOOGLE.toString().equals(httpServletRequest.getHeader("sign-in-mode")) ? AuthProvider.GOOGLE : AuthProvider.SYSTEM;
+            if (jwt != null && jwtValidatorMap.get(authProvider).validateJwt(jwt)) {
+                String email = jwtValidatorMap.get(authProvider).getUsernameFromJwt(jwt);
                 UserDetails userDetails = userDetailService.loadUserByUsername(email);
                 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities()

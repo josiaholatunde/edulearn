@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 @Data
 @EntityListeners(AuditingEntityListener.class)
+@EqualsAndHashCode
 public class BaseAuditableModel {
 
     @Id

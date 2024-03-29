@@ -18,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 public class StudentUserDTO {
 
+    private long id;
     private String firstName;
 
     private String lastName;
@@ -30,6 +31,8 @@ public class StudentUserDTO {
     private String location;
     private String skills;
     private String university;
+
+    @Builder.Default
     private List<UserCertification> certifications = new ArrayList<>();
 
     private Timestamp createdAt;
@@ -37,12 +40,14 @@ public class StudentUserDTO {
     private Timestamp updatedAt;
     private String fullName;
     private String points;
+    private boolean isUserLoggedIn;
 
 
     public static StudentUserDTO fromStudentUser(StudentUser studentUser) {
         StudentUserDTO studentUserDTO = StudentUserDTO.builder().build();
         BeanUtils.copyProperties(studentUser, studentUserDTO);
         studentUserDTO.setFullName(String.format("%s %s", studentUserDTO.firstName, studentUserDTO.lastName));
+        studentUserDTO.setUserLoggedIn(studentUser.isUserLoginStatus());
         return studentUserDTO;
     }
 }

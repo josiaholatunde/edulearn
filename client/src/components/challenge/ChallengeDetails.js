@@ -10,10 +10,11 @@ import data from "../../utils/challenges";
 import InstructionDetails from "../question/InstructionDetails";
 import { connect, useDispatch } from "react-redux";
 import { getChallengeDetails } from "../../redux/actions/challengeActions";
+import ChallengeCompletionModal from "./ChallengeCompletionModal";
 
 
 
-const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails }) => {
+const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingChallengeDetails }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill(null));
     const [questions, setQuestions] = useState([]);
@@ -23,6 +24,8 @@ const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails })
     const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
+    const [ showScoreDetails, setShowScoreDetails ] = useState(false)
+
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
 
     const pathParams = useParams();
@@ -45,7 +48,7 @@ const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails })
         } 
         if (!!challenge) {
             setChallenge(challengeDetail)
-            setQuestions(challengeDetail?.challengeQuestions)
+            setQuestions(challengeDetail?.challengeQuestions || [])
         } 
     }, [challengeIdentifier, mode, challengeDetail?.title]);
 
@@ -56,9 +59,16 @@ const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails })
 
     const handleCloseSuccessModal = () => {
         setShowSuccessModal(false)
-        history.push('/challenge')
+        history.push('/challenges')
     }
 
+    const handleViewScore = () => {
+        setShowScoreDetails(true)
+    }
+
+    const handleViewLeaderBoard = () => {
+        history.push(`/leaderboard?challengeId=${challengeDetail?.id}`)
+    }
 
     const renderQuestionDetails = (challengeDetail) => {
         const challengeQuestions = challengeDetail?.challengeQuestions
@@ -70,7 +80,7 @@ const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails })
             }
         } loading={loading} setLoading={setLoading}  />
         else {
-            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail questions={challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
+            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
             : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} />)
         }
     }
@@ -95,43 +105,23 @@ const ChallengeDetails = ({ history, challengeDetail, loadingChallengeDetails })
                 renderQuestionDetails(challengeDetail)
             }
 
-            {
-                <Modal show={showSuccessModal} onHide={handleCloseSuccessModal} size='md' centered className="success-modal" >
-                    <Modal.Header closeButton={handleCloseSuccessModal}>
-                    <Modal.Title className='pl-3 text-center'>Submission Successful</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="w-100 pt-0"> 
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="confetti-container w-100">
-                                    <img src="/confetti3.jpeg" className="celebration-img" />
-                                </div>
-                            </div>
-                        </div>
-                        <div className="row mt-3">
-                            <div className="col-lg-12">
-                            <div className="d-flex justify-content-center">
-                                <button type="button" className="btn" style={{ height: '40px', width: '200px', border: '1px solid #161f2e'}} data-bs-toggle="dropdown" aria-expanded="false">
-                                    View Score
-                                </button>
+            <ChallengeCompletionModal 
+                showSuccessModal={showSuccessModal}
+                showScoreDetails={showScoreDetails}
+                handleViewScore={handleViewScore}
+                handleViewLeaderBoard={handleViewLeaderBoard}
+                handleCloseSuccessModal={handleCloseSuccessModal}
+                challengeResult={challengeResult}
 
-                                <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
-                                    View Leaderboard
-                                </button>
-                            </div>
-                            </div>
-                        </div>
-                    </Modal.Body>
-                </Modal>
-            }
-
+            />
         </Fragment>
     );
 };
 
-const mapStateToProps = ({ challenges: { challengeDetail }, loading }) => {
+const mapStateToProps = ({ challenges: { challengeDetail, challengeResult }, loading }) => {
     return ({
         challengeDetail,
+        challengeResult,
         loading
     })
 }

@@ -4,6 +4,7 @@ import userReducer from './userReducer.js'
 import loadingReducer from './loadingReducer.js'
 import leaderboardReducer from './leaderboardReducer.js'
 import challengeReducer from './challengeReducer.js'
+import challengeInvitesReducer from './challengeInviteReducer.js'
 
 
 export default combineReducers({
@@ -11,5 +12,6 @@ export default combineReducers({
     users: userReducer,
     loading: loadingReducer,
     leaderboardUsers: leaderboardReducer,
-    challenges: challengeReducer
+    challenges: challengeReducer,
+    challengeInvites: challengeInvitesReducer
 })

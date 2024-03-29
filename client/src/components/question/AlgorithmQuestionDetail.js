@@ -15,20 +15,24 @@ const AlgorithmQuestionDetail = ({ questions, history, challengeMode }) => {
                         <h5 className="question-title">Introduction</h5>
                         <p className="question-range">{ question?.introduction }</p>
                     </div>
-                    <div className="question-body py-3">
+                    {
+                      question && question.inputDescription  && (<div className="question-body py-3">
                         <h5 className="question-title">Input</h5>
                         <p className="question-range">{ question?.inputDescription }</p>
-                    </div>
-                    <div className="question-body py-3">
-                        <h5 className="question-title">Output</h5>
-                        <p className="question-range">{ question?.outputDescription }</p>
-                    </div>
+                    </div>)
+                    }
+                    {
+                        question && question.outputDescription && (<div className="question-body py-3">
+                            <h5 className="question-title">Output</h5>
+                            <p className="question-range">{ question?.outputDescription }</p>
+                        </div>)
+                    }
 
                     <div className="question-body py-3">
                         <h5 className="question-title">Examples:</h5>
                         <ul className="question-range">
                             {
-                                question?.examples && question.examples.length > 0 && question.examples.map(example => (<div>
+                                question?.examples && question.examples.length > 0 && question.examples.map(example => (<div key={example.id}>
                                     <li>Input: { example.input } </li>
                                     <div>Output: { example.output } </div>
                                     <div className='pt-0'>Explanation: { example.explanation } </div>

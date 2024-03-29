@@ -1,23 +1,34 @@
 import React, { Fragment, useEffect, useState } from "react";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import convertToPercentage from "../../utils/levelCalculation";
 import EditBioForm from "./EditBioForm";
+import EditCertificationForm from "./CertificationForm";
 import EditProfile from "./EditProfile";
 import StreakCalendar from "./StreakCalendar";
+import { getUserDetails } from "../../redux/actions/userActions";
+import DeleteCertificationModal from "./DeleteCertificationModal";
 
 const DEFAULT_AVATAR_URL =
   "https://tylermcginnis.com/would-you-rather/sarah.jpg";
 
+const CERTIFICATION_FORM_MODE = {
+  EDIT: 'EDIT',
+  CREATE: 'CREATE'
+}
+
   const Profile = ({ user }) => {
     
-    // const [user, setUser] = useState({});
     const [showEditProfileModal, setShowEditProfileModal] = useState(false)
     const [showEditBioModal, setShowEditBioModal] = useState(false)
+    const [showDeleteCertificationModal, setShowDeleteCertificationModal ] = useState(false)
+    const [certificationFormMode, setCertificationFormMode ] = useState(CERTIFICATION_FORM_MODE.CREATE)
+    const [showEditCertificationModal, setShowEditCertificationModal] = useState(false)
+    const [ currentCertification, setCurrentCertification ] = useState(null)
   
-  
+    const dispatch = useDispatch()
+
     useEffect(() => {
-    // const user = JSON.parse(localStorage.getItem("user"));
-    // setUser(user);
+      dispatch(getUserDetails(user?.email))
   }, []);
 
   const displayFullName = (user) => {
@@ -25,6 +36,19 @@ const DEFAULT_AVATAR_URL =
   }
 
   const levelPercentage = convertToPercentage(user?.level || 10)
+
+
+  const handleEditCertification = (certification) => {
+    setCurrentCertification(certification)
+    setCertificationFormMode(CERTIFICATION_FORM_MODE.EDIT);
+    setShowEditCertificationModal(true)
+  }
+
+  const handleDeleteCertification = (certification) => {
+    setCurrentCertification(certification)
+    setShowDeleteCertificationModal(true)
+  }
+
 
   return (
     <Fragment>
@@ -61,7 +85,7 @@ const DEFAULT_AVATAR_URL =
             </div>
           </div>
         </div>
-        <div className="col-lg-2"><button className="btn btn-md btn-cool mt-5 f-16" onClick={() => setShowEditProfileModal(true) }>
+        <div className="col-lg-2 d-flex justify-content-end align-items-start"><button className="btn btn-md btn-cool mt-5 f-16" onClick={() => setShowEditProfileModal(true) }>
             <i className="mdi mdi-pencil mr-1"></i>Edit Profile</button> 
         </div>
       </div>
@@ -109,7 +133,7 @@ const DEFAULT_AVATAR_URL =
                     </div>
                 </div>
             </div>
-            <div className="col-lg-5 text-left">
+            <div className="col-lg-6 text-left">
                 <div className="current-level card p-3">
                     <h5>Current Level</h5>
                     <div className="progress my-2">
@@ -172,19 +196,31 @@ const DEFAULT_AVATAR_URL =
                     </div>
                 </div>
             </div>
-            <div className="col-lg-4">
+            <div className="col-lg-3 px-0">
                 <div className="current-level card p-3">
                     <h5>Streak</h5>
                     <StreakCalendar />
                 </div>
 
                 <div className="certifications card p-2 mt-5">
-                    <h5>Certifications</h5>
-                    <ul className="text-left mt-3">
+                    <div className="d-flex justify-content-between align-items-center">
+                      <h5 className="mb-0 ml-0 pl-3">Certifications</h5>
+                      <i className="mdi mdi-plus mdi-24px pointer" onClick={() => {
+                        setCertificationFormMode(CERTIFICATION_FORM_MODE.CREATE)
+                        setShowEditCertificationModal(true) 
+                      }}></i>
+                    </div>
+                    <ul className="text-left mt-3 ml-0 pl-3">
                         { user?.certifications && user?.certifications.length == 0 ? 
                           (<h6>User has not added any certification</h6>) :
                           (user?.certifications.map(certification => 
-                            (<li className="mb-2">{ certification?.name } </li>)))
+                            (<li className="mb-2 d-flex justify-content-between align-items-center">
+                                <span className="certification-name">{ certification?.name }</span>
+                                <div className="cetification-icons d-flex">
+                                    <i className="mdi mdi-pencil pointer" onClick={() => handleEditCertification(certification) }></i>
+                                    <i className="mdi mdi-delete ml-2 pointer" onClick={() => handleDeleteCertification(certification) }></i>
+                                </div>
+                              </li>)))
                         }
                     </ul>
                 </div>
@@ -192,6 +228,8 @@ const DEFAULT_AVATAR_URL =
         </div>
         <EditProfile showModal={showEditProfileModal} handleClose = {() => setShowEditProfileModal(false)} />
         <EditBioForm showModal={showEditBioModal} handleClose = {() => setShowEditBioModal(false)} />
+        <DeleteCertificationModal currentCertification={currentCertification} showModal={showDeleteCertificationModal} handleClose = {() => setShowDeleteCertificationModal(false)}  />
+        <EditCertificationForm currentCertification={currentCertification} formMode={certificationFormMode} showModal={showEditCertificationModal} handleClose = {() => setShowEditCertificationModal(false)}  />
       </div>
     </Fragment>
   );
@@ -203,4 +241,4 @@ const mapStateToProps = ({ authedUser }) => {
     user: authedUser?.user?.studentUser
   })
 }
-export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, { getUserDetails })(Profile);

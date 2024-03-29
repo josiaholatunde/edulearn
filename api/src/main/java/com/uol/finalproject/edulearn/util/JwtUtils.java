@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.util;
 
+import com.uol.finalproject.edulearn.entities.User;
 import com.uol.finalproject.edulearn.entities.UserDetailsImpl;
 import io.jsonwebtoken.*;
 import org.slf4j.Logger;
@@ -22,6 +23,20 @@ public class JwtUtils {
 
     @Value("${auth.jwt-expiry-duration:1}")
     private int jwtExpiryMs;
+
+    private static final long TOKEN_VALIDITY_REMEMBER = 2592000000L;
+
+
+    public String generateJwtToken(User user, boolean rememberMe) {
+
+        Date validity = rememberMe ? new Date(new Date().getTime() + TOKEN_VALIDITY_REMEMBER) : calculateExpirationDate(jwtExpiryMs);
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .setIssuedAt(new Date())
+                .setExpiration(validity)
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
+    }
 
     public String generateJwtToken(Authentication authentication) {
         UserDetailsImpl principal = (UserDetailsImpl) authentication.getPrincipal();

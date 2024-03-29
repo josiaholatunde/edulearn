@@ -13,16 +13,21 @@ const axiosDefaultInstance = axios.create({
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Credentials': 'true',
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Access-Control-Allow-Headers': 'Accept'
     },
     withCredentials: true
   });
 
   axiosDefaultInstance.interceptors.request.use(config => {
     const token = localStorage.getItem("token");
+    const authProvider = localStorage.getItem("authProvider");
     console.log('Token ', token)
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+    }
+    if (authProvider) {
+      config.headers.set('sign-in-mode', authProvider)
     }
     return config;
   });

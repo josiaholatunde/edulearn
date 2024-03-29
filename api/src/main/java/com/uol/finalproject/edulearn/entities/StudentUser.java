@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,13 @@ public class StudentUser extends BaseAuditableModel {
     private String skills;
     private String university;
 
+    @Column(name = "is_logged_in")
+    @Builder.Default
+    private boolean userLoginStatus = false;
+
+    @Column(name = "last_logged_in_at")
+    private Timestamp lastLoggedInAt;
+
     @Builder.Default
     private long points = Long.valueOf(100);
 
@@ -44,7 +52,7 @@ public class StudentUser extends BaseAuditableModel {
     @Builder.Default
     private List<Challenge> challenges = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(mappedBy = "studentUser", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<UserCertification> certifications = new ArrayList<>();
 
@@ -52,6 +60,10 @@ public class StudentUser extends BaseAuditableModel {
         StudentUser studentUser = StudentUser.builder().build();
         BeanUtils.copyProperties(registerStudentUserDTO, studentUser);
         return studentUser;
+    }
+
+    public String getFullName() {
+        return String.format("%s %s", firstName, lastName);
     }
 
 

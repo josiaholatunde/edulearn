@@ -1,6 +1,7 @@
 package com.uol.finalproject.edulearn.entities;
 
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
+import com.uol.finalproject.edulearn.entities.enums.ChallengeStatus;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import jakarta.persistence.*;
@@ -47,14 +48,31 @@ public class Challenge extends BaseAuditableModel {
     @Enumerated(EnumType.STRING)
     private RoleType createdBy;
 
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private ChallengeStatus challengeStatus = ChallengeStatus.NOT_STARTED;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private StudentUser studentUser;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     @JoinTable(name = "challenge_questions", joinColumns = @JoinColumn(name = "challenge_id"),
     inverseJoinColumns = @JoinColumn(name = "question_id"))
+    @Builder.Default
     private List<Question> challengeQuestions = new ArrayList<>();
+
+    @OneToMany(mappedBy = "challenge")
+    private List<ChallengeSubmission> challengeSubmissions = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChallengeParticipant> challengeParticipants = new ArrayList<>();
+
+    @OneToMany(mappedBy = "challenge", cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<ChallengeInvitation> challengeInvitations = new ArrayList<>();
 
 }

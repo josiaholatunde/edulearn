@@ -40,7 +40,7 @@ class Register extends Component {
   
   registerUser = (e) => {
     e.preventDefault();
-    const { firstName, lastName, email, studentNo, dateOfBirth, password, confirmPassword, showModal } = this.state;
+    const { firstName, lastName, email, password, confirmPassword, showModal } = this.state;
     const { history, handleRegisterUser } = this.props;
     if (!firstName) {
         showNotification('danger', 'The first name field is required')
@@ -48,16 +48,13 @@ class Register extends Component {
     } else if (!lastName) {
       showNotification('danger', 'The last name field is required')
       return;
-    } else if (!studentNo) {
-      showNotification('danger', 'The student number field is required')
-      return;
     } else if (!isValidEmail(email)) {
         showNotification('danger', 'The email is invalid')
         return;
     } else if (!password) return showNotification('danger', 'The password field is invalid')
     else if (password !== confirmPassword) return showNotification('danger', 'The confirm password field does not match')
 
-    const userToRegister = { firstName, lastName, password, confirmPassword, email, studentNo }
+    const userToRegister = { firstName, lastName, password, confirmPassword, email }
     handleRegisterUser(userToRegister, { history });
   };
 
@@ -77,8 +74,7 @@ class Register extends Component {
       (!this.state.firstName || !this.state.firstName.trim()) ||
       (!this.state.lastName || !this.state.lastName.trim()) ||
       (!this.state.password || !this.state.password.trim()) ||
-      (!this.state.confirmPassword || !this.state.confirmPassword.trim()) ||
-      (!this.state.studentNo || !this.state.studentNo.trim())
+      (!this.state.confirmPassword || !this.state.confirmPassword.trim())
     );
   };
 
@@ -146,7 +142,7 @@ class Register extends Component {
   };
 
   render() {
-    const { firstName, lastName, studentNo, email, password, confirmPassword, errors, showPassword, showConfirmPassword,
+    const { firstName, lastName, email, password, confirmPassword, errors, showPassword, showConfirmPassword,
     isLowerCase, isUpperCase, isSpecialChar, isNumber, isValidLength, showPasswordRequirements } = this.state;
     const { loading } = this.props
 
@@ -196,22 +192,6 @@ class Register extends Component {
                     onChange={this.handleChange}
                     placeholder='Enter your last name'
                   />
-                </div>
-
-                <div className="form-group mb-3 d-flex flex-column align-items-start">
-                  <label htmlFor="studentNo">
-                    Student Number<span className="text-danger">*</span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="studentNo"
-                    name="studentNo"
-                    value={studentNo}
-                    onChange={this.handleChange}
-                    placeholder='Enter your 12 digit student number'
-                  />
-                  <span className="text-danger"> { errors[studentNo] && errors[studentNo]} </span>
                 </div>
 
                 <div className="form-group mb-3 d-flex flex-column align-items-start">
@@ -274,8 +254,8 @@ class Register extends Component {
                   <div className="input-icon w-100">
                     <i className="bi bi-lock"></i>
                     <input
-                    type="password"
-                    className="form-control"
+                    type={`${showConfirmPassword ? "text":  "password"}`}
+                    className="form-control password-input"
                     id="confirmPassword"
                     name="confirmPassword"
                     value={confirmPassword}

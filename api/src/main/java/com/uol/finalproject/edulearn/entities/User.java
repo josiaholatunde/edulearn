@@ -24,6 +24,9 @@ public class User extends BaseAuditableModel {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
+    @Column(name = "auth_provider")
+    private String authProvider;
+
     @OneToOne
     @JoinColumn(name = "student_user_id")
     private StudentUser studentUser;
