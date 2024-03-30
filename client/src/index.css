@@ -150,11 +150,11 @@ input[type='email'], input[type='password'], .password-input {
 
 
 
-.login-form .input-icon, .register-form .input-icon {
+.login-form .input-icon, .register-form .input-icon, .edit-social-profile-form .input-icon {
   position: relative;
 }
 
-.login-form .input-icon i, .register-form .input-icon i {
+.login-form .input-icon i, .register-form .input-icon i, .edit-social-profile-form .input-icon  i {
   position: absolute;
   left: 10px; /* Adjust as needed */
   top: 50%;
@@ -336,4 +336,9 @@ input[type='email'], input[type='password'], .password-input {
 iframe[title='Sign in with Google Button'] {
   top: -35px !important;
   left: 305px !important;
+}
+
+
+.profile.links-section a {
+  font-size: 13px !important;
 }

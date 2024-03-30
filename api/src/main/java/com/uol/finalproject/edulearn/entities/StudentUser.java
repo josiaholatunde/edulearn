@@ -48,6 +48,9 @@ public class StudentUser extends BaseAuditableModel {
     @OneToOne(mappedBy = "studentUser")
     private User user;
 
+    @OneToOne(mappedBy = "studentUser", cascade = CascadeType.ALL)
+    private UserSocialProfile socialProfile;
+
     @OneToMany
     @Builder.Default
     private List<Challenge> challenges = new ArrayList<>();
