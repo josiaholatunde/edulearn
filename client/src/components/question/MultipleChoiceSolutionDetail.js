@@ -2,9 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { submitChallengeResponse } from '../../redux/actions/challengeActions';
 import questionBank from '../../utils/questions';
+import { routeToPath } from '../../utils/routeUtil';
 
 
-const MultipleChoiceSolutionDetail = ({ challengeId, questions, setShowSuccessModal, loading, challengeResult }) => {
+const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading, challengeDetail, challengeResult }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill([]));
     // const [loading, setLoading] = useState(false)
@@ -63,17 +64,8 @@ const MultipleChoiceSolutionDetail = ({ challengeId, questions, setShowSuccessMo
     };
 
 
-    const submitQuiz = () => {
-        //submit answers
-        console.log('answers ', answers)
-        const request = {
-            challengeId,
-            userResponse
-        }
-        dispatch(submitChallengeResponse(request, () => {
-            setShowSuccessModal(true);
-        }))
-          
+    const retakeQuiz = () => {
+        routeToPath(history, `/challenge/${challengeId}/details?type=${challengeDetail?.type}&mode=${challengeDetail?.participantType}`)  
     }
 
     const hasMultipleAnswers = () => {
@@ -88,14 +80,16 @@ const MultipleChoiceSolutionDetail = ({ challengeId, questions, setShowSuccessMo
     
     return (!questions || questions?.length === 0) ? (<h6 className='mt-5'>Oops! There are no questions in this challenge. Kindly contact Admin...</h6>) : (<Fragment>
             <div className="row">
-                <div className="question-container col-lg-12 text-left mt-5 ml-0 pl-0">
+                <div className="question-container col-lg-12 text-left mt-5 ml-0 px-0">
                     <div className='score-section d-flex justify-content-end'>
                         <h5>Your Score: {challengeResult?.totalCorrect}/{challengeResult?.totalQuestions} </h5>
                     </div>
                     <div className="question-header d-flex justify-content-between">
                         <h5 className="question-title">{`Question ${currentQuestion + 1
                             }`}</h5>
-                        <span className="question-range">{`${currentQuestion + 1} of ${questions?.length}`}</span>
+                        <span className="question-range">
+                            { true ? <i className="bi bi-check-lg" style={{ fontSize: '24px', color: 'green'}}></i> : <i className="bi bi-x" style={{ fontSize: '24px', color: 'red'}}></i> }
+                        </span>
                     </div>
                     <div className="question-body py-3">
                         <h6 className="question-text">
@@ -108,30 +102,18 @@ const MultipleChoiceSolutionDetail = ({ challengeId, questions, setShowSuccessMo
                             </div>)
                         }
                         
-                        <ol type="a" className="mt-3 pl-1">
+                        <ol type="A" className="mt-3 pl-1">
                         {questions && questions[currentQuestion]?.multipleChoiceQuestion?.options.map((option, index) => (
                             <Fragment key={index}>
                                 <div
                                     className="option-container d-flex align-items-center"
                                     key={option.id}
                                 >
-                                    <input
-                                        type={`${!!questions[currentQuestion].multipleChoiceQuestion.hasMultipleAnswers ? 'checkbox' : 'radio'}`}
-                                        className="form-contro"
-                                        id={`option${option.id}`}
-                                        name="option"
-                                        checked={answers[currentQuestion]?.includes(option.id)}
-                                        onChange={() => {
-                                            handleOptionChange(currentQuestion, option?.id)
-                                            handleOptionSelect(questions[currentQuestion]?.id, option?.id)
-                                        }}
-                                    />
-                                    <label
-                                        className="pointer ml-2 mb-0 pb-0"
-                                        htmlFor={`option${option.id}`}
-                                    >
-                                        {option.value}
-                                    </label>
+                                    <li className='multiple-choice-question-option'>
+                                        <label className="pointer ml-2 mb-0 pb-0" htmlFor={`option${option.id}`}> {option.value}
+                                        </label>
+                                    </li>
+                                   
                                 </div>
                             </Fragment>
                         ))}
@@ -162,10 +144,10 @@ const MultipleChoiceSolutionDetail = ({ challengeId, questions, setShowSuccessMo
                             type="submit"
                             className="btn btn-lg btn-block btn-cool"
                             style={{ fontSize: '16px', width: '200px'}}
-                            onClick={submitQuiz}
+                            onClick={retakeQuiz}
                             >
                                 { loading && (<span className="spinner-border spinner-border-sm mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>) }
-                                Submit
+                                Retake Quiz
                             </button>)
                     }
                 </div>

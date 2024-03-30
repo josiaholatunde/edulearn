@@ -9,7 +9,7 @@ import { useParams } from 'react-router'
 import data from "../../utils/challenges";
 import InstructionDetails from "../question/InstructionDetails";
 import { connect, useDispatch } from "react-redux";
-import { getChallengeDetails } from "../../redux/actions/challengeActions";
+import { getChallengeDetails, getChallengeSubmissionResponse } from "../../redux/actions/challengeActions";
 import ChallengeCompletionModal from "./ChallengeCompletionModal";
 import MultipleChoiceSolutionDetail from "../question/MultipleChoiceSolutionDetail";
 
@@ -26,7 +26,7 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
     const [ showScoreDetails, setShowScoreDetails ] = useState(false)
-
+    let [submissionId, setSubmissionId] = useState(null)
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
 
     const pathParams = useParams();
@@ -47,14 +47,18 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
         } 
-        if (challengeResult == null) {
-            
+        if (!submissionId) {
+            setSubmissionId(queryParams.get('submissionId'))
+        }
+        console.log('ccc', !challengeResult, 'submissionId', submissionId)
+        if (!challengeResult && submissionId) {
+            dispatch(getChallengeSubmissionResponse(submissionId))
         }
         if (!!challenge) {
             setChallenge(challengeDetail)
             setQuestions(challengeDetail?.challengeQuestions || [])
         } 
-    }, [challengeIdentifier, mode, challengeDetail?.title]);
+    }, [challengeIdentifier, submissionId, challengeResult?.score, mode, challengeDetail?.title]);
 
     const getChallenge = (challengeIdentifier) => {
         dispatch(getChallengeDetails(challengeIdentifier))
@@ -76,7 +80,7 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
 
     const renderQuestionDetails = (challengeDetail) => {
         
-        return (<MultipleChoiceSolutionDetail challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
+        return (<MultipleChoiceSolutionDetail history={history} challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
         
     }
 
@@ -87,12 +91,22 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
                 className="row card mt-5 p-3 text-left d-flex align-items-center"
                 style={{ height: "192px" }}
             >
-                <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
+                <div className="col-lg-9 text-left h-100 d-flex flex-column justify-content-center">
                     <h3>{ challengeDetail?.title || DEFAULT_CHALLENGE_TITLE } </h3>
                     <div>
                         <i className="bi bi-envelope-open"></i>{" "}
                         <span className="f-14">{ challengeDetail?.submissions } submissions received</span>
                     </div>
+                </div>
+                <div className="col-lg-3 mt-5 mr-5 d-flex align-items-center justify-content-end h-100">
+                    <button
+                    type="button"
+                    className="btn btn-lg btn-block"
+                    style={{ fontSize: '16px', width: '190px', border: '1px solid #161f2e'}}
+                    onClick={handleViewLeaderBoard}
+                    >
+                        View Leaderboard
+                    </button>
                 </div>
             </div>
 
@@ -121,4 +135,4 @@ const mapStateToProps = ({ challenges: { challengeDetail, challengeResult }, loa
     })
 }
 
-export default connect(mapStateToProps, { getChallengeDetails  })(ChallengeSolutionDetails);
+export default connect(mapStateToProps, { getChallengeDetails, getChallengeSubmissionResponse  })(ChallengeSolutionDetails);

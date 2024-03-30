@@ -11,6 +11,7 @@ import InstructionDetails from "../question/InstructionDetails";
 import { connect, useDispatch } from "react-redux";
 import { getChallengeDetails } from "../../redux/actions/challengeActions";
 import ChallengeCompletionModal from "./ChallengeCompletionModal";
+import { routeToPath } from "../../utils/routeUtil";
 
 
 
@@ -70,6 +71,10 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         history.push(`/leaderboard?challengeId=${challengeDetail?.id}`)
     }
 
+    const handleViewSolution = () => {
+        routeToPath(history, `/challenge-solution/${challengeDetail?.id}?type=${challengeDetail?.type}&mode=${challengeDetail?.participantType}&submissionId=${challengeResult?.id}`)  
+    }
+
     const renderQuestionDetails = (challengeDetail) => {
         const challengeQuestions = challengeDetail?.challengeQuestions
         if (shouldShowInstruction) return <InstructionDetails questionType={type} setShouldShowInstruction={() => {
@@ -112,6 +117,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
                 handleViewLeaderBoard={handleViewLeaderBoard}
                 handleCloseSuccessModal={handleCloseSuccessModal}
                 challengeResult={challengeResult}
+                handleViewSolution={handleViewSolution}
 
             />
         </Fragment>

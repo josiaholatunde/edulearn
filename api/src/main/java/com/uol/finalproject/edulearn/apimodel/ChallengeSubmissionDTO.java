@@ -23,6 +23,8 @@ import java.util.List;
 @AllArgsConstructor
 public class ChallengeSubmissionDTO {
 
+    private int id;
+
     private float score;
 
     private int totalCorrect;
