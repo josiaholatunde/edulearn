@@ -4,17 +4,17 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.Table;
+import lombok.*;
 
-@Entity(name = "user_multiple_choice_challenge_answers")
+@Entity
+@Table(name = "user_multiple_choice_challenge_question_response")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserChallengeAnswers extends BaseAuditableModel {
+@EqualsAndHashCode
+public class UserChallengeQuestionResponse extends BaseAuditableModel {
 
     @ManyToOne
     @JoinColumn(name = "challenge_submission_id")
@@ -24,6 +24,6 @@ public class UserChallengeAnswers extends BaseAuditableModel {
     @ManyToOne
     private Question question;
 
-    @ManyToOne
-    private MultipleChoiceOption option;
+    private boolean isCorrect;
+
 }

@@ -162,7 +162,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challengeSubmissionRepository.save(challengeSubmission);
 
         ChallengeSubmissionDTO challengeSubmissionDTO = null;
-        if (challenge.getType() == ChallengeType.ALGORITHMS) {
+         if (challenge.getType() == ChallengeType.ALGORITHMS) {
             challengeSubmissionDTO = algorithmChallengeService.saveChallengeQuestionResponses(challengeSubmission, challenge, challengeUserResponse);
         } else {
             challengeSubmissionDTO = multipleChoiceChallengeService.saveChallengeQuestionResponses(challengeSubmission, challenge, challengeUserResponse);

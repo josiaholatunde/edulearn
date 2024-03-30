@@ -7,6 +7,7 @@ import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.MultipleChoiceOptionRepository;
 import com.uol.finalproject.edulearn.repositories.QuestionRepository;
 import com.uol.finalproject.edulearn.repositories.UserChallengeAnswerRepository;
+import com.uol.finalproject.edulearn.repositories.UserChallengeQuestionResponseRepository;
 import com.uol.finalproject.edulearn.services.ChallengeEvaluatorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
     private final QuestionRepository questionRepository;
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
     private final UserChallengeAnswerRepository challengeAnswerRepository;
-
+    private final UserChallengeQuestionResponseRepository challengeQuestionResponseRepository;
 
 
     @Override
@@ -59,6 +60,7 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
                 challengeAnswer.setChallengeSubmission(challengeSubmission);
                 challengeAnswerRepository.save(challengeAnswer);
             });
+            saveChallengeQuestionResponse(challengeSubmission, question, answerOptions, noOfValidAnswers);
         }
 
         float percentage = (noOfCorrectAnswers / (float) totalQuestions) * 100;
@@ -67,5 +69,14 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
         challengeSubmission.setTotalQuestions(totalQuestions);
 
         return ChallengeSubmissionDTO.fromChallengeSubmission(challengeSubmission);
+    }
+
+    private void saveChallengeQuestionResponse(ChallengeSubmission challengeSubmission, Question question, List<MultipleChoiceOption> answerOptions, int noOfValidAnswers) {
+        UserChallengeQuestionResponse questionResponse = challengeQuestionResponseRepository.save(UserChallengeQuestionResponse.builder()
+                .isCorrect(noOfValidAnswers == answerOptions.size())
+                .question(question)
+                .challengeSubmission(challengeSubmission)
+                .build());
+        challengeSubmission.getQuestionResponses().add(questionResponse);
     }
 }
