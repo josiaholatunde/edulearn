@@ -8,6 +8,7 @@ import StreakCalendar from "./StreakCalendar";
 import { getUserDetails } from "../../redux/actions/userActions";
 import DeleteCertificationModal from "./DeleteCertificationModal";
 import EditSocialProfileLinks from "./EditSocialProfileLinks";
+import UpdateProfileImage from "./UpdateProfileImage";
 
 const DEFAULT_AVATAR_URL =
   "https://tylermcginnis.com/would-you-rather/sarah.jpg";
@@ -25,6 +26,7 @@ const CERTIFICATION_FORM_MODE = {
     const [showDeleteCertificationModal, setShowDeleteCertificationModal ] = useState(false)
     const [certificationFormMode, setCertificationFormMode ] = useState(CERTIFICATION_FORM_MODE.CREATE)
     const [showEditCertificationModal, setShowEditCertificationModal] = useState(false)
+    const [showChangeProfileImageModal, setShowChangeProfileImageModal] = useState(false)
     const [ currentCertification, setCurrentCertification ] = useState(null)
   
     const dispatch = useDispatch()
@@ -60,12 +62,18 @@ const CERTIFICATION_FORM_MODE = {
             className="profile-container  h-100 d-flex align-items-center"
             style={{ borderRight: "1px solid black;" }}
           >
-            <div className="profile-img-container">
-              <img
-                src={DEFAULT_AVATAR_URL}
-                alt="avatar"
-                className="img-fluid rounded-circle"
-              />
+            <div className="profile-img-container d-flex flex-column">
+              <div className="profile-img-container">
+                <img
+                  src={user?.imageUrl || DEFAULT_AVATAR_URL}
+                  alt="avatar"
+                  className="img-fluid rounded-circle"
+                />
+              </div>
+              <div className="pointer mt-2 text-cool" onClick={() => setShowChangeProfileImageModal(true)}>
+                <i class="bi bi-camera mr-1"></i>
+                <span style={{ fontSize: '14px'}}>Change Image</span>
+              </div>
             </div>
             <div className="text-container ml-4">
               <div className="d-flex align-items-center mb-3 ">
@@ -256,6 +264,7 @@ const CERTIFICATION_FORM_MODE = {
         </div>
         <EditProfile showModal={showEditProfileModal} handleClose = {() => setShowEditProfileModal(false)} />
         <EditBioForm showModal={showEditBioModal} handleClose = {() => setShowEditBioModal(false)} />
+        <UpdateProfileImage user={user} showModal={showChangeProfileImageModal} handleClose = {() => setShowChangeProfileImageModal(false)} />
         <EditSocialProfileLinks showModal={showEditSocialProfileLinkModal} handleClose = {() => setShowEditSocialProfileLinkModal(false)} />
         <DeleteCertificationModal currentCertification={currentCertification} showModal={showDeleteCertificationModal} handleClose = {() => setShowDeleteCertificationModal(false)}  />
         <EditCertificationForm currentCertification={currentCertification} formMode={certificationFormMode} showModal={showEditCertificationModal} handleClose = {() => setShowEditCertificationModal(false)}  />
