@@ -2,6 +2,7 @@ package com.uol.finalproject.edulearn.apimodel;
 
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.UserCertification;
+import com.uol.finalproject.edulearn.entities.UserSocialProfile;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +35,7 @@ public class StudentUserDTO {
 
     @Builder.Default
     private List<UserCertification> certifications = new ArrayList<>();
+    private UserSocialProfile socialProfile;
 
     private Timestamp createdAt;
 

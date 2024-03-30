@@ -6,6 +6,7 @@ import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
 import com.uol.finalproject.edulearn.apimodel.response.LoginResponseDTO;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.User;
+import com.uol.finalproject.edulearn.entities.UserSocialProfile;
 import com.uol.finalproject.edulearn.exceptions.AuthenticationException;
 import com.uol.finalproject.edulearn.exceptions.AuthorizationException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
@@ -56,6 +57,11 @@ public class UserServiceImpl implements UserService {
         if (Strings.isNotBlank(studentUserDTO.getLastName())) studentUser.setLastName(studentUserDTO.getLastName());
         if (Strings.isNotBlank(studentUserDTO.getLocation())) studentUser.setLocation(studentUserDTO.getLocation());
 
+
+        if (studentUserDTO.getSocialProfile() != null) {
+            handleSocialProfileLinksUpdate(studentUserDTO, studentUser);
+        }
+
         if (!studentUserDTO.getCertifications().isEmpty()) {
             studentUserDTO.getCertifications().forEach(certification -> certification.setStudentUser(studentUser));
             studentUser.getCertifications().clear();
@@ -63,6 +69,16 @@ public class UserServiceImpl implements UserService {
         }
 
         return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
+    }
+
+    private static void handleSocialProfileLinksUpdate(StudentUserDTO studentUserDTO, StudentUser studentUser) {
+        if (studentUser.getSocialProfile() == null) studentUser.setSocialProfile(UserSocialProfile.builder()
+                        .studentUser(studentUser)
+                .build());
+        if (Strings.isNotBlank(studentUserDTO.getSocialProfile().getLinkedInUrl())) studentUser.getSocialProfile().setLinkedInUrl(studentUserDTO.getSocialProfile().getLinkedInUrl());
+        if (Strings.isNotBlank(studentUserDTO.getSocialProfile().getGithubUrl())) studentUser.getSocialProfile().setGithubUrl(studentUserDTO.getSocialProfile().getGithubUrl());
+        if (Strings.isNotBlank(studentUserDTO.getSocialProfile().getTwitterUrl())) studentUser.getSocialProfile().setTwitterUrl(studentUserDTO.getSocialProfile().getTwitterUrl());
+        if (Strings.isNotBlank(studentUserDTO.getSocialProfile().getDiscordUrl())) studentUser.getSocialProfile().setDiscordUrl(studentUserDTO.getSocialProfile().getDiscordUrl());
     }
 
     @Override
