@@ -116,3 +116,27 @@ export const createChallenge = (challengeRequest, callBack) => dispatch => {
         }
     }, 1000)
 }
+
+
+
+export const getChallengeSubmissionResponse = (submissionId, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.get(`/challenges/submissions/${submissionId}`)
+            if (data) {
+                console.log('immm after call', data)
+                dispatch(handleChallengeResult(data?.data))
+                dispatch(hideLoading())
+                if (callBack) callBack()
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            console.error('error ', error)
+            let errorMessage = error.response && error.response.data.message;
+            console.error('error msg', errorMessage)
+            showNotification('danger', errorMessage || 'Error occurred while retrieving challenge submission')
+        }
+    }, 1000)
+}

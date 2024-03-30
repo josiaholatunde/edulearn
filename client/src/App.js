@@ -20,6 +20,7 @@ import ChallengeDetails from './components/challenge/ChallengeDetails';
 import Navbar from './components/layout/Navbar';
 import ChallengeInvite from './components/challenge/ChallengeInvite';
 import ChallengeLobbySection from './components/challenge/ChallengeLobbySection';
+import ChallengeSolutionDetails from './components/challenge/ChallengeSolutionDetails';
 
 
 const token = localStorage.getItem('token');
@@ -52,6 +53,7 @@ function App() {
                 <Route path='/challenge/:identifier/details' exact component={ChallengeDetails} />
                 <Route path='/challenges' exact component={Challenge} />
                 <Route path='/challenge-lobby/:challengeId' exact component={ChallengeLobbySection} />
+                <Route path='/challenge-solution/:challengeId' exact component={ChallengeSolutionDetails} />
                 <Route path='/challenge-invites' exact component={ChallengeInvite} />
                 <Route path='/challenge/algorithms/:id/details' exact component={AlgorithmChallengeAttemptDetails} />
                 <PrivateRoute path='/dashboard' exact component={Dashboard} />
