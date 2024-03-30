@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Table } from 'antd';
 import { useDispatch } from 'react-redux';
 import { updateChallengeInvite } from '../../redux/actions/challengeInviteActions';
+import { routeToPath } from '../../utils/routeUtil';
 
 
 
@@ -24,6 +25,11 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
       title: 'Created By',
       dataIndex: 'createdBy',
       key: 'createdBy',
+    },
+    {
+      title: 'Date Invited',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
     },
     {
       title: 'Status',
@@ -49,7 +55,7 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
   const handleUpdateInvite = (challenge, action) => {
     challenge.status = action
     dispatch(updateChallengeInvite(challenge, () => {
-      history.push(`/challenge/${challenge.id}/details?type=${challenge.type}&mode=individual`)
+      routeToPath(`/challenge-lobby/${challenge.id}?type=${challenge.type}&mode=group`)
     }))
   }
 

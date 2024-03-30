@@ -40,6 +40,8 @@ public class ChallengeInviteDTO {
 
     private ChallengeInviteStatus status;
 
+    private Timestamp createdAt;
+
 
     public static ChallengeInviteDTO fromChallengeInvitation(ChallengeInvitation challengeInvitation) {
         ChallengeInviteDTO challengeDTO = ChallengeInviteDTO.builder().build();
