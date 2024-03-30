@@ -43,6 +43,7 @@ public class StudentUserDTO {
     private String fullName;
     private String points;
     private boolean isUserLoggedIn;
+    private String imageUrl;
 
 
     public static StudentUserDTO fromStudentUser(StudentUser studentUser) {

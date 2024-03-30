@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -34,5 +35,11 @@ public class UserController {
     @GetMapping("/online/active")
     public Page<StudentUserDTO> getOnlineUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
        return userService.getActiveUsersOnline(PageRequest.of(page, size));
+    }
+
+
+    @PostMapping("/{userId}/profile-image")
+    public StudentUserDTO editProfileImage(@PathVariable String userId, @RequestParam("profileImage") MultipartFile file) {
+        return userService.editProfileImage(userId, file);
     }
 }

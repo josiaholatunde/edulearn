@@ -12,6 +12,7 @@ import com.uol.finalproject.edulearn.exceptions.AuthorizationException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.StudentUserRepository;
 import com.uol.finalproject.edulearn.repositories.UserRepository;
+import com.uol.finalproject.edulearn.services.DocumentUploadService;
 import com.uol.finalproject.edulearn.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -35,6 +37,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final StudentUserRepository studentUserRepository;
+    private final DocumentUploadService documentUploadService;
 
     @Override
     public Optional<User> findByUsername(String username) {
@@ -124,6 +127,19 @@ public class UserServiceImpl implements UserService {
 
         LoginResponseDTO loginResponseDTO = new LoginResponseDTO(UserDTO.fromUser(user), null, null);
         return new BaseApiResponseDTO(SUCCESS_LOGIN_CREDENTIALS_MESSAGE, loginResponseDTO, null);
+    }
+
+    @Override
+    public StudentUserDTO editProfileImage(String userId, MultipartFile file) {
+
+        StudentUser studentUser = studentUserRepository.findByEmail(getLoggedInUser().getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        User user = userRepository.findByUsername(studentUser.getEmail()).orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        if (!user.isActive()) throw new AuthorizationException("User is not authorized to carry out action");
+
+        String profileImageUrl = documentUploadService.uploadDocument(file);
+        studentUser.setImageUrl(profileImageUrl);
+        return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
     }
 
 }

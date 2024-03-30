@@ -7,6 +7,7 @@ import com.uol.finalproject.edulearn.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
 
@@ -23,4 +24,6 @@ public interface UserService {
     Page<StudentUserDTO> getActiveUsersOnline(PageRequest pageRequest);
 
     BaseApiResponseDTO getUserDetails();
+
+    StudentUserDTO editProfileImage(String userId, MultipartFile file);
 }

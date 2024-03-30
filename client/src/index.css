@@ -178,14 +178,19 @@ input[type='email'], input[type='password'], .password-input {
 }
 
 .profile-card {
-  height: 250px;
+  height: 290px;
 }
 
 .profile-img-container {
   height: 200px;
   width: 200px;
   display: flex;
+}
 
+.navbar-img-container {
+  height: 30px;
+  width: 30px;
+  display: flex;
 }
 
 .profile-container h5 {

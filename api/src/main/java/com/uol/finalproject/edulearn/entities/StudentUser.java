@@ -34,6 +34,7 @@ public class StudentUser extends BaseAuditableModel {
     private String location;
     private String skills;
     private String university;
+    private String imageUrl;
 
     @Column(name = "is_logged_in")
     @Builder.Default
