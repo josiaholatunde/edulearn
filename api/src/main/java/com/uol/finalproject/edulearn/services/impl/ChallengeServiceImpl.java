@@ -66,6 +66,16 @@ public class ChallengeServiceImpl implements ChallengeService  {
     public ChallengeDTO createChallenge(ChallengeDTO challengeDTO) {
         StudentUser studentUser = retrieveStudentUser();
 
+        Challenge challenge = createChallengeFromRequest(challengeDTO, studentUser);
+
+//        saveChallengeParticipants(challenge, challengeDTO);
+        saveChallengeInvites(challenge, challengeDTO);
+        assignChallengeQuestions(challenge);
+
+        return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private Challenge createChallengeFromRequest(ChallengeDTO challengeDTO, StudentUser studentUser) {
         Challenge challenge = Challenge.builder().build();
         String challengeTitle = challengeDTO.getTitle();
         if (Strings.isBlank(challengeDTO.getTitle())) {
@@ -81,13 +91,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challenge.setStartDate(Timestamp.from(Instant.now()));
         challenge.setChallengeStatus(ChallengeStatus.NOT_STARTED);
         challenge.setParticipantType(challengeDTO.getParticipantType());
-        challenge = challengeRepository.save(challenge);
-
-        saveChallengeParticipants(challenge, challengeDTO);
-        saveChallengeInvites(challenge, challengeDTO);
-        assignChallengeQuestions(challenge);
-
-        return ChallengeDTO.fromChallenge(challenge);
+        return challengeRepository.save(challenge);
     }
 
     private void saveChallengeParticipants(Challenge challenge, ChallengeDTO challengeDTO) {
@@ -114,6 +118,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
                     .build();
             challenge.getChallengeInvitations().add(challengeInvitation);
         }
+        challenge.setTotalInvitations(challengeDTO.getChallengeUsers().size());
         challengeRepository.save(challenge);
     }
 

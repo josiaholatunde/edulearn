@@ -1,0 +1,21 @@
+package com.uol.finalproject.edulearn.repositories;
+
+import com.uol.finalproject.edulearn.entities.Challenge;
+import com.uol.finalproject.edulearn.entities.ChallengeInvitation;
+import com.uol.finalproject.edulearn.entities.ChallengeParticipant;
+import com.uol.finalproject.edulearn.entities.StudentUser;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+@Repository
+public interface ChallengeParticipantRepository extends JpaRepository<ChallengeParticipant, Long> {
+
+
+    Page<ChallengeParticipant> findAllByChallenge(Challenge challenge, Pageable pageable);
+
+}

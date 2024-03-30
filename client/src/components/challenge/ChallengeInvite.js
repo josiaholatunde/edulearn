@@ -42,7 +42,8 @@ const mapToChallengeInvites = (challengeInvites, currentPage, pageSize) => {
         startDate: moment(challenge?.startDate).format('MMMM Do YYYY, h:mm:ss a') || 'N/A',
         endDate: moment(challenge.endDate).format('MMMM Do YYYY, h:mm:ss a'),
         submissions: challenge?.submissions,
-        id: challenge?.id
+        id: challenge?.id,
+        createdAt: moment(challenge?.createdAt).format('MMMM Do YYYY, h:mm:ss a') 
     }))
 }
 

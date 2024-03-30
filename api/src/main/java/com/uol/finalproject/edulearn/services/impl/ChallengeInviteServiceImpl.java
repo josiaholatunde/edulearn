@@ -1,10 +1,15 @@
 package com.uol.finalproject.edulearn.services.impl;
 
+import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeInviteDTO;
+import com.uol.finalproject.edulearn.entities.Challenge;
 import com.uol.finalproject.edulearn.entities.ChallengeInvitation;
+import com.uol.finalproject.edulearn.entities.ChallengeParticipant;
 import com.uol.finalproject.edulearn.entities.StudentUser;
+import com.uol.finalproject.edulearn.entities.enums.ChallengeInviteStatus;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.ChallengeInviteRepository;
+import com.uol.finalproject.edulearn.repositories.ChallengeParticipantRepository;
 import com.uol.finalproject.edulearn.repositories.StudentUserRepository;
 import com.uol.finalproject.edulearn.services.ChallengeInviteService;
 import com.uol.finalproject.edulearn.services.UserService;
@@ -27,6 +32,7 @@ public class ChallengeInviteServiceImpl implements ChallengeInviteService {
     private final UserService userService;
     private final StudentUserRepository studentUserRepository;
     private final ChallengeInviteRepository challengeInviteRepository;
+    private final ChallengeParticipantRepository challengeParticipantRepository;
 
     @Override
     public Page<ChallengeInviteDTO> getInvites(PageRequest pageRequest) {
@@ -48,6 +54,21 @@ public class ChallengeInviteServiceImpl implements ChallengeInviteService {
     public ChallengeInviteDTO updateChallengeInvite(ChallengeInviteDTO challengeInviteDTO) {
         ChallengeInvitation challengeInvitation = challengeInviteRepository.findById(challengeInviteDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Invalid challenge invite id"));
         challengeInvitation.setStatus(challengeInviteDTO.getStatus());
+        if (challengeInviteDTO.getStatus() == ChallengeInviteStatus.ACCEPTED) {
+            saveChallengeParticipant(challengeInvitation.getChallenge());
+        }
         return ChallengeInviteDTO.fromChallengeInvitation(challengeInviteRepository.save(challengeInvitation));
+    }
+
+    private void saveChallengeParticipant(Challenge challenge) {
+        UserDetails userDetails = userService.getLoggedInUser();
+        StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
+        ChallengeParticipant challengeParticipant = ChallengeParticipant.builder()
+                .challenge(challenge)
+                .studentUser(studentUser)
+                .build();
+
+        challengeParticipantRepository.save(challengeParticipant);
     }
 }

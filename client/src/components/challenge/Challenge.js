@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
 import ChallengeDataTable from './ChallengeDataTable'
 import Modal from 'react-bootstrap/Modal';
 import OnlineUsersDataTable from '../OnlineUsersDataTable';
@@ -47,9 +47,10 @@ const mapChallenge = (challenges, currentPage, pageSize) => {
 const Challenge = ({ history, loading, total, challenges }) => {
     const [showQuestionStyle, setShowQuestionStyle] = useState(false)
     const [showOnlineUsers, setShowOnlineUsers] = useState(false)
-    const [ challengeMode, setChallengeMode ] = useState(CHALLENGE_MODE.INDIVIDUAL)
-    const [ selectedOnlineUsersId, setSelectedOnlineUsers ] = useState([])
-    const [selectedUserIds, setSelectedUserIds ] = useState([])
+    const [challengeMode, setChallengeMode] = useState(CHALLENGE_MODE.INDIVIDUAL)
+    const [selectedOnlineUsersId, setSelectedOnlineUsers] = useState([])
+    const [selectedUserIds, setSelectedUserIds] = useState([])
+    const [createChallengeLoader, setCreateChallengeLoader] = useState(false)
 
     const [page, setCurrentPage] = useState(1)
     const [size, setSize] = useState(5)
@@ -79,22 +80,26 @@ const Challenge = ({ history, loading, total, challenges }) => {
             friendlyType,
             participantType: challengeMode,
             totalParticipants: selectedOnlineUsersId.length,
-            challengeUsers: selectedOnlineUsersId || [], 
+            challengeUsers: selectedOnlineUsersId || [],
             category: 'random'
         }
-
-        dispatch(createChallenge(challengeRequest, (challengeId) => {
-            routeToPath(`/challenge/${challengeId}/details?type=${type}&mode=${challengeMode}`)
-        }));
+        setCreateChallengeLoader(true)
+        setTimeout(() => {
+            dispatch(createChallenge(challengeRequest, (challengeId) => {
+                setCreateChallengeLoader(false);
+                routeToPath(`/challenge-lobby/${challengeId}?type=${type}&mode=${challengeMode}`)
+                // routeToPath(`/challenge/${challengeId}/details?type=${type}&mode=${challengeMode}`)
+            }));
+        }, 3000)
     }
-    
+
     console.log('from abpve component', selectedUserIds)
     return (
         <div className='mt-6 challenge'>
             <div className='challenge-header d-flex justify-content-between'>
                 <h1 className='f-32 mb-0 d-flex align-items-center'>Challenges</h1>
                 <div className="btn-group">
-                    <button type="button" className="btn btn-cool dropdown-toggle" style={{ height: '40px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                    <button type="button" className="btn btn-cool dropdown-toggle" style={{ height: '40px' }} data-bs-toggle="dropdown" aria-expanded="false">
                         Start Challenge
                     </button>
                     <ul className="dropdown-menu">
@@ -103,7 +108,7 @@ const Challenge = ({ history, loading, total, challenges }) => {
                             setChallengeMode(CHALLENGE_MODE.INDIVIDUAL)
                         }}>
                             <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
-                               Individual Challenge
+                                Individual Challenge
                             </div>
                         </li>
                         <li className='pointer' onClick={() => {
@@ -111,63 +116,69 @@ const Challenge = ({ history, loading, total, challenges }) => {
                             setChallengeMode(CHALLENGE_MODE.GROUP)
                         }}>
                             <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
-                               Group Challenge
+                                Group Challenge
                             </div>
                         </li>
                     </ul>
-                    </div>
                 </div>
-                <ChallengeDataTable
-                    challenges={challenges} 
-                    currentPage={page}
-                    setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
-                    loading={loading}
-                    totalItems={total}
-                 />
-                <Modal show={showQuestionStyle} onHide={handleCloseQuestionStyle} size='md' centered className="question-style-modal" >
-                    <Modal.Header closeButton={handleCloseQuestionStyle}>
+            </div>
+            <ChallengeDataTable
+                challenges={challenges}
+                currentPage={page}
+                setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
+                loading={loading}
+                totalItems={total}
+            />
+            <Modal show={showQuestionStyle} onHide={handleCloseQuestionStyle} size='md' centered className="question-style-modal" >
+                <Modal.Header closeButton={handleCloseQuestionStyle}>
                     <Modal.Title className='pl-3 text-center w-100'>Choose Question Type</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="d-flex justify-content-center align-items-center">
-                        <div className='row p-3'>
-                            <div className='col-lg-12'>
-                                <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => handleCreateChallenge(CHALLENGE_TYPE.MULTIPLE_CHOICE.name, CHALLENGE_TYPE.MULTIPLE_CHOICE.friendlyType)}  >
-                                        Multiple Choice
-                                    </button>
-                                </div>
-                            </div>
-                            <div className='col-lg-12 my-3'>
-                                <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} onClick={() => handleCreateChallenge(CHALLENGE_TYPE.ALGORITHMS.name, CHALLENGE_TYPE.ALGORITHMS.friendlyType)} >
-                                        Algorithms
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-   
-                    </Modal.Body>
-                </Modal>
+                </Modal.Header>
+                <Modal.Body className="d-flex justify-content-center align-items-center">
+                    <div className='row p-3'>
+                        {
+                            createChallengeLoader ? (<span className="spinner-border spinner-border-sm mr12 my-5" id="lcreate-challenge-btn-loader" role="status" aria-hidden="true"></span>) :
+                                (<Fragment>
+                                    <div className='col-lg-12'>
+                                        <div className='multiple-choice-container d-flex justify-content-center'>
+                                            <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px' }} onClick={() => handleCreateChallenge(CHALLENGE_TYPE.MULTIPLE_CHOICE.name, CHALLENGE_TYPE.MULTIPLE_CHOICE.friendlyType)}  >
+                                                Multiple Choice
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className='col-lg-12 my-3'>
+                                        <div className='multiple-choice-container d-flex justify-content-center'>
+                                            <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px' }} onClick={() => handleCreateChallenge(CHALLENGE_TYPE.ALGORITHMS.name, CHALLENGE_TYPE.ALGORITHMS.friendlyType)} >
+                                                Algorithms
+                                            </button>
+                                        </div>
+                                    </div>
+                                </Fragment>)
+                        }
+                    </div>
+
+                </Modal.Body>
+            </Modal>
 
 
-                <Modal show={showOnlineUsers} onHide={handleCloseOnlineUsers} size='lg' centered className="online-users-modal" >
-                    <Modal.Header closeButton={handleCloseOnlineUsers}>
+            <Modal show={showOnlineUsers} onHide={handleCloseOnlineUsers} size='lg' centered className="online-users-modal" >
+                <Modal.Header closeButton={handleCloseOnlineUsers}>
                     <Modal.Title className='pl-3'>Online Users</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="d-flex w-100 justify-content-center align-items-center">
-                        <OnlineUsersDataTable showQuestionStyle={(selectedOnlineUsers) => {
-                            setShowOnlineUsers(false);
-                            setSelectedOnlineUsers(selectedOnlineUsers)
-                            setShowQuestionStyle(true)}
-                         } 
-                         selectedUserIds={selectedUserIds}
-                         setSelectedUserIds={(selectedUserIds) => {
+                </Modal.Header>
+                <Modal.Body className="d-flex w-100 justify-content-center align-items-center">
+                    <OnlineUsersDataTable showQuestionStyle={(selectedOnlineUsers) => {
+                        setShowOnlineUsers(false);
+                        setSelectedOnlineUsers(selectedOnlineUsers)
+                        setShowQuestionStyle(true)
+                    }
+                    }
+                        selectedUserIds={selectedUserIds}
+                        setSelectedUserIds={(selectedUserIds) => {
                             console.log('kkk ', selectedUserIds)
                             setSelectedUserIds(selectedUserIds)
-                         }}
-                         />
-                    </Modal.Body>
-                </Modal>
+                        }}
+                    />
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }
@@ -180,5 +191,5 @@ const mapStateToProps = ({ challenges: { challenges, total, currentPage, pageSiz
     })
 }
 
-export default connect(mapStateToProps, {  getChallenges })(Challenge)
+export default connect(mapStateToProps, { getChallenges })(Challenge)
 

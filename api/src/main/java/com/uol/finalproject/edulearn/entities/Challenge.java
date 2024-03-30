@@ -45,6 +45,9 @@ public class Challenge extends BaseAuditableModel {
     @Column(name = "total_participants")
     private long totalParticipants;
 
+    @Column(name = "total_invitations")
+    private long totalInvitations;
+
     @Enumerated(EnumType.STRING)
     private RoleType createdBy;
 

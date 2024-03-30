@@ -121,10 +121,10 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
                             challengeResult && challengeResult.algoResult && challengeResult.algoResult.length > 0 && challengeResult.algoResult[index]?.userOutput && (<div>Output: { challengeResult.algoResult[index].userOutput } </div>)
                         }
                         {
-                            challengeResult && challengeResult.algoResult && challengeResult.algoResult[0].compilationError && (<div >Compilation Error: { challengeResult.algoResult[0].compilationError } </div>)
+                            challengeResult && challengeResult.algoResult && challengeResult.algoResult[0]?.compilationError && (<div >Compilation Error: { challengeResult.algoResult[0]?.compilationError } </div>)
                         }
                         {
-                            challengeResult && challengeResult.algoResult && challengeResult.algoResult.length > 0 && challengeResult.algoResult[index]?.testCasePassed && (<div className='my-3' style={{ color: '#fff'}}>Passed: { challengeResult.algoResult[index].testCasePassed } </div>)
+                            challengeResult && challengeResult.algoResult && challengeResult.algoResult.length > 0 && challengeResult.algoResult[index]?.testCasePassed && (<div className='my-3' style={{ color: '#fff'}}>Passed: { challengeResult.algoResult[index]?.testCasePassed } </div>)
                         }
                     </div>))
                 }

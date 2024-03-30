@@ -46,6 +46,8 @@ public class ChallengeDTO {
 
     private long totalParticipants;
 
+    private long totalInvitations;
+
     private RoleType createdBy;
 
     private StudentUserDTO studentUser;
