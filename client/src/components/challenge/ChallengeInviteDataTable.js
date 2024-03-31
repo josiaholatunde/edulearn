@@ -55,7 +55,7 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
   const handleUpdateInvite = (challenge, action) => {
     challenge.status = action
     dispatch(updateChallengeInvite(challenge, () => {
-      routeToPath(`/challenge-lobby/${challenge.id}?type=${challenge.type}&mode=group`)
+      routeToPath(history, `/challenge-lobby/${challenge.id}?type=${challenge.type}&mode=group`)
     }))
   }
 

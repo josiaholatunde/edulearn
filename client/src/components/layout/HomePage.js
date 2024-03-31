@@ -1,19 +1,27 @@
 import React, { Fragment, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { getChallengeInvites } from '../../redux/actions/challengeInviteActions'
+import { getChallengeInvites, updateChallengeInvite } from '../../redux/actions/challengeInviteActions'
 import convertToPercentage from '../../utils/levelCalculation'
 import { getTimeOfDay } from '../../utils/momentUtil'
+import { routeToPath } from '../../utils/routeUtil'
 import History from '../user-profile/History'
 import StreakCalendar from '../user-profile/StreakCalendar'
 
 
-const HomePage = ({ user, challengeInvites }) => {
+const HomePage = ({ history, user, challengeInvites }) => {
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getChallengeInvites({ page: 1, size: 5 }))
     }, [])
+
+    const handleUpdateInvite = (challenge, action) => {
+        challenge.status = action
+        dispatch(updateChallengeInvite(challenge, () => {
+          routeToPath(history, `/challenge-lobby/${challenge.id}?type=${challenge.type}&mode=group`)
+        }))
+    }
 
     const levelPercentage = convertToPercentage(user?.level || 10)
 
@@ -80,8 +88,8 @@ const HomePage = ({ user, challengeInvites }) => {
                                         <li style={{ fontSize: '14px' }}> { challengeInvite.createdBy || 'N/A'} invited you to a challenge</li>
 
                                         <div className='d-flex justify-content-end mb-3' style={{ fontSize: '13px' }}>
-                                            <div>Accept</div>
-                                            <div className='ml-2'>Decline</div>
+                                            <div className='pointer' onClick={() => handleUpdateInvite(challengeInvite, 'ACCEPTED')}>Accept</div>
+                                            <div className='ml-2' onClick={() => handleUpdateInvite(challengeInvite, 'DECLINED')}>Decline</div>
                                         </div>
                                     </Fragment>))) : (<div>You do not have any challenge invites</div>) 
                             }

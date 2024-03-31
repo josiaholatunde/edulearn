@@ -4,6 +4,7 @@ package com.uol.finalproject.edulearn.controllers;
 import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +41,12 @@ public class ChallengeController {
     @PostMapping("/submissions")
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(@RequestBody ChallengeUserResponse challengeUserResponse) throws Exception {
         return challengeService.saveChallengeQuestionResponses(challengeUserResponse);
+    }
+
+
+    @GetMapping("/summary")
+    public ChallengeSummaryDTO getChallengesSummary() throws Exception {
+        return challengeService.getChallengesSummary();
     }
 
 }
