@@ -32,7 +32,7 @@ export const handleGoogleLogin = (tokenResponse, history) => async dispatch => {
                 })
                 storeUserCredentialsInLocalStorage({ user, token }, 'GOOGLE');
                 showNotification('success', 'Successfully logged in user')
-                history.push('/challenges')
+                history.push('/home')
             }
         } catch (error) {
             let errorMessage = error.response && error.response.data.message;
