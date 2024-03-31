@@ -40,7 +40,7 @@ export const handleLoginUser = (userToLogin, { history }) => dispatch => {
                 })
                 storeUserCredentialsInLocalStorage({ user, token });
                 showNotification('success', 'Successfully logged in user')
-                history.push('/challenges')
+                history.push('/home')
             }
             dispatch(hideLoading())
         } catch (error) {

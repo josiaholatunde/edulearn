@@ -20,6 +20,7 @@ import ChallengeDetails from './components/challenge/ChallengeDetails';
 import Navbar from './components/layout/Navbar';
 import ChallengeInvite from './components/challenge/ChallengeInvite';
 import ChallengeLobbySection from './components/challenge/ChallengeLobbySection';
+import HomePage from './components/layout/HomePage';
 
 
 const token = localStorage.getItem('token');
@@ -45,6 +46,7 @@ function App() {
             <div className='container'>
               <Switch>
                 <Route path='/login' exact component={SignIn} />
+                <Route path='/home' exact component={HomePage} />
                 <Route path='/register' exact component={Register} />
                 <Route path='/profile' exact component={Profile} />
                 <Route path='/leaderboard' exact component={Leaderboard} />

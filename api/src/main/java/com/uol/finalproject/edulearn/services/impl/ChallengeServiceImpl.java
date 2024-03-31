@@ -2,6 +2,7 @@ package com.uol.finalproject.edulearn.services.impl;
 
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
@@ -68,11 +69,15 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         Challenge challenge = createChallengeFromRequest(challengeDTO, studentUser);
 
-//        saveChallengeParticipants(challenge, challengeDTO);
         saveChallengeInvites(challenge, challengeDTO);
         assignChallengeQuestions(challenge);
 
         return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    @Override
+    public ChallengeSummaryDTO getChallengesSummary() {
+        return null;
     }
 
     private Challenge createChallengeFromRequest(ChallengeDTO challengeDTO, StudentUser studentUser) {
