@@ -26,6 +26,9 @@ class Navbar extends Component {
                     <div className="collapse navbar-collapse navbar-rel-links justify-content-center" id="navbarSupportedContent">
                         {loggedInUser && (
                             <ul className="navbar-nav mr-auto">
+                                <li className="nav-item">
+                                    <Link className="nav-link" to='/home'>Home</Link>
+                                </li>
                                 <li className="nav-item dropdown">
                                     <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Challenges
