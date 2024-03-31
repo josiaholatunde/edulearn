@@ -40,6 +40,8 @@ public class Challenge extends BaseAuditableModel {
 
     private Timestamp endDate;
 
+    private Long duration;
+
     private long submissions;
 
     @Column(name = "total_participants")

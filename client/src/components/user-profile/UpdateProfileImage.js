@@ -9,12 +9,14 @@ import { showNotification } from '../../utils/showNotification';
 const UpdateProfileImage = ({ showModal, handleClose, user, loading }) => {
     const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
+    const [fileName, setFileName] = useState('')
     const fileInputRef = useRef(null);
     const dispatch = useDispatch();
 
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         if (selectedFile) {
+            setFileName(selectedFile.name)
             setFile(selectedFile);
             const reader = new FileReader();
             reader.onload = () => {
@@ -28,7 +30,11 @@ const UpdateProfileImage = ({ showModal, handleClose, user, loading }) => {
         if (file) {
             const formData = new FormData();
             formData.append('profileImage', file);
-            dispatch(handleProfileImageUpdate(formData, user?.email, handleClose));
+            dispatch(handleProfileImageUpdate(formData, user?.email, () => {
+                handleClose()
+                setFile(null)
+                setFileName('')
+            }));
         } else {
             showNotification('danger', 'Please upload a file')
         }
@@ -55,8 +61,11 @@ const UpdateProfileImage = ({ showModal, handleClose, user, loading }) => {
                                 </div>) : (<Fragment>
                                     <input type="file" ref={fileInputRef} style={{ display: 'none' }} onChange={handleFileChange} />
                                     <div className='icon-container d-flex flex-column align-items-center justify-content-center h-100'>
-                                        <div className='mb-3'>Drag here or click to upload</div>
+                                        <div className='mb-3'> { !fileName ? 'Drag here or click to upload' : 'Change image' } </div>
                                         <i className="bi bi-cloud-arrow-up-fill" style={{ fontSize: '40px' }}></i>
+                                        {
+                                            fileName && (<div className='mt-2'> {fileName} </div>)
+                                        }
                                     </div>
                                 </Fragment>)
                             }
