@@ -347,3 +347,13 @@ iframe[title='Sign in with Google Button'] {
 .profile.links-section a {
   font-size: 13px !important;
 }
+
+@font-face {
+  font-family: 'digital-7';
+  src: url('./assets/digital-7/digital-7.ttf') format('truetype');
+}
+
+.digital-timer {
+  font-family: 'digital-7' !important;
+  font-size: 44px;
+}
