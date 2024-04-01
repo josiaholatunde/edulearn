@@ -38,6 +38,12 @@ public class ChallengeController {
         return challengeService.createChallenge(challengeDTO);
     }
 
+    @PutMapping("/{challengeId}")
+    public ChallengeDTO handleChallengeUpdate(@PathVariable long challengeId, @RequestBody ChallengeDTO challengeDTO) {
+
+        return challengeService.handleChallengeUpdate(challengeId, challengeDTO);
+    }
+
     @PostMapping("/submissions")
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(@RequestBody ChallengeUserResponse challengeUserResponse) throws Exception {
         return challengeService.saveChallengeQuestionResponses(challengeUserResponse);

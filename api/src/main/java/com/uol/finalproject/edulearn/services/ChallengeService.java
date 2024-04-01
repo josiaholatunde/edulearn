@@ -20,4 +20,5 @@ public interface ChallengeService {
 
     ChallengeSummaryDTO getChallengesSummary();
 
+    ChallengeDTO handleChallengeUpdate(long challengeId, ChallengeDTO challengeDTO);
 }

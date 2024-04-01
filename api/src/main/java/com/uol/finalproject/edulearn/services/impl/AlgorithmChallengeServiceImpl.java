@@ -33,6 +33,7 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
 
     private final QuestionRepository questionRepository;
     private final CodeJudgeRestService codeJudgeRestService;
+    private final PythonParserExecutorServiceImpl pythonParserExecutorService;
 
     @Override
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(ChallengeSubmission challengeSubmission, Challenge challenge, ChallengeUserResponse challengeUserResponse) throws Exception {
@@ -121,6 +122,8 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
         switch (language) {
             case JAVA:
                 return appendMainMethodToUserSolutionInJava(question.getAlgorithmQuestion(), userSolution);
+            case PYTHON:
+                return pythonParserExecutorService.appendMainMethodToUserSolutionInPython(question.getAlgorithmQuestion(), userSolution);
             default:
                 throw new BadRequestException("Language is not currently supported");
         }

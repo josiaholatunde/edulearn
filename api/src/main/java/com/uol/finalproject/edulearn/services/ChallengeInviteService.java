@@ -1,6 +1,5 @@
 package com.uol.finalproject.edulearn.services;
 
-import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeInviteDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

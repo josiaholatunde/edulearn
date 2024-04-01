@@ -26,6 +26,7 @@ public class LinkedHashMapConverter implements AttributeConverter<LinkedHashMap<
     @Override
     public LinkedHashMap<String, Object> convertToEntityAttribute(String dbData) {
         try {
+            if (dbData == null) return new LinkedHashMap<>();
             return objectMapper.readValue(dbData, LinkedHashMap.class);
         } catch (IOException e) {
             // Handle the exception appropriately, e.g., log it or throw a runtime exception

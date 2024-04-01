@@ -1,10 +1,13 @@
 import React, { Fragment } from 'react'
+import { useDispatch } from 'react-redux'
+import { handleChallengeUpdate } from '../../redux/actions/challengeActions'
 import { QUESTION_TYPE } from '../../utils/constants'
 
 
 
-const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruction, setLoading }) => {
+const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruction, setLoading, challenge }) => {
 
+    const dispatch = useDispatch()
     const getQuizTitle  = (title) => {
         return !!title ? title : 'this unique challenge'
     }
@@ -14,6 +17,11 @@ const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruct
             return `Welcome to ${getQuizTitle()}! Test your knowledge with these multiple-choice questions. Choose the correct answer for each question and see how well you understand computer science concepts. Good luck!`
         }
         return `Welcome to this algorithm challenge! Test your knowledge of algorithms with these algorithm questions. Read the problem statement, write code to pass the test cases and see how well you understand the efficiency of various algorithms. Good luck!`
+    }
+
+    const handleChallengeStatusUpdate = () => {
+        challenge.challengeStatus = 'STARTED'
+        dispatch(handleChallengeUpdate(challenge))
     }
 
 
@@ -30,6 +38,7 @@ const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruct
                         <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}}  onClick={() => {
                             setLoading(true)
                             setShouldShowInstruction(false)
+                            handleChallengeStatusUpdate()
                         }}>
                             { loading && (<span className="spinner-border spinner-border-sm mr12" id="registerForm-btn-loader" role="status" aria-hidden="true"></span>) }
                             Start Challenge

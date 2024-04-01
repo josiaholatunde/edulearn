@@ -43,6 +43,9 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (!!queryParams.get('mode')) {
             setChallengeMode(queryParams.get('mode'))
         }
+        if (!!queryParams.get('showInstruction')) {
+            setShouldShowInstruction(false)
+        }
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
         } 
@@ -92,7 +95,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
                 setStartChallenge(true)
             } , 3000)    
             }
-        } loading={loading} setLoading={setLoading}  />
+        } loading={loading} setLoading={setLoading} challenge={challengeDetail}  />
         else {
             return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail userResponse={userResponse} setUserResponses={setUserResponses} challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
             : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} />)
@@ -135,7 +138,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
                         </div>
                         <div className="col-lg-4">
                             {
-                                startChallenge && (<div className="count-down-timer w-100 h-100 d-flex justify-content-end align-items-center">
+                                (startChallenge && type == QUESTION_TYPE.MULTIPLE_CHOICE) &&  (<div className="count-down-timer w-100 h-100 d-flex justify-content-end align-items-center">
                                     <Countdown date={Date.now() + (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 10000)} renderer={renderer} onComplete={handleOnComplete} />
                                 </div>)
                             }

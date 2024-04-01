@@ -2,6 +2,7 @@ package com.uol.finalproject.edulearn.entities.enums;
 
 public enum ChallengeStatus {
     NOT_STARTED("Not Started"),
+    STARTED("Started"),
     IN_PROGRESS("In Progress"),
     COMPLETED("Completed"),
     CANCELLED("Cancelled");
