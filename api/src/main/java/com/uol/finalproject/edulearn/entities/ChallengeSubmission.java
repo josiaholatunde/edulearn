@@ -33,7 +33,7 @@ public class ChallengeSubmission extends BaseAuditableModel {
     @JoinColumn(name = "student_user_id")
     private StudentUser studentUser;
 
-    @OneToMany(mappedBy = "challengeSubmission", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "challengeSubmission", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Builder.Default
     private List<UserChallengeQuestionResponse> questionResponses = new ArrayList<>();
 

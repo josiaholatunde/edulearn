@@ -4,10 +4,7 @@ import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
-import com.uol.finalproject.edulearn.repositories.MultipleChoiceOptionRepository;
-import com.uol.finalproject.edulearn.repositories.QuestionRepository;
-import com.uol.finalproject.edulearn.repositories.UserChallengeAnswerRepository;
-import com.uol.finalproject.edulearn.repositories.UserChallengeQuestionResponseRepository;
+import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.ChallengeEvaluatorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,8 +21,7 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
 
     private final QuestionRepository questionRepository;
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
-    private final UserChallengeAnswerRepository challengeAnswerRepository;
-    private final UserChallengeQuestionResponseRepository challengeQuestionResponseRepository;
+    private final ChallengeSubmissionRepository challengeSubmissionRepository;
 
 
     @Override
@@ -50,17 +46,18 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
 
             if (noOfValidAnswers == answerOptions.size()) noOfCorrectAnswers += 1;
 
+            UserChallengeQuestionResponse userChallengeQuestionResponse = saveChallengeQuestionResponse(challengeSubmission, question, answerOptions, noOfValidAnswers);
+
             entry.getValue().forEach(optionId -> {
                 MultipleChoiceOption option = multipleChoiceOptionRepository.findById(optionId)
                         .orElseThrow(() -> new ResourceNotFoundException("One or more invalid option ids"));
 
                 UserChallengeAnswers challengeAnswer = new UserChallengeAnswers();
                 challengeAnswer.setOption(option);
-                challengeAnswer.setQuestion(question);
-                challengeAnswer.setChallengeSubmission(challengeSubmission);
-                challengeAnswerRepository.save(challengeAnswer);
+                challengeAnswer.setQuestionResponse(userChallengeQuestionResponse);
+                userChallengeQuestionResponse.getChallengeAnswersList().add(challengeAnswer);
             });
-            saveChallengeQuestionResponse(challengeSubmission, question, answerOptions, noOfValidAnswers);
+
         }
 
         float percentage = (noOfCorrectAnswers / (float) totalQuestions) * 100;
@@ -68,15 +65,17 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
         challengeSubmission.setTotalCorrect(noOfCorrectAnswers);
         challengeSubmission.setTotalQuestions(totalQuestions);
 
-        return ChallengeSubmissionDTO.fromChallengeSubmission(challengeSubmission);
+        return ChallengeSubmissionDTO.fromChallengeSubmission(challengeSubmissionRepository.save(challengeSubmission));
     }
 
-    private void saveChallengeQuestionResponse(ChallengeSubmission challengeSubmission, Question question, List<MultipleChoiceOption> answerOptions, int noOfValidAnswers) {
-        UserChallengeQuestionResponse questionResponse = challengeQuestionResponseRepository.save(UserChallengeQuestionResponse.builder()
+    private UserChallengeQuestionResponse saveChallengeQuestionResponse(ChallengeSubmission challengeSubmission, Question question, List<MultipleChoiceOption> answerOptions, int noOfValidAnswers) {
+        UserChallengeQuestionResponse questionResponse = UserChallengeQuestionResponse.builder()
                 .isCorrect(noOfValidAnswers == answerOptions.size())
                 .question(question)
                 .challengeSubmission(challengeSubmission)
-                .build());
+                .build();
         challengeSubmission.getQuestionResponses().add(questionResponse);
+
+        return questionResponse;
     }
 }

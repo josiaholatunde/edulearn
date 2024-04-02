@@ -8,11 +8,17 @@ import { routeToPath } from '../../utils/routeUtil';
 const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading, challengeDetail, challengeResult }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill([]));
+    const [isCurrentQuestionAnswerCorrect, setIsCurrentQuestionAnswer] = useState(false)
+    const [correctOptionsId, setCorrrectOptionsId] = useState([])
     // const [loading, setLoading] = useState(false)
     const [userResponse, setUserResponses] = useState({})
     // const [ questions, setQuestions ] = useState([])
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        setIsCurrentQuestionAnswer(isAnswerCorrect(questions[currentQuestion], challengeResult))
+    }, [currentQuestion, challengeResult?.multipleChoiceResult])
 
 
     
@@ -72,12 +78,26 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
         return !!questions[currentQuestion].multipleChoiceQuestion.hasMultipleAnswers
     }
 
+    const isAnswerCorrect = (currentQuestion, result) => {
+        console.log('called again ', currentQuestion, 'res', result)
+        if (result && result.multipleChoiceResult) {
+            const currentQuestionResult = result.multipleChoiceResult?.find(res => res.question.id == currentQuestion.id)
+            console.log('found ', currentQuestionResult)
+            const answerOptions = currentQuestionResult?.question?.answerList?.map(answer => answer?.option?.id) || []
+            console.log('answer options ', answerOptions)
+            setCorrrectOptionsId(answerOptions)
+            return currentQuestionResult?.correct;
+        }
+        return false;
+
+    }
+
 
     const renderQuestion = () => {
         
     }
 
-    
+    console.log('questions', questions[currentQuestion])
     return (!questions || questions?.length === 0) ? (<h6 className='mt-5'>Oops! There are no questions in this challenge. Kindly contact Admin...</h6>) : (<Fragment>
             <div className="row">
                 <div className="question-container col-lg-12 text-left mt-5 ml-0 px-0">
@@ -88,7 +108,7 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
                         <h5 className="question-title">{`Question ${currentQuestion + 1
                             }`}</h5>
                         <span className="question-range">
-                            { true ? <i className="bi bi-check-lg" style={{ fontSize: '24px', color: 'green'}}></i> : <i className="bi bi-x" style={{ fontSize: '24px', color: 'red'}}></i> }
+                            { isCurrentQuestionAnswerCorrect ? <i className="bi bi-check-lg" style={{ fontSize: '28px', color: 'green'}}></i> : <i className="bi bi-x" style={{ fontSize: '28px', color: 'red'}}></i> }
                         </span>
                     </div>
                     <div className="question-body py-3">
@@ -109,11 +129,20 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
                                     className="option-container d-flex align-items-center"
                                     key={option.id}
                                 >
-                                    <li className='multiple-choice-question-option'>
-                                        <label className="pointer ml-2 mb-0 pb-0" htmlFor={`option${option.id}`}> {option.value}
-                                        </label>
-                                    </li>
-                                   
+                                    <input
+                                        type={`${!!questions[currentQuestion].multipleChoiceQuestion.hasMultipleAnswers ? 'checkbox' : 'radio'}`}
+                                        className="form-contro"
+                                        id={`option${option.id}`}
+                                        name="option"
+                                        disabled="true"
+                                        checked={correctOptionsId?.includes(option.id)}
+                                    />
+                                    <label
+                                        className="pointer ml-2 mb-0 pb-0"
+                                        htmlFor={`option${option.id}`}
+                                    >
+                                        {option.value}
+                                    </label>
                                 </div>
                             </Fragment>
                         ))}

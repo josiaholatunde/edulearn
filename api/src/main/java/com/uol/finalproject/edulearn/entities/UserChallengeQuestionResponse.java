@@ -1,11 +1,11 @@
 package com.uol.finalproject.edulearn.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user_multiple_choice_challenge_question_response")
@@ -25,5 +25,9 @@ public class UserChallengeQuestionResponse extends BaseAuditableModel {
     private Question question;
 
     private boolean isCorrect;
+
+    @OneToMany(mappedBy = "questionResponse", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<UserChallengeAnswers> challengeAnswersList = new ArrayList<>();
 
 }

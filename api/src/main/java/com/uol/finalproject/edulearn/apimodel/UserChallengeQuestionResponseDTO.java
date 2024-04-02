@@ -14,7 +14,7 @@ import org.springframework.beans.BeanUtils;
 @AllArgsConstructor
 public class UserChallengeQuestionResponseDTO {
 
-    private long id;
+    private Long id;
 
     private ChallengeSubmissionDTO challengeSubmission;
 
@@ -25,6 +25,11 @@ public class UserChallengeQuestionResponseDTO {
     public static UserChallengeQuestionResponseDTO fromChallengeQuestionResponse(UserChallengeQuestionResponse challengeQuestionResponse) {
         UserChallengeQuestionResponseDTO userChallengeQuestionResponseDTO = UserChallengeQuestionResponseDTO.builder().build();
         BeanUtils.copyProperties(challengeQuestionResponse, userChallengeQuestionResponseDTO);
+        QuestionDTO questionDTO = QuestionDTO.builder()
+                .answerList(challengeQuestionResponse.getQuestion().getMultipleChoiceQuestion().getAnswers())
+                .build();
+        BeanUtils.copyProperties(challengeQuestionResponse.getQuestion(), questionDTO);
+        userChallengeQuestionResponseDTO.setQuestion(questionDTO);
         return userChallengeQuestionResponseDTO;
     }
 }

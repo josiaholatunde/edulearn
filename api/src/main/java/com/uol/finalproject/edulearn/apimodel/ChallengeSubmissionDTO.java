@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ChallengeSubmissionDTO {
 
-    private int id;
+    private Long id;
 
     private float score;
 

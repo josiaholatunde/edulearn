@@ -40,7 +40,7 @@ const ChallengeCompletionModal = ({ challengeResult,  showSuccessModal, showScor
                         }
 
                         <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px' }} onClick={handleViewLeaderBoard}>
-                            View Leaderboard
+                            Leaderboard
                         </button>
                         {
                             !isAlgorithmView && (<button type="button" className="btn ml-3" style={{ height: '40px', width: '200px', border: '1px solid #161f2e' }} onClick={handleViewSolution}>

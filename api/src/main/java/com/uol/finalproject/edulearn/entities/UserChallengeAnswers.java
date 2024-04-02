@@ -17,12 +17,9 @@ import lombok.NoArgsConstructor;
 public class UserChallengeAnswers extends BaseAuditableModel {
 
     @ManyToOne
-    @JoinColumn(name = "challenge_submission_id")
+    @JoinColumn(name = "challenge_question_response_id")
     @JsonIgnore
-    private ChallengeSubmission challengeSubmission;
-
-    @ManyToOne
-    private Question question;
+    private UserChallengeQuestionResponse questionResponse;
 
     @ManyToOne
     private MultipleChoiceOption option;
