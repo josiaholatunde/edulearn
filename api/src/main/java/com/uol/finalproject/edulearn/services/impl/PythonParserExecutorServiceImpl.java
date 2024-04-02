@@ -17,7 +17,7 @@ import java.util.Map;
 public class PythonParserExecutorServiceImpl {
 
 
-    public List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolutionInPython(AlgorithmQuestion question, String userSolution) throws Exception {
+    public List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolution(AlgorithmQuestion question, String userSolution) throws Exception {
         List<Pair<AlgorithmQuestionExample, String>> allExamplesForCodeJudge = new ArrayList<>();
 
         // Iterate over examples

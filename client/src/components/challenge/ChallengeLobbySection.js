@@ -32,9 +32,10 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
             dispatch(getChallengeDetails(challengeId))
         }, 10000)
 
-        if (!isLoggedInUserCreatorOfChallenge() && challengeDetail?.challengeStatus == 'STARTED') {
+        console.log('challenge details before the koko', challengeDetail)
+        if (!isLoggedInUserCreatorOfChallenge() && challengeId == challengeDetail?.id && challengeDetail?.challengeStatus == 'STARTED') {
             console.log('Redirecting user to challenge start page')
-            startChallenge()
+            redirectToChallengeDetails()
         }
 
         return () => clearInterval(intervalId)
@@ -44,13 +45,18 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
         return challengeDetail?.studentUser?.id == user?.id
     }
 
+    const redirectToChallengeDetails = () => {
+        routeToPath(history, `/challenge/${challengeId}/details?type=${type}&mode=${challengeMode}&showInstruction=false`)
+
+    }
+
     const startChallenge = () => {
         const request = {
             challengeStatus: 'STARTED',
             id: challengeId
         }
         dispatch(handleChallengeUpdate(request))
-        routeToPath(history, `/challenge/${challengeId}/details?type=${type}&mode=${challengeMode}&showInstruction=false`)
+        redirectToChallengeDetails()
     }
 
 
@@ -78,7 +84,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
 
             <div className="main-cotent text-center my-1 d-flex justify-content-center align-items-center flex-column">
                 {
-                    challengeDetail && challengeDetail.studentUser && (<div className="p-2 my-2" style={{ backgroundColor: '#C0C0C0', width: '400px', borderRadius: '5px' }}> {challengeDetail?.studentUser?.fullName} created this challenge</div>)
+                    challengeDetail && challengeDetail.studentUser && (<div className="p-2 my-2" style={{ backgroundColor: '#C0C0C0', width: '249px', borderRadius: '5px' }}> {challengeDetail?.studentUser?.fullName} created this challenge</div>)
                 }
 
                 <div className="joined-candidates challenge-participants my-2">

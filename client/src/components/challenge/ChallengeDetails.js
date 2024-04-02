@@ -45,6 +45,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         }
         if (!!queryParams.get('showInstruction')) {
             setShouldShowInstruction(false)
+            setStartChallenge(true)
         }
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
