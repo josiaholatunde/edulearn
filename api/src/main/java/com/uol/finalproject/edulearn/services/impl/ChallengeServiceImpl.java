@@ -2,6 +2,8 @@ package com.uol.finalproject.edulearn.services.impl;
 
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
+import com.uol.finalproject.edulearn.apimodel.NotificationMessage;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
@@ -23,8 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,7 +43,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final UserService userService;
     private final AlgorithmChallengeServiceImpl algorithmChallengeService;
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
-
+    private final StompNotificationService stompNotificationService;
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
 
@@ -68,10 +70,32 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         Challenge challenge = createChallengeFromRequest(challengeDTO, studentUser);
 
-//        saveChallengeParticipants(challenge, challengeDTO);
         saveChallengeInvites(challenge, challengeDTO);
         assignChallengeQuestions(challenge);
 
+        return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void sendPushNotificationToParticipants(List<String> userEmails, String message) {
+        for (String userEmail: userEmails) {
+            log.info("About to send challenge invite push notification to user {}", userEmail);
+            stompNotificationService.sendNotificationToDestination(String.format("/topic/user/%s/challenge-invite/notification", userEmail), NotificationMessage.builder()
+                            .message(message)
+                    .build());
+            log.info("Successfully sent challenge invite push notification to user {}", userEmail);
+        }
+    }
+
+    @Override
+    public ChallengeSummaryDTO getChallengesSummary() {
+        return null;
+    }
+
+    @Override
+    public ChallengeDTO handleChallengeUpdate(long challengeId, ChallengeDTO challengeDTO) {
+        Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
+        challenge.setChallengeStatus(challengeDTO.getChallengeStatus());
+        challengeRepository.updateChallengeStatus(challengeDTO.getChallengeStatus(), challenge.getId());
         return ChallengeDTO.fromChallenge(challenge);
     }
 
@@ -94,21 +118,9 @@ public class ChallengeServiceImpl implements ChallengeService  {
         return challengeRepository.save(challenge);
     }
 
-    private void saveChallengeParticipants(Challenge challenge, ChallengeDTO challengeDTO) {
-
-        for (Long currentUserId: challengeDTO.getChallengeUsers()) {
-            StudentUser studentUser = studentUserRepository.findById(currentUserId).orElseThrow(() -> new ResourceNotFoundException("One or more invalid student user ids"));
-            ChallengeParticipant challengeParticipant = ChallengeParticipant.builder()
-                    .challenge(challenge)
-                    .studentUser(studentUser)
-                    .build();
-            challenge.getChallengeParticipants().add(challengeParticipant);
-        }
-        challengeRepository.save(challenge);
-    }
-
     private void saveChallengeInvites(Challenge challenge, ChallengeDTO challengeDTO) {
 
+        List<String> invitedUserEmails = new ArrayList<>();
         for (Long currentUserId: challengeDTO.getChallengeUsers()) {
             StudentUser studentUser = studentUserRepository.findById(currentUserId).orElseThrow(() -> new ResourceNotFoundException("One or more invalid student user ids"));
             ChallengeInvitation challengeInvitation = ChallengeInvitation.builder()
@@ -117,9 +129,11 @@ public class ChallengeServiceImpl implements ChallengeService  {
                     .status(ChallengeInviteStatus.PENDING)
                     .build();
             challenge.getChallengeInvitations().add(challengeInvitation);
+            invitedUserEmails.add(studentUser.getEmail());
         }
         challenge.setTotalInvitations(challengeDTO.getChallengeUsers().size());
         challengeRepository.save(challenge);
+        sendPushNotificationToParticipants(invitedUserEmails, String.format("%s has invited you to a group challenge. Kindly accept or decline", challenge.getStudentUser().getFullName()));
     }
 
     private static String deduceChallengeTitle(ChallengeDTO challengeDTO, StudentUser studentUser) {

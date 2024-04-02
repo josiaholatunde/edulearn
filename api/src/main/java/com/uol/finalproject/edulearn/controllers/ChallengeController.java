@@ -4,6 +4,7 @@ package com.uol.finalproject.edulearn.controllers;
 import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.ChallengeSubmissionService;
@@ -39,6 +40,12 @@ public class ChallengeController {
         return challengeService.createChallenge(challengeDTO);
     }
 
+    @PutMapping("/{challengeId}")
+    public ChallengeDTO handleChallengeUpdate(@PathVariable long challengeId, @RequestBody ChallengeDTO challengeDTO) {
+
+        return challengeService.handleChallengeUpdate(challengeId, challengeDTO);
+    }
+
     @PostMapping("/submissions")
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(@RequestBody ChallengeUserResponse challengeUserResponse) throws Exception {
         return challengeService.saveChallengeQuestionResponses(challengeUserResponse);
@@ -47,6 +54,12 @@ public class ChallengeController {
     @GetMapping("/submissions/{submissionId}")
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(@PathVariable long submissionId) throws Exception {
         return challengeSubmissionService.getChallengeSubmission(submissionId);
+    }
+
+
+    @GetMapping("/summary")
+    public ChallengeSummaryDTO getChallengesSummary() throws Exception {
+        return challengeService.getChallengesSummary();
     }
 
 }

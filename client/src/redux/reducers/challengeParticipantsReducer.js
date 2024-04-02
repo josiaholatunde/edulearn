@@ -6,7 +6,7 @@ export default function challengeParticipantsReducer(state={}, action) {
         case GET_CHALLENGE_PARTICIPANTS:
             return {
                 ...state,
-                challengeParticipants: action.challengeParticipants,
+                challengeParticipants: action.challengeParticipants || [],
                 total: action.total,
                 currentPage: action.page,
                 pageSize: action.size

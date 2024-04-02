@@ -41,6 +41,8 @@ public class ChallengeInviteDTO {
     private ChallengeInviteStatus status;
 
     private Timestamp createdAt;
+    private long challengeId;
+    private String challengeType;
 
 
     public static ChallengeInviteDTO fromChallengeInvitation(ChallengeInvitation challengeInvitation) {
@@ -52,6 +54,8 @@ public class ChallengeInviteDTO {
         challengeDTO.setType(challengeInvitation.getChallenge().getType());
         challengeDTO.setCreatedBy(challengeInvitation.getChallenge().getStudentUser().getFullName());
         challengeDTO.setStatus(challengeInvitation.getStatus());
+        challengeDTO.setChallengeId(challengeInvitation.getChallenge().getId());
+        challengeDTO.setChallengeType(challengeInvitation.getChallenge().getFriendlyType());
 
         if (challengeInvitation.getStudentUser() != null) {
             StudentUserDTO studentUserDTO = StudentUserDTO.fromStudentUser(challengeInvitation.getStudentUser());

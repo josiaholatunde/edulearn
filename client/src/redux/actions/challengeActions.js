@@ -140,3 +140,22 @@ export const getChallengeSubmissionResponse = (submissionId, callBack) => dispat
         }
     }, 1000)
 }
+export const handleChallengeUpdate = (challengeRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.put(`/challenges/${challengeRequest?.id}`, challengeRequest)
+            if (data) {
+                console.log('immm after call', data)
+                const challengeId = data?.data?.id
+                dispatch(hideLoading())
+                if (callBack) callBack(challengeId)
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while updating challenge')
+        }
+    }, 1000)
+}

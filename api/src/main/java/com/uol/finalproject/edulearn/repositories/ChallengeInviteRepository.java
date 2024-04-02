@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Repository
 public interface ChallengeInviteRepository extends JpaRepository<ChallengeInvitation, Long> {
 
-    Page<ChallengeInvitation> findAllByStudentUser(StudentUser studentUser, Pageable pageable);
+    Page<ChallengeInvitation> findAllByStudentUserOrderByIdDesc(StudentUser studentUser, Pageable pageable);
 
     @Query("UPDATE ChallengeInvitation SET status='EXPIRED' WHERE challenge=?1")
     @Transactional

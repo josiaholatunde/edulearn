@@ -33,6 +33,31 @@ export const handleProfileUpdate = (userToUpdate, callBack) => dispatch => {
 }
 
 
+
+export const handleProfileImageUpdate = (formData, email, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            const { data } = await axios.post(`/users/${email}/profile-image`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                },
+            })
+            if (data) {
+                dispatch(getUserDetails(email))
+                dispatch(hideLoading())
+                showNotification('success', 'Successfully updated user profile image')
+                if (callBack) callBack()
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while updating user profile image')
+        }
+    }, 1000)
+}
+
+
 export const getUserDetails = (userEmail) => async dispatch => {
     dispatch(showLoading())
     try {

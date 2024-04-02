@@ -5,6 +5,7 @@ import com.uol.finalproject.edulearn.entities.Challenge;
 import com.uol.finalproject.edulearn.entities.Question;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
+import com.uol.finalproject.edulearn.entities.enums.ChallengeStatus;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import jakarta.persistence.*;
@@ -51,6 +52,8 @@ public class ChallengeDTO {
     private RoleType createdBy;
 
     private StudentUserDTO studentUser;
+
+    private ChallengeStatus challengeStatus;
 
     private List<Question> challengeQuestions = new ArrayList<>();
 

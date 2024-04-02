@@ -21,6 +21,8 @@ import Navbar from './components/layout/Navbar';
 import ChallengeInvite from './components/challenge/ChallengeInvite';
 import ChallengeLobbySection from './components/challenge/ChallengeLobbySection';
 import ChallengeSolutionDetails from './components/challenge/ChallengeSolutionDetails';
+import HomePage from './components/layout/HomePage';
+import WebSocket from './components/web-socket/WebSocket';
 
 
 const token = localStorage.getItem('token');
@@ -43,9 +45,11 @@ function App() {
      <Router>
             <Navbar />
             <Notification />
+            <WebSocket />
             <div className='container'>
               <Switch>
                 <Route path='/login' exact component={SignIn} />
+                <Route path='/home' exact component={HomePage} />
                 <Route path='/register' exact component={Register} />
                 <Route path='/profile' exact component={Profile} />
                 <Route path='/leaderboard' exact component={Leaderboard} />

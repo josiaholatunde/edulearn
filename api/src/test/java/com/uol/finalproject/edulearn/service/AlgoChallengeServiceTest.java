@@ -143,6 +143,80 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
         Assertions.assertEquals(2, 2);
     }
 
+
+    @Test
+    public void testClassTwoSumProblemPython() throws Exception {
+        Challenge challenge = createChallenge(ChallengeType.ALGORITHMS);
+        Map<Long, String> algoResponse = new HashMap<>();
+        algoResponse.put(1l, "from typing import List\nclass Solution:\n    def twoSums(self, nums: List[int], target: int) -> List[int]:\n        hashmap = {}\n        for i in range(len(nums)):\n            complement = target - nums[i]\n            if complement in hashmap:\n                return [i, hashmap[complement]]\n            hashmap[nums[i]] = i");
+
+        String jsonArray = "[{\"name\":\"nums\",\"type\":\"intArray\"},{\"name\":\"target\",\"type\":\"int\"}]";
+        AlgorithmQuestionExample questionExample = AlgorithmQuestionExample
+                .builder()
+                .inputArguments(new LinkedHashMap<>() {{
+                    put("nums", "[ 2,7,11,15 ]");
+                    put("target", 9);
+                }})
+                .output("[0, 1]")
+                .build();
+        questionExample.setId(2l);
+
+        doReturn(Optional.ofNullable(Question.builder()
+                .algorithmQuestion(AlgorithmQuestion.builder()
+                        .methodArguments(new ObjectMapper().readTree(jsonArray))
+                        .methodName("twoSums")
+                        .examples(List.of(questionExample)).build())
+                .build()))
+                .when(questionRepository).findById(anyLong());
+
+        ChallengeSubmissionDTO challengeSubmissionDTO = challengeService.saveChallengeQuestionResponses(ChallengeUserResponse.builder()
+                .challengeId(challenge.getId())
+                .language(ProgrammingLanguage.PYTHON)
+                .algorithmResponse(algoResponse)
+                .build());
+
+        log.info("Challenge submission DTO: {}", challengeSubmissionDTO);
+        Assertions.assertEquals(2, 2);
+    }
+
+
+    @Test
+    public void testClassTwoSumProblemJavascript() throws Exception {
+        Challenge challenge = createChallenge(ChallengeType.ALGORITHMS);
+        Map<Long, String> algoResponse = new HashMap<>();
+        algoResponse.put(1l,
+                "var twoSums = function(nums, target) { const cache = {};\n for (let i = 0; i < nums.length; i++) { const num = nums[i];\n const complement = target - num;\n if (complement in cache) { return [cache[complement], i];\n } cache[num] = i;\n } return [];\n };\n"
+        );
+
+        String jsonArray = "[{\"name\":\"nums\",\"type\":\"intArray\"},{\"name\":\"target\",\"type\":\"int\"}]";
+        AlgorithmQuestionExample questionExample = AlgorithmQuestionExample
+                .builder()
+                .inputArguments(new LinkedHashMap<>() {{
+                    put("nums", "[ 2,7,11,15 ]");
+                    put("target", 9);
+                }})
+                .output("[0, 1]")
+                .build();
+        questionExample.setId(2l);
+
+        doReturn(Optional.ofNullable(Question.builder()
+                .algorithmQuestion(AlgorithmQuestion.builder()
+                        .methodArguments(new ObjectMapper().readTree(jsonArray))
+                        .methodName("twoSums")
+                        .examples(List.of(questionExample)).build())
+                .build()))
+                .when(questionRepository).findById(anyLong());
+
+        ChallengeSubmissionDTO challengeSubmissionDTO = challengeService.saveChallengeQuestionResponses(ChallengeUserResponse.builder()
+                .challengeId(challenge.getId())
+                .language(ProgrammingLanguage.JAVASCRIPT)
+                .algorithmResponse(algoResponse)
+                .build());
+
+        log.info("Challenge submission DTO: {}", challengeSubmissionDTO);
+        Assertions.assertEquals(2, 2);
+    }
+
     private Challenge createChallenge(ChallengeType challengeType) {
         return challengeRepository.save(Challenge.builder()
                         .type(challengeType)

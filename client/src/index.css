@@ -150,11 +150,11 @@ input[type='email'], input[type='password'], .password-input {
 
 
 
-.login-form .input-icon, .register-form .input-icon {
+.login-form .input-icon, .register-form .input-icon, .edit-social-profile-form .input-icon {
   position: relative;
 }
 
-.login-form .input-icon i, .register-form .input-icon i {
+.login-form .input-icon i, .register-form .input-icon i, .edit-social-profile-form .input-icon  i {
   position: absolute;
   left: 10px; /* Adjust as needed */
   top: 50%;
@@ -178,14 +178,19 @@ input[type='email'], input[type='password'], .password-input {
 }
 
 .profile-card {
-  height: 250px;
+  height: 290px;
 }
 
 .profile-img-container {
   height: 200px;
   width: 200px;
   display: flex;
+}
 
+.navbar-img-container {
+  height: 30px;
+  width: 30px;
+  display: flex;
 }
 
 .profile-container h5 {
@@ -340,4 +345,19 @@ iframe[title='Sign in with Google Button'] {
 
 .multiple-choice-question-option::marker {
   padding-left: 1rem !important;
+}
+
+
+.profile.links-section a {
+  font-size: 13px !important;
+}
+
+@font-face {
+  font-family: 'digital-7';
+  src: url('./assets/digital-7/digital-7.ttf') format('truetype');
+}
+
+.digital-timer {
+  font-family: 'digital-7' !important;
+  font-size: 44px;
 }

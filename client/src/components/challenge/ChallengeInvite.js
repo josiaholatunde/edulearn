@@ -43,7 +43,10 @@ const mapToChallengeInvites = (challengeInvites, currentPage, pageSize) => {
         endDate: moment(challenge.endDate).format('MMMM Do YYYY, h:mm:ss a'),
         submissions: challenge?.submissions,
         id: challenge?.id,
-        createdAt: moment(challenge?.createdAt).format('MMMM Do YYYY, h:mm:ss a') 
+        createdAt: moment(challenge?.createdAt).format('MMMM Do YYYY, h:mm:ss a'),
+        challengeId: challenge?.challengeId,
+        challengeType: challenge?.challengeType,
+        fullName: challenge?.studentUser?.fullName
     }))
 }
 

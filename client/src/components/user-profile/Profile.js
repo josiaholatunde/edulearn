@@ -7,6 +7,8 @@ import EditProfile from "./EditProfile";
 import StreakCalendar from "./StreakCalendar";
 import { getUserDetails } from "../../redux/actions/userActions";
 import DeleteCertificationModal from "./DeleteCertificationModal";
+import EditSocialProfileLinks from "./EditSocialProfileLinks";
+import UpdateProfileImage from "./UpdateProfileImage";
 
 const DEFAULT_AVATAR_URL =
   "https://tylermcginnis.com/would-you-rather/sarah.jpg";
@@ -19,10 +21,12 @@ const CERTIFICATION_FORM_MODE = {
   const Profile = ({ user }) => {
     
     const [showEditProfileModal, setShowEditProfileModal] = useState(false)
+    const [showEditSocialProfileLinkModal, setShowEditSocialProfileLinkModal] = useState(false)
     const [showEditBioModal, setShowEditBioModal] = useState(false)
     const [showDeleteCertificationModal, setShowDeleteCertificationModal ] = useState(false)
     const [certificationFormMode, setCertificationFormMode ] = useState(CERTIFICATION_FORM_MODE.CREATE)
     const [showEditCertificationModal, setShowEditCertificationModal] = useState(false)
+    const [showChangeProfileImageModal, setShowChangeProfileImageModal] = useState(false)
     const [ currentCertification, setCurrentCertification ] = useState(null)
   
     const dispatch = useDispatch()
@@ -58,12 +62,18 @@ const CERTIFICATION_FORM_MODE = {
             className="profile-container  h-100 d-flex align-items-center"
             style={{ borderRight: "1px solid black;" }}
           >
-            <div className="profile-img-container">
-              <img
-                src={DEFAULT_AVATAR_URL}
-                alt="avatar"
-                className="img-fluid rounded-circle"
-              />
+            <div className="profile-img-container d-flex flex-column">
+              <div className="profile-img-container">
+                <img
+                  src={user?.imageUrl || DEFAULT_AVATAR_URL}
+                  alt="avatar"
+                  className="img-fluid rounded-circle"
+                />
+              </div>
+              <div className="pointer mt-2 text-cool" onClick={() => setShowChangeProfileImageModal(true)}>
+                <i class="bi bi-camera mr-1"></i>
+                <span style={{ fontSize: '14px'}}>Change Image</span>
+              </div>
             </div>
             <div className="text-container ml-4">
               <div className="d-flex align-items-center mb-3 ">
@@ -118,18 +128,44 @@ const CERTIFICATION_FORM_MODE = {
                     </div>
                 </div>
 
-                <div className="links-section mb-3">
-                    <h4 className="bio-header-text">Links</h4>
+                <div className="profile links-section mb-3">
+                    <div className="d-flex justify-content-between">
+                      <h4 className="bio-header-text">Links</h4>
+                      <div className="pointer" style={{ fontSize: '14px', color: 'blue', textDecoration: 'underline'}} onClick={() => setShowEditSocialProfileLinkModal(true) }>Add new Link</div>
+                    </div>
                     <div className="link-container">
-                        <div>
-                            <a href="www.linkedin.com/ogunboyejolatunde" className="links-font-size">www.linkedin.com/ogunboyejolatunde</a>
-                        </div>
-                        <div>
-                            <a href="www.linkedin.com/ogunboyejolatunde" className="links-font-size">www.github.com/josiaholatunde</a>
-                        </div>
-                        <div>
-                            <a href="www.linkedin.com/ogunboyejolatunde" className="links-font-size">www.twitter.com/josiaholatunde1</a> 
-                        </div>
+
+                      {
+                        user && user.socialProfile && user.socialProfile.githubUrl && (<div className="d-flex align-items-center mb-2">
+                          <i class="bi bi-github mr-2"></i>
+                          <a href={user.socialProfile.githubUrl} className="links-font-size">{user.socialProfile.githubUrl}</a>
+                        </div>)
+                      }
+                      {
+                        user && user.socialProfile && user.socialProfile.linkedInUrl && (<div className="d-flex align-items-center mb-2">
+                          <i class="bi bi-linkedin mr-2"></i>
+                          <a href={user.socialProfile.linkedInUrl} className="links-font-size">{user.socialProfile.linkedInUrl}</a>
+                        </div>)
+                      }
+
+                      {
+                        user && user.socialProfile && user.socialProfile.twitterUrl && (<div className="d-flex align-items-center mb-2">
+                          <i class="bi bi-twitter mr-2"></i>
+                          <a href={user.socialProfile.twitterUrl} className="links-font-size">{user.socialProfile.twitterUrl}</a>
+                        </div>)
+                      }
+
+                      {
+                        user && user.socialProfile && user.socialProfile.discordUrl && (<div className="d-flex align-items-center mb-2">
+                          <i class="bi bi-discord mr-2"></i>
+                          <a href={user.socialProfile.discordUrl} className="links-font-size">{user.socialProfile.discordUrl}</a>
+                        </div>)
+                      }
+
+                      {
+                        user && !user.socialProfile  && (<div style={{ fontSize: '14px'}}>No social profile links to show</div>)
+                      }
+                        
                     </div>
                 </div>
             </div>
@@ -228,6 +264,8 @@ const CERTIFICATION_FORM_MODE = {
         </div>
         <EditProfile showModal={showEditProfileModal} handleClose = {() => setShowEditProfileModal(false)} />
         <EditBioForm showModal={showEditBioModal} handleClose = {() => setShowEditBioModal(false)} />
+        <UpdateProfileImage user={user} showModal={showChangeProfileImageModal} handleClose = {() => setShowChangeProfileImageModal(false)} />
+        <EditSocialProfileLinks showModal={showEditSocialProfileLinkModal} handleClose = {() => setShowEditSocialProfileLinkModal(false)} />
         <DeleteCertificationModal currentCertification={currentCertification} showModal={showDeleteCertificationModal} handleClose = {() => setShowDeleteCertificationModal(false)}  />
         <EditCertificationForm currentCertification={currentCertification} formMode={certificationFormMode} showModal={showEditCertificationModal} handleClose = {() => setShowEditCertificationModal(false)}  />
       </div>

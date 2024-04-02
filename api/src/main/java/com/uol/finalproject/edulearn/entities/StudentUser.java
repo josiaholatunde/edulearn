@@ -34,6 +34,7 @@ public class StudentUser extends BaseAuditableModel {
     private String location;
     private String skills;
     private String university;
+    private String imageUrl;
 
     @Column(name = "is_logged_in")
     @Builder.Default
@@ -47,6 +48,9 @@ public class StudentUser extends BaseAuditableModel {
 
     @OneToOne(mappedBy = "studentUser")
     private User user;
+
+    @OneToOne(mappedBy = "studentUser", cascade = CascadeType.ALL)
+    private UserSocialProfile socialProfile;
 
     @OneToMany
     @Builder.Default

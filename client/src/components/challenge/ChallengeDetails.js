@@ -1,19 +1,18 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Modal from 'react-bootstrap/Modal';
 import { QUESTION_TYPE } from "../../utils/constants";
 import questionBank from "../../utils/questions";
 import AlgorithmQuestionDetail from "../question/AlgorithmQuestionDetail";
 import MultipleChoiceQuestionDetail from "../question/MultipleChoiceQuestionDetail";
 import { useLocation } from 'react-router-dom'
 import { useParams } from 'react-router'
-import data from "../../utils/challenges";
 import InstructionDetails from "../question/InstructionDetails";
 import { connect, useDispatch } from "react-redux";
-import { getChallengeDetails } from "../../redux/actions/challengeActions";
+import { getChallengeDetails, submitChallengeResponse } from "../../redux/actions/challengeActions";
 import ChallengeCompletionModal from "./ChallengeCompletionModal";
 import { routeToPath } from "../../utils/routeUtil";
 
 
+import Countdown from 'react-countdown';
 
 const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingChallengeDetails }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -26,8 +25,11 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
     const [ showScoreDetails, setShowScoreDetails ] = useState(false)
+    const [startChallenge, setStartChallenge] = useState(false)
+    const [userResponse, setUserResponses] = useState({})
 
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
+    const DEFAULT_CHALLENGE_DURATION_MINUTES = 0.01;
 
     const pathParams = useParams();
     const challengeIdentifier = pathParams.identifier;
@@ -43,6 +45,10 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         }
         if (!!queryParams.get('mode')) {
             setChallengeMode(queryParams.get('mode'))
+        }
+        if (!!queryParams.get('showInstruction')) {
+            setShouldShowInstruction(false)
+            setStartChallenge(true)
         }
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
@@ -71,6 +77,19 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         history.push(`/leaderboard?challengeId=${challengeDetail?.id}`)
     }
 
+    const handleOnComplete = () => {
+
+        console.log('answers ', answers)
+        const request = {
+            challengeId: challengeDetail?.id,
+            userResponse
+        }
+        dispatch(submitChallengeResponse(request, () => {
+            setShowSuccessModal(true);
+            setStartChallenge(false);
+        }))
+    }
+
     const handleViewSolution = () => {
         routeToPath(history, `/challenge-solution/${challengeDetail?.id}?type=${challengeDetail?.type}&mode=${challengeDetail?.participantType}&submissionId=${challengeResult?.id}`)  
     }
@@ -81,29 +100,59 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
             setTimeout(() => {
                 setLoading(false)
                 setShouldShowInstruction(false)
+                setStartChallenge(true)
             } , 3000)    
             }
-        } loading={loading} setLoading={setLoading}  />
+        } loading={loading} setLoading={setLoading} challenge={challengeDetail}  />
         else {
-            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
+            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail userResponse={userResponse} setUserResponses={setUserResponses} challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} />) 
             : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} />)
         }
     }
+
+    const renderer = ({ hours, minutes, seconds }) => {
+        const pad = (num) => String(num).padStart(2, '0');
+    
+        return (
+          <span className="digital-timer">
+            {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+          </span>
+        );
+      };
 
     console.log('challenge ', challenge, 'challenge details', challengeDetail)
     return (
         <Fragment>
             <div
-                className="row card mt-5 p-3 text-left d-flex align-items-center"
+                className="row card mt-5 p-3 flex-row text-left justify-content-center"
                 style={{ height: "192px" }}
             >
-                <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
-                    <h3>{ challengeDetail?.title || DEFAULT_CHALLENGE_TITLE } </h3>
-                    <div>
-                        <i className="bi bi-envelope-open"></i>{" "}
-                        <span className="f-14">{ challengeDetail?.submissions } submissions received</span>
-                    </div>
-                </div>
+                {
+                    loadingChallengeDetails ? (<div className="col-lg-12">
+                        <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
+                            <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
+                        </div>
+                    </div>) : (<Fragment>
+                        <div className="col-lg-8">
+                            <div className="text-left h-100 d-flex align-items-center justify-content-center">
+                                <div className="container d-flex flex-column">
+                                    <h3>{ challengeDetail?.title || DEFAULT_CHALLENGE_TITLE } </h3>
+                                    <div>
+                                        <i className="bi bi-envelope-open"></i>{" "}
+                                        <span className="f-14">{ challengeDetail?.submissions } submissions received</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-lg-4">
+                            {
+                                (startChallenge && type == QUESTION_TYPE.MULTIPLE_CHOICE) &&  (<div className="count-down-timer w-100 h-100 d-flex justify-content-end align-items-center">
+                                    <Countdown date={Date.now() + (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 10000)} renderer={renderer} onComplete={handleOnComplete} />
+                                </div>)
+                            }
+                        </div>
+                        </Fragment>)
+                }
             </div>
 
             {
@@ -128,8 +177,8 @@ const mapStateToProps = ({ challenges: { challengeDetail, challengeResult }, loa
     return ({
         challengeDetail,
         challengeResult,
-        loading
+        loadingChallengeDetails: loading
     })
 }
 
-export default connect(mapStateToProps, { getChallengeDetails  })(ChallengeDetails);
+export default connect(mapStateToProps, { getChallengeDetails, submitChallengeResponse  })(ChallengeDetails);

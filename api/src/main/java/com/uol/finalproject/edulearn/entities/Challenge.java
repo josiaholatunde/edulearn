@@ -14,7 +14,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "challenges")
+@Entity
+@Table(name = "challenges")
 @Data
 @Builder
 @NoArgsConstructor
@@ -40,6 +41,8 @@ public class Challenge extends BaseAuditableModel {
 
     private Timestamp endDate;
 
+    private Long duration;
+
     private long submissions;
 
     @Column(name = "total_participants")
@@ -52,7 +55,9 @@ public class Challenge extends BaseAuditableModel {
     private RoleType createdBy;
 
     @Builder.Default
+    @Lob
     @Enumerated(EnumType.STRING)
+    @Column(name = "challenge_status", columnDefinition = "LONGTEXT")
     private ChallengeStatus challengeStatus = ChallengeStatus.NOT_STARTED;
 
 

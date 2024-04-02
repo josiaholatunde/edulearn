@@ -12,34 +12,40 @@ const AlgorithmSolution = ({ question: { solutions } }) => {
 
     const solution = solutions && solutions.length > 0 && solutions[0]
     return <Fragment>
-        <div className='description'>
-            <div>Description</div>
-            { solution?.description }
-        </div>
+        {
+            !solution?.description ? (<div>No solution has been uploaded for this question</div>)
 
-        <div className='code-solution mt-5 p-3' style={{ backgroundColor: 'black', padding: '10px', color: 'white' }}>
-            <div className='implementation-header d-flex justify-content-between'>
-                <div>Code Implementation</div>
-                <div onClick={() => copyToClipboard(solution)} className='pointer'>
-                   <i className={`bi ${isCopied ? 'bi-clipboard2-check' : 'bi-clipboard' }`}></i> 
-                </div>
-            </div>
-            <div className='pt-3'>
-                <code >{solution?.code}</code>
-            </div>
-        </div>
+                : (<Fragment>
+                    <div className='description'>
+                        <div>Description</div>
+                        {solution?.description}
+                    </div>
 
-        <div className='relevant links mt-5'>
-            <div>Relevant Resources</div>
-            <ul className='py-3'>
-                { 
-                    solution && solution?.relevantResources && solution?.relevantResources?.length === 0 ? (<h6>There are no relevant resources for this question</h6>) :
-                    (solution?.relevantResources?.split(',').map(resource => (<li> 
-                        <a href={resource} className='text-cool'> { resource } </a> 
-                        </li>)))
-                }
-            </ul>
-        </div>
+                    <div className='code-solution mt-5 p-3' style={{ backgroundColor: 'black', padding: '10px', color: 'white' }}>
+                        <div className='implementation-header d-flex justify-content-between'>
+                            <div>Code Implementation</div>
+                            <div onClick={() => copyToClipboard(solution)} className='pointer'>
+                                <i className={`bi ${isCopied ? 'bi-clipboard2-check' : 'bi-clipboard'}`}></i>
+                            </div>
+                        </div>
+                        <div className='pt-3'>
+                            <code >{solution?.code}</code>
+                        </div>
+                    </div>
+
+                    <div className='relevant links mt-5'>
+                        <div>Relevant Resources</div>
+                        <ul className='py-3'>
+                            {
+                                solution && solution?.relevantResources && solution?.relevantResources?.length === 0 ? (<h6>There are no relevant resources for this question</h6>) :
+                                    (solution?.relevantResources?.split(',').map(resource => (<li>
+                                        <a href={resource} className='text-cool'> {resource} </a>
+                                    </li>)))
+                            }
+                        </ul>
+                    </div>
+                </Fragment>)
+        }
 
     </Fragment>
 

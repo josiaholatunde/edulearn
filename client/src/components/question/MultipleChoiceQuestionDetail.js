@@ -4,12 +4,9 @@ import { submitChallengeResponse } from '../../redux/actions/challengeActions';
 import questionBank from '../../utils/questions';
 
 
-const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessModal, loading }) => {
+const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessModal, loading, userResponse, setUserResponses }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill([]));
-    // const [loading, setLoading] = useState(false)
-    const [userResponse, setUserResponses] = useState({})
-    // const [ questions, setQuestions ] = useState([])
 
     const dispatch = useDispatch()
 
