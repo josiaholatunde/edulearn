@@ -1,6 +1,5 @@
 package com.uol.finalproject.edulearn.services.impl;
 
-import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeInviteDTO;
 import com.uol.finalproject.edulearn.entities.Challenge;
 import com.uol.finalproject.edulearn.entities.ChallengeInvitation;
@@ -40,7 +39,7 @@ public class ChallengeInviteServiceImpl implements ChallengeInviteService {
         StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
         Page<ChallengeInvitation> challengeInvitations = challengeInviteRepository
-                .findAllByStudentUser(studentUser, pageRequest);
+                .findAllByStudentUserOrderByIdDesc(studentUser, pageRequest);
 
         List<ChallengeInviteDTO> challengesDTO = challengeInvitations
                 .stream()

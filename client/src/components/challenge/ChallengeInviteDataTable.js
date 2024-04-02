@@ -1,12 +1,12 @@
 import React, { Fragment } from 'react';
 import { Table } from 'antd';
-import { useDispatch } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { updateChallengeInvite } from '../../redux/actions/challengeInviteActions';
 import { routeToPath } from '../../utils/routeUtil';
 
 
 
-const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrentPage, loading, totalItems}) => {
+const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrentPage, loading, totalItems, challengeDetail }) => {
   
   const dispatch = useDispatch()
   
@@ -42,7 +42,7 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
       key: 'action',
       render: (_, challenge) => (<div className='join-challenge'>
               {
-                !['ACCEPTED', 'DECLINED'].includes(challenge?.status) && (<Fragment>
+                !['ACCEPTED', 'DECLINED', 'EXPIRED'].includes(challenge?.status) && (<Fragment>
                   <i className="mdi mdi-check mdi-24px pointer text-cool" onClick={() => handleUpdateInvite(challenge, 'ACCEPTED')} /> 
                   <i className="mdi mdi-close mdi-24px pointer text-cool ml-2" onClick={() => handleUpdateInvite(challenge, 'DECLINED')} />
                 </Fragment>)
@@ -55,7 +55,7 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
   const handleUpdateInvite = (challenge, action) => {
     challenge.status = action
     dispatch(updateChallengeInvite(challenge, () => {
-      routeToPath(history, `/challenge-lobby/${challenge.id}?type=${challenge.type}&mode=group`)
+      routeToPath(history, `/challenge-lobby/${challenge?.challengeId}?type=${challenge?.type}&mode=group`)
     }))
   }
 
@@ -78,4 +78,10 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
   );
 };
 
-export default ChallengeInviteDataTable;
+const mapStateToProps = ({ challenges: { challengeDetail }, loading }) => {
+  return ({
+      challengeDetail,
+      loadingChallengeDetails: loading
+  })
+}
+export default connect(mapStateToProps, null)(ChallengeInviteDataTable);

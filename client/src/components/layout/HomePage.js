@@ -31,8 +31,8 @@ const HomePage = ({ history, user, challengeInvites }) => {
                 <div className='content d-flex align-items-center'>
                     <div className='avatar' style={{ background: 'black', borderRadius: '50%', height: '100px', width: '100px' }}></div>
                     <div className='greeting-container ml-2 text-left'>
-                        <div style={{ fontSize: '24px', fontWeight: '600' }}>Good { getTimeOfDay()}, <i class="bi bi-sun-fill" style={{ width: '40px', height: '40px' }}></i></div>
-                        <div style={{ fontSize: '32px', fontWeight: '700', fontStyle: 'normal' }}> {user?.fullName} </div>
+                        <div style={{ fontSize: '24px', fontWeight: '600' }}>Good { getTimeOfDay()}, <i className="bi bi-sun-fill" style={{ width: '40px', height: '40px' }}></i></div>
+                        <div style={{ fontSize: '30px', fontWeight: '700', fontStyle: 'normal' }}> {user?.fullName} </div>
                     </div>
                 </div>
             </div>

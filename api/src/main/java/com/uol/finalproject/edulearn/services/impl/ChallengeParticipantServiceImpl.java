@@ -1,17 +1,12 @@
 package com.uol.finalproject.edulearn.services.impl;
 
-import com.uol.finalproject.edulearn.apimodel.ChallengeInviteDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeParticipantDTO;
-import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
 import com.uol.finalproject.edulearn.entities.Challenge;
 import com.uol.finalproject.edulearn.entities.ChallengeParticipant;
-import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.ChallengeParticipantRepository;
 import com.uol.finalproject.edulearn.repositories.ChallengeRepository;
-import com.uol.finalproject.edulearn.repositories.StudentUserRepository;
 import com.uol.finalproject.edulearn.services.ChallengeParticipantService;
-import com.uol.finalproject.edulearn.services.StudentUserService;
 import com.uol.finalproject.edulearn.services.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,17 +25,19 @@ import java.util.stream.Collectors;
 public class ChallengeParticipantServiceImpl implements ChallengeParticipantService {
     private final ChallengeRepository challengeRepository;
     private final ChallengeParticipantRepository challengeParticipantRepository;
+    private final UserService userService;
 
 
     @Override
     public Page<ChallengeParticipantDTO> getChallengeParticipants(long challengeId, PageRequest pageRequest) {
-
+        UserDetails userDetails = userService.getLoggedInUser();
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
 
         Page<ChallengeParticipant> challengeParticipantPage = challengeParticipantRepository.findAllByChallenge(challenge, pageRequest);
         List<ChallengeParticipantDTO> challengeParticipants = challengeParticipantPage
+                .stream().filter(participant -> !participant.getStudentUser().getEmail().equals(userDetails.getUsername()))
                 .map(challengeParticipant -> ChallengeParticipantDTO.fromStudentUser(challengeParticipant.getStudentUser(), challengeParticipant))
-                .stream().collect(Collectors.toList());
+                .collect(Collectors.toList());
 
         return new PageImpl<>(challengeParticipants, pageRequest, challengeParticipantPage.getTotalElements());
     }

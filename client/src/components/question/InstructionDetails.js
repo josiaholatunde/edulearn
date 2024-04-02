@@ -1,10 +1,13 @@
 import React, { Fragment } from 'react'
+import { useDispatch } from 'react-redux'
+import { handleChallengeUpdate } from '../../redux/actions/challengeActions'
 import { QUESTION_TYPE } from '../../utils/constants'
 
 
 
-const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruction, setLoading }) => {
+const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruction, setLoading, challenge }) => {
 
+    const dispatch = useDispatch()
     const getQuizTitle  = (title) => {
         return !!title ? title : 'this unique challenge'
     }

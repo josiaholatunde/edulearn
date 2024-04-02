@@ -33,6 +33,8 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
 
     private final QuestionRepository questionRepository;
     private final CodeJudgeRestService codeJudgeRestService;
+    private final PythonParserExecutorServiceImpl pythonParserExecutorService;
+    private final JavascriptParserExecutorServiceImpl javascriptParserExecutorService;
 
     @Override
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(ChallengeSubmission challengeSubmission, Challenge challenge, ChallengeUserResponse challengeUserResponse) throws Exception {
@@ -74,7 +76,9 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
                         .build();
 
                 algoTestCaseResult.setCompilationError(codeJudgeResponse.getCompileOutput());
-                algoTestCaseResult = parseResponse(stdout, algoTestCaseResult);
+                if (stdout != null) {
+                    algoTestCaseResult = parseResponse(stdout, algoTestCaseResult);
+                }
 
                 if (algoTestCaseResult.isTestCasePassed()) totalCorrect++;
                 challengeSubmissionDTO.getAlgoResult().add(algoTestCaseResult);
@@ -113,20 +117,32 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
     }
 
     private String getCodeJudgeLanguageId(ProgrammingLanguage language) {
-        return "62";
+        switch (language) {
+            case PYTHON:
+                return "71";
+            case JAVASCRIPT:
+                return "63";
+            case JAVA:
+            default:
+                return "62";
+        }
     }
 
     private List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolution(ProgrammingLanguage language, long questionId, String userSolution) throws Exception {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Invalid question id"));
         switch (language) {
             case JAVA:
-                return appendMainMethodToUserSolutionInJava(question.getAlgorithmQuestion(), userSolution);
+                return appendMainMethodToUserSolution(question.getAlgorithmQuestion(), userSolution);
+            case PYTHON:
+                return pythonParserExecutorService.appendMainMethodToUserSolution(question.getAlgorithmQuestion(), userSolution);
+            case JAVASCRIPT:
+                return javascriptParserExecutorService.appendMainMethodToUserSolution(question.getAlgorithmQuestion(), userSolution);
             default:
                 throw new BadRequestException("Language is not currently supported");
         }
     }
 
-    private List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolutionInJava(AlgorithmQuestion question, String userSolution) throws Exception {
+    private List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolution(AlgorithmQuestion question, String userSolution) throws Exception {
         ParseResult<CompilationUnit> cu = new JavaParser().parse(userSolution);
 
         cu.getResult().orElseThrow(() -> new AlgorithmQuestionResultException("Failed to parse user solution"));
