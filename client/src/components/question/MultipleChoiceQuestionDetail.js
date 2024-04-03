@@ -1,4 +1,3 @@
-
 import React, { Fragment, useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { submitChallengeResponse } from '../../redux/actions/challengeActions';
