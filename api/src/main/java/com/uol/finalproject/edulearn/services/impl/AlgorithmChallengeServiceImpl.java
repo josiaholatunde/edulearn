@@ -26,6 +26,8 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Thread.sleep;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
@@ -62,6 +64,7 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
                 tokens.append(submitResponse.get(i).getToken());
                 if (i != submitResponse.size() - 1) tokens.append(",");
             }
+            sleep(3000);
             CodeJudgeBatchResponse codeJudgeBatchResponse = codeJudgeRestService.getSubmissionsBatch(String.format("/submissions/batch?tokens=%s", tokens));
             int totalExamples = codeJudgeBatchResponse.getSubmissions().size(), totalCorrect = 0;
 
