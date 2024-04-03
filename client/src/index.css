@@ -343,6 +343,10 @@ iframe[title='Sign in with Google Button'] {
   left: 305px !important;
 }
 
+.multiple-choice-question-option::marker {
+  padding-left: 1rem !important;
+}
+
 
 .profile.links-section a {
   font-size: 13px !important;

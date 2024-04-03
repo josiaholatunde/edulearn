@@ -4,6 +4,7 @@ package com.uol.finalproject.edulearn.apimodel;
 import com.uol.finalproject.edulearn.entities.Challenge;
 import com.uol.finalproject.edulearn.entities.ChallengeSubmission;
 import com.uol.finalproject.edulearn.entities.Question;
+import com.uol.finalproject.edulearn.entities.UserChallengeQuestionResponse;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
@@ -16,12 +17,15 @@ import org.springframework.beans.BeanUtils;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChallengeSubmissionDTO {
+
+    private Long id;
 
     private float score;
 
@@ -32,10 +36,21 @@ public class ChallengeSubmissionDTO {
     @Builder.Default
     private List<AlgoTestCaseResult> algoResult = new ArrayList<>();
 
+    @Builder.Default
+    private List<UserChallengeQuestionResponseDTO> multipleChoiceResult = new ArrayList<>();
+
 
     public static ChallengeSubmissionDTO fromChallengeSubmission(ChallengeSubmission challengeSubmission) {
         ChallengeSubmissionDTO challengeSubmissionDTO = ChallengeSubmissionDTO.builder().build();
         BeanUtils.copyProperties(challengeSubmission, challengeSubmissionDTO);
+
+        if (!challengeSubmission.getQuestionResponses().isEmpty()) {
+            challengeSubmissionDTO.setMultipleChoiceResult(challengeSubmission.getQuestionResponses()
+                    .stream()
+                    .map(UserChallengeQuestionResponseDTO::fromChallengeQuestionResponse)
+                    .collect(Collectors.toList())
+            );
+        }
         return challengeSubmissionDTO;
     }
 

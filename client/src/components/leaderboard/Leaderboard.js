@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { getLeaderBoardUsers } from '../../redux/actions/leaderboardActions'
+import { useLocation } from 'react-router'
+import { getChallengeLeaderBoardUsers, getLeaderBoardUsers } from '../../redux/actions/leaderboardActions'
 import LeaderboardDataTable from './LeaderboardDataTable'
 
 
@@ -24,9 +25,22 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
     const [size, setSize] = useState(5)
     
     const dispatch = useDispatch()
+    const location = useLocation()
+    const queryParams = new URLSearchParams(location.search)
 
     useEffect(() => {
-        dispatch(getLeaderBoardUsers({ page, size, level, name }))
+        if (queryParams.has('challengeId')) {
+            dispatch(getChallengeLeaderBoardUsers({ 
+                challengeId: queryParams.get('challengeId'),
+                page, 
+                size, 
+                level, 
+                name 
+            }))
+        } else {
+            dispatch(getLeaderBoardUsers({ page, size, level, name }))
+        }
+        
     }, [page])
 
     const filterLeaderBoard = () => {

@@ -14,7 +14,6 @@ import java.util.List;
 
 @Entity(name = "student_users")
 @Builder
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class StudentUser extends BaseAuditableModel {
@@ -71,4 +70,131 @@ public class StudentUser extends BaseAuditableModel {
     }
 
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSkills() {
+        return skills;
+    }
+
+    public void setSkills(String skills) {
+        this.skills = skills;
+    }
+
+    public String getUniversity() {
+        return university;
+    }
+
+    public void setUniversity(String university) {
+        this.university = university;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public boolean isUserLoginStatus() {
+        return userLoginStatus;
+    }
+
+    public void setUserLoginStatus(boolean userLoginStatus) {
+        this.userLoginStatus = userLoginStatus;
+    }
+
+    public Timestamp getLastLoggedInAt() {
+        return lastLoggedInAt;
+    }
+
+    public void setLastLoggedInAt(Timestamp lastLoggedInAt) {
+        this.lastLoggedInAt = lastLoggedInAt;
+    }
+
+    public long getPoints() {
+        return points;
+    }
+
+    public void setPoints(long points) {
+        this.points = points;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public UserSocialProfile getSocialProfile() {
+        return socialProfile;
+    }
+
+    public void setSocialProfile(UserSocialProfile socialProfile) {
+        this.socialProfile = socialProfile;
+    }
+
+    public List<Challenge> getChallenges() {
+        return challenges;
+    }
+
+    public void setChallenges(List<Challenge> challenges) {
+        this.challenges = challenges;
+    }
+
+    public List<UserCertification> getCertifications() {
+        return certifications;
+    }
+
+    public void setCertifications(List<UserCertification> certifications) {
+        this.certifications = certifications;
+    }
 }

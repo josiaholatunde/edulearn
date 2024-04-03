@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity(name = "questions")
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -46,17 +45,75 @@ public class Question extends BaseAuditableModel {
     private MultipleChoiceQuestion multipleChoiceQuestion;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Question question = (Question) o;
-        return level == question.level && noOfUsersLiked == question.noOfUsersLiked && Objects.equals(title, question.title) && Objects.equals(category, question.category) && type == question.type && Objects.equals(imageUrl, question.imageUrl) && Objects.equals(challenges, question.challenges) && Objects.equals(algorithmQuestion, question.algorithmQuestion) && Objects.equals(multipleChoiceQuestion, question.multipleChoiceQuestion);
+    public String getTitle() {
+        return title;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), title, category, type, level, noOfUsersLiked, imageUrl, challenges, algorithmQuestion, multipleChoiceQuestion);
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public QuestionType getType() {
+        return type;
+    }
+
+    public void setType(QuestionType type) {
+        this.type = type;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getNoOfUsersLiked() {
+        return noOfUsersLiked;
+    }
+
+    public void setNoOfUsersLiked(int noOfUsersLiked) {
+        this.noOfUsersLiked = noOfUsersLiked;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public List<Challenge> getChallenges() {
+        return challenges;
+    }
+
+    public void setChallenges(List<Challenge> challenges) {
+        this.challenges = challenges;
+    }
+
+    public AlgorithmQuestion getAlgorithmQuestion() {
+        return algorithmQuestion;
+    }
+
+    public void setAlgorithmQuestion(AlgorithmQuestion algorithmQuestion) {
+        this.algorithmQuestion = algorithmQuestion;
+    }
+
+    public MultipleChoiceQuestion getMultipleChoiceQuestion() {
+        return multipleChoiceQuestion;
+    }
+
+    public void setMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion) {
+        this.multipleChoiceQuestion = multipleChoiceQuestion;
     }
 }

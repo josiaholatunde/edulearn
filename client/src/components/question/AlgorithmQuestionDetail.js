@@ -2,7 +2,7 @@ import React, { Fragment } from 'react'
 
 
 
-const AlgorithmQuestionDetail = ({ questions, history, challengeMode }) => {
+const AlgorithmQuestionDetail = ({ questions, history, challengeMode, setStartChallenge={setStartChallenge} }) => {
 
 
     console.log('questions object', questions)

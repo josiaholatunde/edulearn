@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -16,6 +17,7 @@ public class MultipleChoiceAnswer extends BaseAuditableModel {
 
     @ManyToOne
     @JoinColumn(name = "multiple_choice_question_id")
+    @JsonIgnore
     private MultipleChoiceQuestion question;
 
     @OneToOne

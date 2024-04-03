@@ -2,10 +2,10 @@ package com.uol.finalproject.edulearn.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "challenge_submissions")
+@EqualsAndHashCode
 public class ChallengeSubmission extends BaseAuditableModel {
 
     private float score;
@@ -31,5 +32,9 @@ public class ChallengeSubmission extends BaseAuditableModel {
     @ManyToOne
     @JoinColumn(name = "student_user_id")
     private StudentUser studentUser;
+
+    @OneToMany(mappedBy = "challengeSubmission", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    private List<UserChallengeQuestionResponse> questionResponses = new ArrayList<>();
 
 }

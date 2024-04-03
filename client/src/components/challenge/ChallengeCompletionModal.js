@@ -2,8 +2,7 @@ import React from 'react'
 import Modal from 'react-bootstrap/Modal';
 
 const ChallengeCompletionModal = ({ challengeResult,  showSuccessModal, showScoreDetails, handleViewScore, handleViewLeaderBoard, 
-    handleCloseSuccessModal, isAlgorithmView }) => {
-
+    handleCloseSuccessModal, isAlgorithmView, handleViewSolution }) => {
 
 
     return <Modal show={showSuccessModal} onHide={handleCloseSuccessModal} size='md' centered className="success-modal" >
@@ -41,8 +40,13 @@ const ChallengeCompletionModal = ({ challengeResult,  showSuccessModal, showScor
                         }
 
                         <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px' }} onClick={handleViewLeaderBoard}>
-                            View Leaderboard
+                            Leaderboard
                         </button>
+                        {
+                            !isAlgorithmView && (<button type="button" className="btn ml-3" style={{ height: '40px', width: '200px', border: '1px solid #161f2e' }} onClick={handleViewSolution}>
+                            View Solution
+                        </button>)
+                        }
                     </div>
                 </div>
             </div>

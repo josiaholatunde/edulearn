@@ -40,7 +40,7 @@ public class JavascriptParserExecutorServiceImpl {
             javaScriptCode.append(");\n");
 
             javaScriptCode.append("const expected = ").append(example.getOutput()).append(";\n");
-            javaScriptCode.append("console.log('IsCorrect = ', JSON.stringify(result) === JSON.stringify(expected));\n");
+            javaScriptCode.append("console.log('IsCorrect = ', JSON.stringify(result) == JSON.stringify(expected));\n");
             javaScriptCode.append("console.log('UserOutput = ', result);\n");
 
             allExamplesForCodeJudge.add(Pair.of(example, javaScriptCode.toString()));

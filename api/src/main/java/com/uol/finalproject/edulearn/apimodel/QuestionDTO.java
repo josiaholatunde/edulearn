@@ -2,6 +2,8 @@ package com.uol.finalproject.edulearn.apimodel;
 
 
 import com.uol.finalproject.edulearn.entities.Challenge;
+import com.uol.finalproject.edulearn.entities.MultipleChoiceAnswer;
+import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
 import com.uol.finalproject.edulearn.entities.Question;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
@@ -25,6 +27,7 @@ import java.util.List;
 @AllArgsConstructor
 public class QuestionDTO {
 
+    private Long id;
     private String title;
 
     private String category;
@@ -32,4 +35,7 @@ public class QuestionDTO {
     private QuestionType type;
 
     private int level;
+
+    @Builder.Default
+    private List<MultipleChoiceAnswer> answerList = new ArrayList<>();
 }
