@@ -1,0 +1,363 @@
+body {
+  font-family: 'Roboto', sans-serif, sans-serif !important; 
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.navbar a {
+  color: #fff !important;
+}
+
+.navbar-nav li {
+  margin: 0 .6rem !important;
+}
+
+input, select {
+  box-shadow: none !important;
+}
+
+.img-fluid {
+  height: 100% !important;
+  width: 100% !important;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.text-lightgrey {
+  opacity: 50%;
+}
+
+.theme-text {
+  font-size: 1.5rem !important;
+}
+
+.ml-12 {
+  margin-left: 1.2rem !important;
+}
+
+.mr12 {
+  margin-right: .3rem !important;
+}
+
+.bg-cool {
+  background-color: #161f2e !important;
+}
+
+.btn-cool, .badge-cool {
+  background-color: #161f2e !important;
+  color: #fff !important;
+  border:  1px solid #161f2e !important;
+}
+
+.btn-light {
+  background-color: #fff !important;
+  color: #161f2e !important;
+}
+
+.text-cool {
+  color: #161f2e !important;
+}
+
+.badge {
+  /* width: 7rem !important; */
+}
+
+.social-login {
+  margin-top: 1.5rem;
+}
+
+.or-signup-section {
+  margin-top: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-header {
+  display: inline-block; 
+  width: 50px;
+  margin: 0 10px;
+}
+
+.card-header-main {
+  font-size: 24px !important;
+}
+
+.input[type="submit"]:focus,
+.input[type="submit"]:active:focus,
+.input[type="submit"].focus,
+.input[type="submit"]:active.focus,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus,
+.btn.focus,
+.btn:active.focus,
+.btn.active.focus,
+.btn-danger:focus,
+.btn-danger:active, textarea {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+input {
+  font-size: 14px !important;
+}
+
+input::placeholder {
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+input[type='email'], input[type='password'], .password-input {
+  padding-left: 2.5rem !important; /* Adjust the font size as needed */
+}
+
+@media screen and (max-width: 600px) {
+  .navbar-rel-links {
+    text-align: right !important;
+  }
+
+  .navbar-rel-links li {
+    text-align: right !important;
+    display: flex;
+    justify-content: flex-end;
+    margin: .3rem .6rem !important;
+  }
+
+  .admin-action {
+    display: flex;
+    justify-content: space-between;
+    row-gap: .9rem !important;
+  }
+}
+
+
+
+.google-icon {
+  color: #DB4437; /* Google red color */
+}
+
+.facebook-icon {
+  color: #3b5998; /* Facebook blue color */
+}
+
+.github-icon {
+  color: #333; /* GitHub default color */
+}
+
+
+
+.login-form .input-icon, .register-form .input-icon, .edit-social-profile-form .input-icon {
+  position: relative;
+}
+
+.login-form .input-icon i, .register-form .input-icon i, .edit-social-profile-form .input-icon  i {
+  position: absolute;
+  left: 10px; /* Adjust as needed */
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.input-icon i.password {
+  right: 10px !important;
+  left: unset;
+  cursor: pointer;
+}
+
+.bio-header p {
+  font-size: 14px;
+}
+
+.profile-section-card {
+  display: flex;
+  flex-direction: row !important;
+
+}
+
+.profile-card {
+  height: 290px;
+}
+
+.profile-img-container {
+  height: 200px;
+  width: 200px;
+  display: flex;
+}
+
+.navbar-img-container {
+  height: 30px;
+  width: 30px;
+  display: flex;
+}
+
+.profile-container h5 {
+  font-size: 1rem;
+  margin-bottom: 0 !important;
+}
+
+.badge-container span {
+  font-size: 50px;
+}
+
+.bio-header-text {
+  font-size: 20px !important;
+}
+
+.badge-container .additional-text, .additional-text {
+  font-size: 10px;
+}
+
+.history .additional-text {
+  font-size: 14px;
+}
+
+.history {
+  border-bottom: 1px solid #ccc;;
+}
+
+.history h5 {
+  font-size: 18px;
+}
+
+.history p {
+  font-size: 14px;
+}
+
+.links-font-size {
+  font-size: 14px;
+}
+
+.history-header {
+  font-size: 18px;
+}
+
+.history-problem-desc {
+  font-size: 12px;
+}
+
+
+
+.react-calendar {
+  border: none !important;
+}
+
+.edit-profile-modal .modal-dialog {
+  width: 600px; /* Adjust the width as needed */
+}
+
+.certifications li { font-size: 15px;}
+
+.f-14 {
+  font-size: 14px !important;
+}
+
+.f-16 {
+  font-size: 16px !important;
+}
+
+.f-32 {
+  font-size: 26px !important;
+}
+
+.mt-6 { 
+  margin-top: 6rem;
+}
+
+.dropdown-menu a.dropdown-item:hover, .dropdown-menu a.dropdown-item, .dropdown-menu div.dropdown-item {
+  color: #212529 !important;
+  background-color: #fff;
+}
+
+.leaderboard .dropdown-menu {
+  transform: translate3d(-200px, 42px, 0px) !important;
+  width: 300px !important;
+}
+
+/* .online-users-modal {
+  max-width: 600px !important;
+  margin: 0 auto;
+} */
+
+.question-body div, .question-body .option-container {
+  padding: .63rem 0;
+}
+
+.ml-7 {
+  margin-left: 5.5rem;
+}
+
+.text-grey {
+  color: rgba(51, 51, 51, 0.3);
+}
+
+.confetti-container {
+  height: 280px;
+  background-size: cover;
+  background-position: center;
+}
+
+.celebration-img {
+  height: 100%;
+  width: 100%;
+  image-rendering: auto;
+  object-fit: cover;
+}
+
+.code-mirror-wrapper {
+  height: 100% !important;
+}
+
+.CodeMirror-wrap {
+  height: 100% !important;
+}
+
+.nav-pills .nav-link.active {
+  background-color: #fff !important;
+  color: #161f2e !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  font-size: 10px !important;
+}
+
+.react-calendar__navigation__label__labelText react-calendar__navigation__label__labelText--from {
+  font-size: 14px !important;
+}
+
+.social-login i {
+  font-size: 24px; /* Adjust the font size as needed */
+  margin: 0 10px; /* Add some horizontal margin between icons */
+}
+
+.google-icon {
+  display: inline !important;
+  font-size: 24px; 
+  margin-right: 10px; 
+}
+
+iframe[title='Sign in with Google Button'] {
+  top: -35px !important;
+  left: 305px !important;
+}
+
+.multiple-choice-question-option::marker {
+  padding-left: 1rem !important;
+}
+
+
+.profile.links-section a {
+  font-size: 13px !important;
+}
+
+@font-face {
+  font-family: 'digital-7';
+  src: url('./assets/digital-7/digital-7.ttf') format('truetype');
+}
+
+.digital-timer {
+  font-family: 'digital-7' !important;
+  font-size: 44px;
+}
