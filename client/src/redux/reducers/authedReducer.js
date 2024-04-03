@@ -1,5 +1,6 @@
+import { genActionStyle } from "antd/es/alert/style";
 import { SET_AUTHED_USER } from "../actions"
-import { CREATE_USER, LOGIN_USER, LOG_USER_OUT } from "../actions/types";
+import { CREATE_USER, GET_ONLINE_USERS, LOGIN_USER, LOG_USER_OUT, UPDATE_USER } from "../actions/types";
 
 const initialState = {
     user: null,
@@ -15,6 +16,7 @@ export default function authReducer(state=initialState, { type, payload }) {
         case SET_AUTHED_USER:
             return payload;
         case CREATE_USER:
+        case UPDATE_USER:
             return {
                 ...state,
                 user: payload,
@@ -34,6 +36,7 @@ export default function authReducer(state=initialState, { type, payload }) {
                 isLoading: false,
                 createdUser: null,
             }
+        
         default:
         return state
     };

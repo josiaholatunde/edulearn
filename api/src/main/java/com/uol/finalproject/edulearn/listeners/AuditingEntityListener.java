@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AuditingEntityListener {
-
     @PrePersist
     public void beforeCreation(BaseAuditableModel baseAuditableModel) {
         baseAuditableModel.setCreatedAt(DateUtil.getCurrentDate());

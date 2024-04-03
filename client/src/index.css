@@ -50,6 +50,7 @@ input, select {
 .btn-cool, .badge-cool {
   background-color: #161f2e !important;
   color: #fff !important;
+  border:  1px solid #161f2e !important;
 }
 
 .btn-light {
@@ -97,7 +98,7 @@ input, select {
 .btn:active.focus,
 .btn.active.focus,
 .btn-danger:focus,
-.btn-danger:active {
+.btn-danger:active, textarea {
     outline: none !important;
     box-shadow: none !important;
 }
@@ -149,11 +150,11 @@ input[type='email'], input[type='password'], .password-input {
 
 
 
-.login-form .input-icon, .register-form .input-icon {
+.login-form .input-icon, .register-form .input-icon, .edit-social-profile-form .input-icon {
   position: relative;
 }
 
-.login-form .input-icon i, .register-form .input-icon i {
+.login-form .input-icon i, .register-form .input-icon i, .edit-social-profile-form .input-icon  i {
   position: absolute;
   left: 10px; /* Adjust as needed */
   top: 50%;
@@ -177,14 +178,19 @@ input[type='email'], input[type='password'], .password-input {
 }
 
 .profile-card {
-  height: 250px;
+  height: 290px;
 }
 
 .profile-img-container {
   height: 200px;
   width: 200px;
   display: flex;
+}
 
+.navbar-img-container {
+  height: 30px;
+  width: 30px;
+  display: flex;
 }
 
 .profile-container h5 {
@@ -311,4 +317,47 @@ input[type='email'], input[type='password'], .password-input {
 .nav-pills .nav-link.active {
   background-color: #fff !important;
   color: #161f2e !important;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  font-size: 10px !important;
+}
+
+.react-calendar__navigation__label__labelText react-calendar__navigation__label__labelText--from {
+  font-size: 14px !important;
+}
+
+.social-login i {
+  font-size: 24px; /* Adjust the font size as needed */
+  margin: 0 10px; /* Add some horizontal margin between icons */
+}
+
+.google-icon {
+  display: inline !important;
+  font-size: 24px; 
+  margin-right: 10px; 
+}
+
+iframe[title='Sign in with Google Button'] {
+  top: -35px !important;
+  left: 305px !important;
+}
+
+.multiple-choice-question-option::marker {
+  padding-left: 1rem !important;
+}
+
+
+.profile.links-section a {
+  font-size: 13px !important;
+}
+
+@font-face {
+  font-family: 'digital-7';
+  src: url('./assets/digital-7/digital-7.ttf') format('truetype');
+}
+
+.digital-timer {
+  font-family: 'digital-7' !important;
+  font-size: 44px;
 }

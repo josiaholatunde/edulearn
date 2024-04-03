@@ -11,7 +11,7 @@ import 'codemirror/mode/python/python';
 import 'codemirror/mode/clike/clike';
 
 const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examples, userCodeOutput, 
-    setUserCodeOutput, handleRunCode, handleSubmitCode, isRunCodeLoading, isSubmitLoading }) => {
+    setUserCodeOutput, handleRunCode, handleSubmitCode, isRunCodeLoading, isSubmitLoading, challengeResult }) => {
     const [isControlled, setIsControlled] = useState(false);
     const [theme, setTheme] = useState('material');
 
@@ -33,6 +33,11 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
     }
   }
 
+  const toLower = language => {
+      return !!language ? language.toLowerCase() : language
+  }
+
+  console.log('challenge result', challengeResult)
   return (
     <div className="code-editor" style={{ height: '500px', position: 'relative'}} >
       <div className="editor-header w-100 pl-3 d-flex justify-content-between"  style={{ width: '9rem', height: '40px', background: '#161f2e', color: '#fff'}}>
@@ -43,9 +48,9 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
             value={language}
             onChange={({ target }) => setLanguage(target.value)}
         >
-            <option value="javascript">JavaScript</option>
-            <option value="python">Python</option>
-            <option value="java">Java</option>
+            <option value="JAVASCRIPT">JavaScript</option>
+            <option value="PYTHON">Python</option>
+            <option value="JAVA">Java</option>
             {/* Add more options for other languages */}
         </select>
         <select
@@ -72,7 +77,7 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
             options={{
                 lineWrapping: true,
                 lint: true,
-                mode: language == 'java' ? 'text/x-java': language,
+                mode: language == 'JAVA' ? 'text/x-java': toLower(language),
                 theme,
                 lineNumbers: true
             }}
@@ -96,24 +101,32 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
                 Submit
             </button>
         </div>
-        <div className='result-terminal p-3' style={{ height: '40%', background: '#161f2e', color: '#fff' }}>
-            <ul className="nav nav-pills bg-cool">
-            { examples && examples.length > 0 && examples.map(example => 
+        <div className='result-terminal p-3' style={{ height: '44%', background: '#161f2e', color: '#fff', overflow: 'scroll' }}>
+            <ul className="nav nav-pills bg-cool" style={{ zIndex: '1', position: 'sticky', top: '-15px'}}>
+            { examples && examples.length > 0 && examples.map((example, index) => 
                 
-                <li className="nav-item" role="presentation">
+                <li className="nav-item" role="presentation" key={example.id}>
                     <div className='nav-link' data-bs-toggle="pill" data-bs-target={`#pills-${example.id}`} type="button" role="tab" aria-controls={`pills-${example.id}`} aria-selected="true">
-                        Test Case { example.id }
+                        Test Case { index + 1 }
                     </div>
                 </li>)
             }
             </ul>
-            <div class="tab-content mt-3" id="pills-tabContent">
-                { examples && examples.length > 0 && examples.map(example => 
+            <div className="tab-content mt-3 ml-3" id="pills-tabContent">
+                { examples && examples.length > 0 && examples.map((example, index) => 
                     
-                    (<div className="tab-pane fade" id={`pills-${example.id}`} role="tabpanel" aria-labelledby={`pills-${example.id}-tab`}>
+                    (<div key={example.id} className={`tab-pane fade ${index === 0 ? 'show active' : ''}`} id={`pills-${example.id}`} role="tabpanel" aria-labelledby={`pills-${example.id}-tab`}>
                         <div>Input: { example.input } </div>
                         <div className='my-3'>Expected: { example.output } </div>
-                        {userCodeOutput && <div >Output: { userCodeOutput } </div> }
+                        {
+                            challengeResult && challengeResult.algoResult && challengeResult.algoResult.length > 0 && challengeResult.algoResult[index]?.userOutput && (<div>Output: { challengeResult.algoResult[index].userOutput } </div>)
+                        }
+                        {
+                            challengeResult && challengeResult.algoResult && challengeResult.algoResult[0]?.compilationError && (<div >Compilation Error: { challengeResult.algoResult[0]?.compilationError } </div>)
+                        }
+                        {
+                            challengeResult && challengeResult.algoResult && challengeResult.algoResult.length > 0 && challengeResult.algoResult[index] && (<div className='my-3' style={{ color: '#fff'}}>Passed: { `${challengeResult.algoResult[index]?.testCasePassed}` } </div>)
+                        }
                     </div>))
                 }
             </div>

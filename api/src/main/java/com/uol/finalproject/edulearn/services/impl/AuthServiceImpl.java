@@ -1,28 +1,31 @@
 package com.uol.finalproject.edulearn.services.impl;
 
+import com.uol.finalproject.edulearn.apimodel.StudentUserDTO;
+import com.uol.finalproject.edulearn.apimodel.UserDTO;
 import com.uol.finalproject.edulearn.apimodel.request.RegisterStudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
 import com.uol.finalproject.edulearn.apimodel.response.LoginResponseDTO;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.User;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
+import com.uol.finalproject.edulearn.exceptions.AuthenticationException;
+import com.uol.finalproject.edulearn.exceptions.BadRequestException;
 import com.uol.finalproject.edulearn.repositories.StudentUserRepository;
 import com.uol.finalproject.edulearn.repositories.UserRepository;
 import com.uol.finalproject.edulearn.services.AuthService;
 import com.uol.finalproject.edulearn.services.UserService;
 import com.uol.finalproject.edulearn.util.JwtUtils;
-import com.uol.mobileweb.gevs_election_polls.exceptions.AuthenticationException;
-import com.uol.mobileweb.gevs_election_polls.exceptions.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 
@@ -49,7 +52,8 @@ public class AuthServiceImpl implements AuthService {
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             String jwtToken = jwtUtils.generateJwtToken(authenticate);
 
-            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(user, jwtToken, jwtUtils.convertJwtExpiryToMilliSeconds());
+            UserDTO userDTO = buildUserDTO(user);
+            LoginResponseDTO loginResponseDTO = new LoginResponseDTO(userDTO, jwtToken, jwtUtils.convertJwtExpiryToMilliSeconds());
             return new BaseApiResponseDTO(SUCCESS_LOGIN_CREDENTIALS_MESSAGE, loginResponseDTO, null);
         } catch (BadCredentialsException ex) {
             log.error("An error occurred while logging in user {}", ex.getMessage());
@@ -58,19 +62,65 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
+    private static UserDTO buildUserDTO(User user) {
+        StudentUserDTO studentUserDTO = StudentUserDTO.builder().build();
+        BeanUtils.copyProperties(user.getStudentUser(), studentUserDTO);
+        UserDTO userDTO = UserDTO.builder().build();
+        BeanUtils.copyProperties(user, userDTO);
+        userDTO.setStudentUser(studentUserDTO);
+        return userDTO;
+    }
+
     @Override
     public BaseApiResponseDTO registerStudentUser(RegisterStudentUserDTO registerStudentUserDTO) {
 
         if (!registerStudentUserDTO.doPasswordsMatch()) throw new BadRequestException("Passwords do not match. Kindly try again");
         if (userRepository.existsByUsernameAndRoleType(registerStudentUserDTO.getEmail(), RoleType.STUDENT_USER)) throw new BadRequestException("Email already exists. Kindly try again");
-        if (studentUserRepository.existsByStudentNo(registerStudentUserDTO.getStudentNo())) throw new BadRequestException("Student number has been taken. Kindly try again");
+        if (studentUserRepository.existsByEmail(registerStudentUserDTO.getEmail())) throw new BadRequestException("Email already exists. Kindly try again");
 
         String hashedPassword = passwordEncoder.encode(registerStudentUserDTO.getPassword());
         StudentUser studentUser = studentUserRepository.save(StudentUser.fromRegisterStudent(registerStudentUserDTO));
 
-        User user = new User(registerStudentUserDTO.getEmail(), hashedPassword, true, RoleType.STUDENT_USER, studentUser);
+        User user = User.builder()
+                .username(registerStudentUserDTO.getEmail())
+                .password(hashedPassword)
+                .isActive(true)
+                .roleType(RoleType.STUDENT_USER)
+                .studentUser(studentUser)
+                .build();
         userRepository.save(user);
 
-        return new BaseApiResponseDTO("Successfully registered student user", studentUser, null);
+        StudentUserDTO studentUserDTO = StudentUserDTO.builder().build();
+        BeanUtils.copyProperties(studentUser, studentUserDTO);
+
+        return new BaseApiResponseDTO("Successfully registered student user", studentUserDTO, null);
+    }
+
+
+    @Override
+    public BaseApiResponseDTO authenticateUserOauth(String authProvider, String userEmail, OAuth2User oAuth2User) {
+        User user = null;
+        if (!studentUserRepository.existsByEmail(userEmail)) {
+            StudentUser studentUser = studentUserRepository.save(StudentUser.builder()
+                            .email(userEmail)
+                            .firstName(oAuth2User.getAttribute("given_name"))
+                            .lastName(oAuth2User.getAttribute("family_name"))
+                    .build());
+
+             user =userRepository.save(User.builder()
+                    .username(userEmail)
+                    .isActive(true)
+                    .roleType(RoleType.STUDENT_USER)
+                    .studentUser(studentUser)
+                    .authProvider(authProvider)
+                    .build());
+
+        } else {
+            user = userRepository.findByUsername(userEmail).orElseThrow(() -> new AuthenticationException("Could not find user email"));
+        }
+        String jwtToken = jwtUtils.generateJwtToken(user, false);
+        UserDTO userDTO = buildUserDTO(user);
+        LoginResponseDTO loginResponseDTO = new LoginResponseDTO(userDTO, jwtToken, jwtUtils.convertJwtExpiryToMilliSeconds());
+        return new BaseApiResponseDTO(SUCCESS_LOGIN_CREDENTIALS_MESSAGE, loginResponseDTO, null);
     }
 }

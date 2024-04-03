@@ -10,14 +10,18 @@ import 'antd/dist/antd';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import store from './store'
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID
+
 root.render(
-  <React.StrictMode>
     <Provider store={store}>
-        <App />
+        <GoogleOAuthProvider clientId={clientId}>
+            <App />
+        </GoogleOAuthProvider>
+        
     </Provider>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

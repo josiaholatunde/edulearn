@@ -1,136 +1,190 @@
 import React, { Fragment, useEffect, useState } from "react";
-import Modal from 'react-bootstrap/Modal';
 import { QUESTION_TYPE } from "../../utils/constants";
 import questionBank from "../../utils/questions";
 import AlgorithmQuestionDetail from "../question/AlgorithmQuestionDetail";
 import MultipleChoiceQuestionDetail from "../question/MultipleChoiceQuestionDetail";
 import { useLocation } from 'react-router-dom'
 import { useParams } from 'react-router'
-import data from "../../utils/challenges";
 import InstructionDetails from "../question/InstructionDetails";
+import { connect, useDispatch } from "react-redux";
+import { getChallengeDetails, submitChallengeResponse } from "../../redux/actions/challengeActions";
+import ChallengeCompletionModal from "./ChallengeCompletionModal";
+import { routeToPath } from "../../utils/routeUtil";
 
 
+import Countdown from 'react-countdown';
 
-const ChallengeDetails = ({ match, history }) => {
+const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingChallengeDetails }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill(null));
     const [questions, setQuestions] = useState([]);
     const [showSuccessModal, setShowSuccessModal ] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [type, setType] = useState(QUESTION_TYPE.multiple_choice)
+    const [type, setType] = useState(QUESTION_TYPE.MULTIPLE_CHOICE)
     const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
+    const [ showScoreDetails, setShowScoreDetails ] = useState(false)
+    const [startChallenge, setStartChallenge] = useState(false)
+    const [userResponse, setUserResponses] = useState({})
+    const [challengeEndDate, setChallengeEndDate] = useState(null)
+
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
+    const DEFAULT_CHALLENGE_DURATION_MINUTES = 1;
 
     const pathParams = useParams();
     const challengeIdentifier = pathParams.identifier;
 
+    const dispatch = useDispatch()
     const location = useLocation()
     const queryParams = new URLSearchParams(location.search)
     
     useEffect(() => {
         if (!!queryParams.get('type')) {
             const type = queryParams.get('type')
-            setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.multiple_choice)
-            setQuestions(getQuestions(type))
+            setType(type == QUESTION_TYPE.ALGORITHMS ? QUESTION_TYPE.ALGORITHMS : QUESTION_TYPE.MULTIPLE_CHOICE)
         }
         if (!!queryParams.get('mode')) {
             setChallengeMode(queryParams.get('mode'))
         }
-
-        console.log('ccc', challengeIdentifier)
+        if (queryParams.has('showInstruction')) {
+            setShouldShowInstruction(false)
+            setStartChallenge(true)
+            setChallengeEndDate(Date.now() + (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000))
+        }
         if (challengeIdentifier && mode) {
-            const challenge = getChallenge(challengeIdentifier)
-            setChallenge(challenge)
-            setQuestions(challenge?.questions || [])
+            getChallenge(challengeIdentifier)
         } 
-    }, [queryParams]);
+        if (!!challenge) {
+            setChallenge(challengeDetail)
+            setQuestions(challengeDetail?.challengeQuestions || [])
+        } 
+        
+    }, [challengeIdentifier, mode, challengeDetail?.title]);
 
     const getChallenge = (challengeIdentifier) => {
-        return data.find(challenge => challenge.title == challengeIdentifier)
+        dispatch(getChallengeDetails(challengeIdentifier))
     }
 
-
-
-    const getQuestions = (challengeId, type) => {
-        if (!challengeId || challengeId == 'random') return questionBank.filter(question => question.type === type)
-        return questionBank.filter(question => question.category == challengeId && question.type === type)
-    }
-
-    
 
     const handleCloseSuccessModal = () => {
         setShowSuccessModal(false)
-        history.push('/challenge')
+        history.push('/challenges')
     }
 
+    const handleViewScore = () => {
+        setShowScoreDetails(true)
+    }
 
-    const renderQuestionDetails = () => {
+    const handleViewLeaderBoard = () => {
+        history.push(`/leaderboard?challengeId=${challengeDetail?.id}`)
+    }
+
+    const handleOnComplete = () => {
+
+        console.log('answers ', answers)
+        const request = {
+            challengeId: challengeDetail?.id,
+            userResponse
+        }
+        dispatch(submitChallengeResponse(request, () => {
+            setShowSuccessModal(true);
+            setStartChallenge(false);
+        }))
+    }
+
+    const handleViewSolution = () => {
+        routeToPath(history, `/challenge-solution/${challengeDetail?.id}?type=${challengeDetail?.type}&mode=${challengeDetail?.participantType}&submissionId=${challengeResult?.id}`)  
+    }
+
+    const renderQuestionDetails = (challengeDetail) => {
+        const challengeQuestions = challengeDetail?.challengeQuestions
         if (shouldShowInstruction) return <InstructionDetails questionType={type} setShouldShowInstruction={() => {
             setTimeout(() => {
                 setLoading(false)
                 setShouldShowInstruction(false)
-            } , 3000)    
+                setStartChallenge(true)
+                if (challengeEndDate == null) {
+                    setChallengeEndDate(Date.now() + (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000))
+                }
+            } , 2000)    
             }
-        } loading={loading} setLoading={setLoading}  />
+        } loading={loading} setLoading={setLoading} challenge={challengeDetail}  />
         else {
-            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
-            : (<AlgorithmQuestionDetail questions={questions} history={history} challengeMode={mode} />)
+            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail userResponse={userResponse} setUserResponses={setUserResponses} challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} setStartChallenge={setStartChallenge} />) 
+            : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} setStartChallenge={setStartChallenge} />)
         }
     }
 
+    const renderer = ({ hours, minutes, seconds }) => {
+        const pad = (num) => String(num).padStart(2, '0');
+    
+        return (
+          <span className="digital-timer">
+            {pad(hours)}:{pad(minutes)}:{pad(seconds)}
+          </span>
+        );
+      };
+
+    console.log('challenge ', challenge, 'challenge details', challengeDetail, 'end date ', challengeEndDate)
     return (
         <Fragment>
             <div
-                className="row card mt-5 p-3 text-left d-flex align-items-center"
+                className="row card mt-5 p-3 flex-row text-left justify-content-center"
                 style={{ height: "192px" }}
             >
-                <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
-                    <h3>{ challenge?.title || DEFAULT_CHALLENGE_TITLE } </h3>
-                    <div>
-                        <i className="bi bi-envelope-open"></i>{" "}
-                        <span className="f-14">{ challenge?.submissions } submissions received</span>
-                    </div>
-                </div>
-            </div>
-
-            {
-                renderQuestionDetails()
-            }
-
-            {
-                <Modal show={showSuccessModal} onHide={handleCloseSuccessModal} size='md' centered className="success-modal" >
-                    <Modal.Header closeButton={handleCloseSuccessModal}>
-                    <Modal.Title className='pl-3 text-center'>Submission Successful</Modal.Title>
-                    </Modal.Header>
-                    <Modal.Body className="w-100 pt-0"> 
-                        <div className="row">
-                            <div className="col-lg-12">
-                                <div className="confetti-container w-100">
-                                    <img src="/confetti3.jpeg" className="celebration-img" />
+                {
+                    loadingChallengeDetails ? (<div className="col-lg-12">
+                        <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
+                            <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
+                        </div>
+                    </div>) : (<Fragment>
+                        <div className="col-lg-8">
+                            <div className="text-left h-100 d-flex align-items-center justify-content-center">
+                                <div className="container d-flex flex-column">
+                                    <h3>{ challengeDetail?.title || DEFAULT_CHALLENGE_TITLE } </h3>
+                                    <div>
+                                        <i className="bi bi-envelope-open"></i>{" "}
+                                        <span className="f-14">{ challengeDetail?.submissions } submissions received</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="row mt-3">
-                            <div className="col-lg-12">
-                            <div className="d-flex justify-content-center">
-                                <button type="button" className="btn" style={{ height: '40px', width: '200px', border: '1px solid #161f2e'}} data-bs-toggle="dropdown" aria-expanded="false">
-                                    View Score
-                                </button>
-
-                                <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
-                                    View Leaderboard
-                                </button>
-                            </div>
-                            </div>
+                        <div className="col-lg-4">
+                            {
+                                (startChallenge && !!challengeEndDate && type == QUESTION_TYPE.MULTIPLE_CHOICE) &&  (<div className="count-down-timer w-100 h-100 d-flex justify-content-end align-items-center">
+                                    <Countdown date={challengeEndDate} renderer={renderer} onComplete={handleOnComplete} />
+                                </div>)
+                            }
                         </div>
-                    </Modal.Body>
-                </Modal>
+                        </Fragment>)
+                }
+            </div>
+
+            {
+                renderQuestionDetails(challengeDetail)
             }
 
+            <ChallengeCompletionModal 
+                showSuccessModal={showSuccessModal}
+                showScoreDetails={showScoreDetails}
+                handleViewScore={handleViewScore}
+                handleViewLeaderBoard={handleViewLeaderBoard}
+                handleCloseSuccessModal={handleCloseSuccessModal}
+                challengeResult={challengeResult}
+                handleViewSolution={handleViewSolution}
+
+            />
         </Fragment>
     );
 };
 
-export default ChallengeDetails;
+const mapStateToProps = ({ challenges: { challengeDetail, challengeResult }, loading }) => {
+    return ({
+        challengeDetail,
+        challengeResult,
+        loadingChallengeDetails: loading
+    })
+}
+
+export default connect(mapStateToProps, { getChallengeDetails, submitChallengeResponse  })(ChallengeDetails);

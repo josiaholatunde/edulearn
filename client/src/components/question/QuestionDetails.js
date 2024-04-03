@@ -6,19 +6,22 @@ import AlgorithmQuestionDetail from "./AlgorithmQuestionDetail";
 import MultipleChoiceQuestionDetail from "./MultipleChoiceQuestionDetail";
 import { useLocation } from 'react-router-dom'
 import InstructionDetails from "./InstructionDetails";
+import { connect } from "react-redux";
 
 
 
-const QuestionDetails = ({ match, history }) => {
+const QuestionDetails = ({  history, challengeResult }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const [answers, setAnswers] = useState(Array(questionBank.length).fill(null));
     const [questions, setQuestions] = useState([]);
     const [showSuccessModal, setShowSuccessModal ] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [type, setType] = useState(QUESTION_TYPE.multiple_choice)
+    const [type, setType] = useState(QUESTION_TYPE.MULTIPLE_CHOICE)
     const [shouldShowInstruction, setShouldShowInstruction] = useState(true)
     const [challenge, setChallenge] = useState({})
     const [mode, setChallengeMode ] = useState('individual')
+    const [ showScoreDetails, setShowScoreDetails ] = useState(false)
+    
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
 
     const location = useLocation()
@@ -27,23 +30,27 @@ const QuestionDetails = ({ match, history }) => {
     useEffect(() => {
         if (!!queryParams.get('type')) {
             const type = queryParams.get('type')
-            setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.multiple_choice)
-            setQuestions(getQuestions(type))
+            setType(type == QUESTION_TYPE.algorithms ? QUESTION_TYPE.algorithms : QUESTION_TYPE.MULTIPLE_CHOICE)
         }
         if (!!queryParams.get('mode')) {
             setChallengeMode(queryParams.get('mode'))
         }
     }, []);
 
-    const getQuestions = type => {
-        return questionBank.filter(question => question.type === type)
+    const handleViewLeaderBoard = () => {
+        
     }
 
     
 
     const handleCloseSuccessModal = () => {
         setShowSuccessModal(false)
-        history.push('/challenge')
+        history.push('/challenges')
+    }
+
+
+    const handleViewScore = () => {
+        setShowScoreDetails(true)
     }
 
 
@@ -56,7 +63,7 @@ const QuestionDetails = ({ match, history }) => {
             }
         } loading={loading} setLoading={setLoading}  />
         else {
-            return type === QUESTION_TYPE.multiple_choice ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
+            return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail questions={questions} setShowSuccessModal={setShowSuccessModal} />) 
             : (<AlgorithmQuestionDetail questions={questions} history={history} challengeMode={mode} />)
         }
     }
@@ -88,19 +95,32 @@ const QuestionDetails = ({ match, history }) => {
                     <Modal.Body className="w-100 pt-0"> 
                         <div className="row">
                             <div className="col-lg-12">
-                                <div className="confetti-container w-100">
+                                { 
+                                    showScoreDetails ? (<div className="row">
+                                        <div className="col-lg-12">
+                                            Score : <span> { challengeResult?.score} % </span>
+                                        </div>
+                                        <div className="col-lg-12">
+                                            Total Number of Correct Questions: <span> { challengeResult?.totalCorrect } </span>
+                                        </div>
+                                        <div className="col-lg-12">
+                                            Total Number of Questions: <span> { challengeResult?.totalQuestions } </span>
+                                        </div>
+                                    </div>) :
+                                    (<div className="confetti-container w-100">
                                     <img src="/confetti3.jpeg" className="celebration-img" />
-                                </div>
+                                </div>)
+                                }
                             </div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-lg-12">
                             <div className="d-flex justify-content-center">
-                                <button type="button" className="btn" style={{ height: '40px', width: '200px', border: '1px solid #161f2e'}} data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" className="btn" style={{ height: '40px', width: '200px', border: '1px solid #161f2e'}} onClick={handleViewScore}>
                                     View Score
                                 </button>
 
-                                <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px'}} onClick={handleViewLeaderBoard}>
                                     View Leaderboard
                                 </button>
                             </div>
@@ -114,4 +134,10 @@ const QuestionDetails = ({ match, history }) => {
     );
 };
 
-export default QuestionDetails;
+const mapStateToProps = ({ loading, challenges: { challengeResult } }) => {
+    return ({
+        loading,
+        challengeResult
+    })
+}
+export default connect(mapStateToProps)(QuestionDetails);

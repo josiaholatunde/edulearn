@@ -17,7 +17,9 @@ export function setAuthedUser(id) {
 export function clearUserInLocalStorage() {
     localStorage.setItem('user', null);
     localStorage.setItem('token', null);
+    localStorage.setItem('authProvider', null);
 }
+
 
 
 export const handleLoginUser = (userToLogin, { history }) => dispatch => {
@@ -25,7 +27,7 @@ export const handleLoginUser = (userToLogin, { history }) => dispatch => {
 
     setTimeout(async () => {
         try {
-            const { data } = await axios.post('/login', userToLogin)
+            const { data } = await axios.post('/auth/login', userToLogin)
             if (data) {
                 const { token, user } = data && data.data
                 setAuthToken(token);
@@ -38,7 +40,7 @@ export const handleLoginUser = (userToLogin, { history }) => dispatch => {
                 })
                 storeUserCredentialsInLocalStorage({ user, token });
                 showNotification('success', 'Successfully logged in user')
-                history.push('/dashboard')
+                history.push('/home')
             }
             dispatch(hideLoading())
         } catch (error) {
@@ -56,7 +58,7 @@ export const handleRegisterUser = (userToRegister, { history }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
-            const { data } = await axios.post('/register/voter', userToRegister)
+            const { data } = await axios.post('/auth/register', userToRegister)
             if (data) {
                 const user = data.data
                 dispatch({ type: CREATE_USER, payload: user })
@@ -73,12 +75,17 @@ export const handleRegisterUser = (userToRegister, { history }) => dispatch => {
 
 }
 
-export const storeUserCredentialsInLocalStorage = ({ user, token }) => {
+
+
+export const storeUserCredentialsInLocalStorage = ({ user, token }, authProvider) => {
     if (user) {
         localStorage.setItem('user', JSON.stringify(user))
     }
     if (token) {
         localStorage.setItem('token', token)
+    }
+    if (authProvider) {
+        localStorage.setItem('authProvider', authProvider)
     }
 }
 
@@ -91,11 +98,11 @@ export const logOutUser = (history) => dispatch => {
 }
 
 
-export const logOutUserOnTokenExpiration = () => async dispatch =>  {
+export const logOutUserOnTokenExpiration = ()  =>  {
     localStorage.setItem('user', null)
     localStorage.setItem('token', null)
-    dispatch(logOutUser())
-    dispatch(handleClearUserState())  
+    localStorage.setItem('authProvider', null)
+    // dispatch(logOutUser())
 }
 
 

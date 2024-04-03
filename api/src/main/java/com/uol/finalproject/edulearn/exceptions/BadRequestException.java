@@ -1,4 +1,4 @@
-package com.uol.mobileweb.gevs_election_polls.exceptions;
+package com.uol.finalproject.edulearn.exceptions;
 
 public class BadRequestException extends RuntimeException {
 

@@ -1,15 +1,18 @@
 package com.uol.finalproject.edulearn.advice;
 
-import com.uol.mobileweb.gevs_election_polls.apimodel.response.BaseApiResponseDTO;
-import com.uol.mobileweb.gevs_election_polls.exceptions.AuthenticationException;
-import com.uol.mobileweb.gevs_election_polls.exceptions.BadRequestException;
-import com.uol.mobileweb.gevs_election_polls.exceptions.ResourceNotFoundException;
+import com.uol.finalproject.edulearn.apimodel.AlgoTestCaseResult;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
+import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
+import com.uol.finalproject.edulearn.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 @RestControllerAdvice
 public class GlobalControllerAdvice {
@@ -22,11 +25,30 @@ public class GlobalControllerAdvice {
     }
 
 
+    @ExceptionHandler(AlgorithmQuestionResultException.class)
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<?> handleAlgorithmResultException(AlgorithmQuestionResultException ex, HttpServletRequest request) {
+        System.out.println(request);
+        return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage(), ChallengeSubmissionDTO.builder()
+                .algoResult(Collections.singletonList(AlgoTestCaseResult.builder()
+                                .compilationError(ex.getMessage())
+                        .build()))
+                .build(), new ArrayList<>()), HttpStatus.OK);
+    }
+
+
     @ExceptionHandler(AuthenticationException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<?> handleAuthenticationException(AuthenticationException ex, HttpServletRequest request) {
         System.out.println(request);
         return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage()), HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(AuthorizationException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseEntity<?> handleAuthorizationException(AuthorizationException ex, HttpServletRequest request) {
+        System.out.println(request);
+        return new ResponseEntity<>(new BaseApiResponseDTO(ex.getMessage()), HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadRequestException.class)
