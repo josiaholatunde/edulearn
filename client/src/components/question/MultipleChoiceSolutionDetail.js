@@ -97,7 +97,6 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
         
     }
 
-    console.log('questions', questions[currentQuestion])
     return (!questions || questions?.length === 0) ? (<h6 className='mt-5'>Oops! There are no questions in this challenge. Kindly contact Admin...</h6>) : (<Fragment>
             <div className="row">
                 <div className="question-container col-lg-12 text-left mt-5 ml-0 px-0">

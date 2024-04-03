@@ -49,19 +49,19 @@ function App() {
             <div className='container'>
               <Switch>
                 <Route path='/login' exact component={SignIn} />
-                <Route path='/home' exact component={HomePage} />
+                <PrivateRoute path='/home' exact component={HomePage} />
                 <Route path='/register' exact component={Register} />
-                <Route path='/profile' exact component={Profile} />
-                <Route path='/leaderboard' exact component={Leaderboard} />
-                <Route path='/questions' exact component={QuestionDetails} />
-                <Route path='/challenge/:identifier/details' exact component={ChallengeDetails} />
-                <Route path='/challenges' exact component={Challenge} />
-                <Route path='/challenge-lobby/:challengeId' exact component={ChallengeLobbySection} />
-                <Route path='/challenge-solution/:challengeId' exact component={ChallengeSolutionDetails} />
-                <Route path='/challenge-invites' exact component={ChallengeInvite} />
-                <Route path='/challenge/algorithms/:id/details' exact component={AlgorithmChallengeAttemptDetails} />
-                <PrivateRoute path='/dashboard' exact component={Dashboard} />
-                <PrivateRoute path='/' exact component={Dashboard} />
+                <PrivateRoute path='/profile' exact component={Profile} />
+                <PrivateRoute path='/leaderboard' exact component={Leaderboard} />
+                <PrivateRoute path='/questions' exact component={QuestionDetails} />
+                <PrivateRoute path='/challenge/:identifier/details' exact component={ChallengeDetails} />
+                <PrivateRoute path='/challenges' exact component={Challenge} />
+                <PrivateRoute path='/challenge-lobby/:challengeId' exact component={ChallengeLobbySection} />
+                <PrivateRoute path='/challenge-solution/:challengeId' exact component={ChallengeSolutionDetails} />
+                <PrivateRoute path='/challenge-invites' exact component={ChallengeInvite} />
+                <PrivateRoute path='/challenge/algorithms/:id/details' exact component={AlgorithmChallengeAttemptDetails} />
+                <PrivateRoute path='/dashboard' exact component={HomePage} />
+                <PrivateRoute path='/' exact component={HomePage} />
                 <Route component={NotFound} />
               </Switch>
             </div>

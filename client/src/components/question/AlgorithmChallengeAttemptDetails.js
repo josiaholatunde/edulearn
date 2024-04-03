@@ -98,7 +98,7 @@ const AlgorithmChallengeAttemptDetails = ({ history, challengeDetail, challengeR
         setTimeout(() => {
             setIsSubmitLoading(false)
             if (challengeResult?.score != 100) {
-                showNotification('danger', 'One more more test cases still fail. Kindly try again');
+                showNotification('danger', 'One more more test cases still fails. Kindly try again');
                 return;
             }
             setShowSuccessModal(true);

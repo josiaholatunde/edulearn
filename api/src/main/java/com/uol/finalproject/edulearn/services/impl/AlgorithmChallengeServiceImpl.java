@@ -20,6 +20,7 @@ import com.uol.finalproject.edulearn.services.ChallengeEvaluatorService;
 import com.uol.finalproject.edulearn.services.CodeJudgeRestService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 
@@ -78,7 +79,12 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
                         .expectedOutput(example.getOutput())
                         .build();
 
-                algoTestCaseResult.setCompilationError(codeJudgeResponse.getCompileOutput());
+                if (Strings.isNotBlank(codeJudgeResponse.getCompileOutput())) {
+                    algoTestCaseResult.setCompilationError(codeJudgeResponse.getCompileOutput());
+                } else if (Strings.isNotBlank(codeJudgeResponse.getStderr())) {
+                    algoTestCaseResult.setCompilationError(codeJudgeResponse.getStderr());
+                }
+
                 if (stdout != null) {
                     algoTestCaseResult = parseResponse(stdout, algoTestCaseResult);
                 }
@@ -108,9 +114,9 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
                 String key = parts[0];
                 String value = parts[1];
                 if (key.equals("IsCorrect")) {
-                    isCorrect = Boolean.parseBoolean(value);
+                    isCorrect = Boolean.parseBoolean(value.trim());
                 } else if (key.equals("UserOutput")) {
-                    userOutput = value;
+                    userOutput = value.trim();
                 }
             }
         }

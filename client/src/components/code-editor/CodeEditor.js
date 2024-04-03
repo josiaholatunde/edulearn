@@ -101,8 +101,8 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
                 Submit
             </button>
         </div>
-        <div className='result-terminal p-3' style={{ height: '44%', background: '#161f2e', color: '#fff' }}>
-            <ul className="nav nav-pills bg-cool">
+        <div className='result-terminal p-3' style={{ height: '44%', background: '#161f2e', color: '#fff', overflow: 'scroll' }}>
+            <ul className="nav nav-pills bg-cool" style={{ zIndex: '1', position: 'sticky', top: '-15px'}}>
             { examples && examples.length > 0 && examples.map((example, index) => 
                 
                 <li className="nav-item" role="presentation" key={example.id}>
