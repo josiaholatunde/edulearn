@@ -14,8 +14,8 @@ class Navbar extends Component {
     render() {
         const { loggedInUser } = this.props;
         return (
-            <nav className="navbar navbar-expand-lg navbar-light bg-cool text-white sticky-top" >
-                <div className='container px-0'>
+            <nav className="navbar navbar-expand-lg navbar-light text-white sticky-top bg-cool px-5" style={{ background: '#ccc' }} >
+                <div className='container-fluid px-0' >
                     <Link className="navbar-brand" to="/challenges">
                         EduLearn
                     </Link>

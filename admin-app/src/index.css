@@ -361,3 +361,37 @@ iframe[title='Sign in with Google Button'] {
   font-family: 'digital-7' !important;
   font-size: 44px;
 }
+
+
+.sidebar-container li {
+  margin: 10px;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.sidebar-container li svg {
+  margin-right: 8px;
+}
+
+.sidebar-container li:hover, .sidebar-container li div:hover {
+  background-color: #fff;
+  color: #161f2e;
+  fill: #161f2e;
+  border-radius: 6px;
+  transition: fill 0.5s ease;
+}
+
+
+.sidebar-container li:hover {
+  background-color: #fff;
+  color: #161f2e;
+  fill: #161f2e;
+  border-radius: 6px;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-container li:hover svg {
+  color: #161f2e !important;
+  fill: #161f2e !important;
+  transition: fill 0.5s ease;
+}

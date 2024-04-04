@@ -24,7 +24,7 @@ import ChallengeSolutionDetails from './components/challenge/ChallengeSolutionDe
 import HomePage from './components/layout/HomePage';
 import WebSocket from './components/web-socket/WebSocket';
 import Sidebar from './components/layout/Sidebar';
-import AuthenticatedApp from './AuthenticatedApp';
+import Settings from './components/settings/Settings';
 
 
 const token = localStorage.getItem('token');
@@ -41,23 +41,15 @@ if (token && user && Object.keys(user).length > 0) {
   })
 }
 
-function App() {
+function AuthenticatedApp() {
   return (
-    <div className="App">
-     <Router>
-        <Navbar />
-        <Notification />
-        <WebSocket />
-          <Switch>
-            <Route path='/login' exact component={SignIn} />
-            {/* <Route path='/home' exact component={HomePage} /> */}
-            <Route path='/register' exact component={Register} />
-            <Route component={AuthenticatedApp} />
-            <Route component={NotFound} />
-          </Switch>
+  
+      <Router>
+        <div className="container-fluid pl-0">
+          <Sidebar />
+        </div>
       </Router>
-    </div>
   );
 }
 
-export default App;
+export default AuthenticatedApp;
