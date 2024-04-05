@@ -42,6 +42,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final AlgorithmChallengeServiceImpl algorithmChallengeService;
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
     private final StompNotificationService stompNotificationService;
+    private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
 
@@ -87,11 +88,47 @@ public class ChallengeServiceImpl implements ChallengeService  {
         Challenge challenge = createChallengeFromRequest(challengeDTO, challengeDTO.getCreatedBy() == RoleType.ADMIN ? null : retrieveStudentUser());
 
         saveChallengeQuestions(challenge, challengeDTO);
+        saveChallengeAnswers(challenge, challengeDTO);
 
         return ChallengeDTO.fromChallenge(challenge);
     }
 
+    private void saveChallengeAnswers(Challenge challenge, ChallengeDTO challengeDTO) {
+        for (Question question: challenge.getChallengeQuestions()) {
+            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
+                List<MultipleChoiceOption> optionAnswers = challengeDTO.getOptionAnswers().get(question.getTitle());
+                if (optionAnswers != null && !optionAnswers.isEmpty()) {
+                    List<MultipleChoiceAnswer> multipleChoiceAnswers = optionAnswers.stream()
+                            .map(optionAnswer -> MultipleChoiceAnswer.builder()
+                                    .option(optionAnswer)
+                                    .question(question.getMultipleChoiceQuestion())
+                                    .build())
+                            .collect(Collectors.toList());
+
+                    question.getMultipleChoiceQuestion().getAnswers().addAll(multipleChoiceAnswers);
+                    questionRepository.save(question);
+                }
+            }
+        }
+    }
+
     private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {
+
+        for (Question question : challengeDTO.getChallengeQuestions()) {
+            questionRepository.save(question);
+
+            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
+                MultipleChoiceQuestion multipleChoiceQuestion = question.getMultipleChoiceQuestion();
+                multipleChoiceQuestion.setQuestion(question);
+                questionRepository.save(question);
+
+                List<MultipleChoiceOption> multipleChoiceOptions = multipleChoiceQuestion.getOptions();
+                for (MultipleChoiceOption option : multipleChoiceOptions) {
+                    option.setQuestion(multipleChoiceQuestion);
+                }
+                multipleChoiceOptionRepository.saveAll(multipleChoiceOptions);
+            }
+        }
         challenge.setChallengeQuestions(challengeDTO.getChallengeQuestions());
         return challengeRepository.save(challenge);
     }
@@ -139,10 +176,12 @@ public class ChallengeServiceImpl implements ChallengeService  {
         if (studentUser != null) {
             challenge.setLevel(studentUser.getLevel());
         } else {
-            challenge.setLevel(challenge.getLevel());
+            challenge.setLevel(challengeDTO.getLevel());
         }
         challenge.setChallengeStatus(ChallengeStatus.NOT_STARTED);
         challenge.setParticipantType(challengeDTO.getParticipantType());
+        challenge.setDuration(challenge.getDuration());
+
         return challengeRepository.save(challenge);
     }
 

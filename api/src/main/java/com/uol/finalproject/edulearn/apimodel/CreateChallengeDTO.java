@@ -4,12 +4,10 @@ package com.uol.finalproject.edulearn.apimodel;
 import com.uol.finalproject.edulearn.entities.Challenge;
 import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
 import com.uol.finalproject.edulearn.entities.Question;
-import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeStatus;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,7 +24,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ChallengeDTO {
+public class CreateChallengeDTO {
 
     private Long id;
 
@@ -58,15 +56,15 @@ public class ChallengeDTO {
 
     private ChallengeStatus challengeStatus;
 
-    private List<Question> challengeQuestions = new ArrayList<>();
+    private List<QuestionDTO> challengeQuestions = new ArrayList<>();
 
     private List<Long> challengeUsers = new ArrayList<>();
 
     private Map<String, List<MultipleChoiceOption>> optionAnswers = new HashMap<>();
 
 
-    public static ChallengeDTO fromChallenge(Challenge challenge) {
-        ChallengeDTO challengeDTO = ChallengeDTO.builder().build();
+    public static CreateChallengeDTO fromChallenge(Challenge challenge) {
+        CreateChallengeDTO challengeDTO = CreateChallengeDTO.builder().build();
         BeanUtils.copyProperties(challenge, challengeDTO);
 
         if (challenge.getStudentUser() != null) {

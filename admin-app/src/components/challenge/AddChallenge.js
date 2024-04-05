@@ -62,9 +62,17 @@ const AddChallenge = ({ history, loading }) => {
             participantType,
             type,
             friendlyType: type,
-            level,
+            level: parseInt(level),
             createdBy: 'ADMIN',
             challengeQuestions: questionList
+        }
+        if (type === 'MULTIPLE_CHOICE') {
+            createChallengeRequest.optionAnswers = {}
+            for (const question of questionList) { 
+                const answers = question.multipleChoiceQuestion.options.filter(option => option.checked || option.value == checkedOption)
+                console.log('question', question, 'answers ', answers)
+                createChallengeRequest.optionAnswers[question.title] = answers
+            } 
         }
         dispatch(createChallenge(createChallengeRequest, () => {
             history.push('/challenges')
@@ -126,7 +134,7 @@ const AddChallenge = ({ history, loading }) => {
             case 'MULTIPLE_CHOICE':
             default:
                 return <form className='add-question-form'>
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb-4 d-flex flex-column align-items-start">
                         <label htmlFor="title">Title<span className="text-danger">*</span></label>
                         <input 
                         type='text' className='form-control' id="title" name="title" 
@@ -136,7 +144,7 @@ const AddChallenge = ({ history, loading }) => {
                     
                         <span className="text-danger"> { errors[questionTitle] && errors[questionTitle] }</span>
                     </div>
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb-4 d-flex flex-column align-items-start">
                         <label htmlFor="category">Category<span className="text-danger">*</span></label>
                         <input 
                         type='text' className='form-control' id="category" name="category" 
@@ -147,7 +155,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[questionCategory] && errors[questionCategory] }</span>
                     </div>
 
-                    <div className="form-group my-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb-4 d-flex flex-column align-items-start">
                         <label htmlFor="difficultyLevel">Difficulty Level<span className="text-danger">*</span></label>
                         <select
                         id="difficultyLevel"
@@ -164,7 +172,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[difficultyLevel] && errors[difficultyLevel] }</span>
                     </div>
 
-                    <div className="form-group my-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb-4 d-flex flex-column align-items-start">
                         <label htmlFor="optionType">Option Type<span className="text-danger">*</span></label>
                         <select
                         id="languageSelect"
@@ -181,7 +189,7 @@ const AddChallenge = ({ history, loading }) => {
                     </div>
 
                     {options.map((option, index) => (
-                        <div key={index} className="form-group my-3 d-flex flex-row align-items-center">
+                        <div key={index} className="form-group mb-4 d-flex flex-row align-items-center">
                             <input
                                 type={optionType === 'RADIO' ? 'radio' : 'checkbox'}
                                 id={`option-${index}`}
@@ -199,22 +207,23 @@ const AddChallenge = ({ history, loading }) => {
                                 onChange={(e) => {
                                     const updatedOptions = [...options];
                                     updatedOptions[index].title = e.target.value;
+                                    updatedOptions[index].value = e.target.value;
                                     setOptions(updatedOptions);
                                 }}
                                 placeholder={`Option ${index + 1}`}
                             />
                             {/* <label className='mb-0 ml-2' htmlFor={`option-${index}`}>{`Option ${index + 1}`}</label> */}
-                            <div type="button" className='pointer ml-2' onClick={() => handleRemoveOption(index)}>
+                            <div type="button" className='pointer ml-2 ' onClick={() => handleRemoveOption(index)}>
                                 <i class="bi bi-dash-lg"></i>
                             </div>
                         </div>
                     ))}
-                    <div className='pointer' type="button" onClick={handleAddOption}>
-                        <i class="bi bi-plus-lg"></i>
+                    <div className='pointer mb45' style={{ fontSize: '14px'}} type="button" onClick={handleAddOption}>
+                        <i class="bi bi-plus-lg mr-1"></i>
                         Add Option
                     </div>
 
-                    <div className='form-group my-3 d-flex flex-column align-items-start'>
+                    <div className='form-group mb45 d-flex flex-column align-items-start'>
                         <button
                         type="button"
                         className="btn btn-lg btn-block btn-cool"
@@ -234,23 +243,20 @@ const AddChallenge = ({ history, loading }) => {
     }
 
     console.log('works')
-    return <div className='col-lg-12 card my-4 mx-2 p-2'>
-        <div className='row mt-3'>
-            <div className='col-lg-3'>
-                <h3 style={{ fontSize: '24px'}}>Create Challenge</h3>
-            </div>
-
-            <div className='col-lg-2 mx-0'>
-                <div className='d-flex align-items-center justify-content-center' style={{ height: '25px', color: 'var(--Grey-grey-500, #333)', background: 'var(--Grey-grey-100, #C0C0C0)', borderRadius: '4px', fontSize: '14px'}}>
+    return <div className='col-lg-12 card my-1 mx-2 p-2'>
+        <div className='row my-3'>
+            <div className='col-lg-5 d-flex ml-4'>
+                <h3 className='mb-0' style={{ fontSize: '24px'}}>Create Challenge</h3>
+                <div className='d-flex align-items-center justify-content-center ml-4 p-2 mb-0' style={{ height: '25px', color: 'var(--Grey-grey-500, #333)', background: 'var(--Grey-grey-100, #C0C0C0)', borderRadius: '4px', fontSize: '14px'}}>
                    { type === 'MULTIPLE_CHOICE' ? 'Multiple Choice' : 'Algorithmic'} 
                 </div>
             </div>
         </div>
-        <div className='row p-4'>
+        <div className='row mt-3 p-4'>
             <div className='col-lg-7'>
                 <form onSubmit={handleCreateChallenge} className='add-challenge-form'>
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
-                        <label htmlFor="title">Challenge Title<span className="text-danger">*</span></label>
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
+                        <label htmlFor="title" style={{ fontWeight: '400', fontStyle: 'normal', fontSize: '16px', lineHeight: 'normal'}}>Challenge Title<span className="text-danger">*</span></label>
                         <input 
                         type='text' className='form-control' id="title" name="title" 
                         placeholder="Enter challenge title" value={title} onChange={({ target }) => {
@@ -259,7 +265,7 @@ const AddChallenge = ({ history, loading }) => {
                     
                         <span className="text-danger"> { errors[title] && errors[title] }</span>
                     </div>
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
                         <label htmlFor="title">Instruction<span className="text-danger">*</span></label>
                         <textarea 
                         rows={7}
@@ -271,7 +277,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[instruction] && errors[instruction] }</span>
                     </div>
 
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
                         <label htmlFor="category">Category<span className="text-danger">*</span></label>
                         <input 
                         type='text' className='form-control' id="category" name="category" 
@@ -282,7 +288,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[category] && errors[category] }</span>
                     </div>
 
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
                         <label htmlFor="participantType">Challenge Mode<span className="text-danger">*</span></label>
                         <select
                         id="languageSelect"
@@ -298,7 +304,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[participantType] && errors[participantType] }</span>
                     </div>
 
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
                         <label htmlFor="duration">Duration<span className="text-danger">*</span></label>
                         <input 
                         type='text' className='form-control' id="duration" name="duration" 
@@ -309,7 +315,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[duration] && errors[duration] }</span>
                     </div>
 
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
                         <label htmlFor="level">Level<span className="text-danger">*</span></label>
                         <input 
                         type='text' className='form-control' id="level" name="level" 
@@ -320,7 +326,7 @@ const AddChallenge = ({ history, loading }) => {
                         <span className="text-danger"> { errors[level] && errors[level] }</span>
                     </div>
 
-                    <div className="form-group mb-3 d-flex flex-column align-items-start">
+                    <div className="form-group mb45 d-flex flex-column align-items-start">
                         <label htmlFor="level" className='pointer' onClick={() => setShowAddQuestionModal(true)}>
                             <i class="bi bi-plus-lg mr-2"></i>
                             Add Challenge Question
@@ -329,7 +335,7 @@ const AddChallenge = ({ history, loading }) => {
                     </div>
                 </form>
             </div>
-            <div className='col-lg-5 challenge-preview'>
+            <div className='offset-lg-1 col-lg-4 challenge-preview'>
                 <div className='row'>
                     <div className='col-lg-12 card px-0' style={{ height: '539px', overflow: 'auto'}}>
                         <div className='card-header' style={{ fontSize: '20px'}}>{ title || 'Challenge Preview' }</div>
@@ -337,7 +343,7 @@ const AddChallenge = ({ history, loading }) => {
                             <div className='instruction'>
                                 <div style={{ fontSize: '20px', fontWeight: '500'}}>Instruction</div>
                                 <div className='mt-3' style={{ fontWeight: 'normal', fontSize: '16px'}}>
-                                    { instruction || 'Welcome to the Time Complexity Quiz! Test your knowledge of algorithm time complexities with these multiple-choice questions. Choose the correct answer for each question and see how well you understand th' }
+                                    { instruction || 'Welcome to the Time Complexity Quiz! Test your knowledge of algorithm time complexities with these multiple-choice questions. Choose the correct answer for each question and see how well you understand.' }
                                 </div>
                             </div>
                             {
@@ -356,7 +362,7 @@ const AddChallenge = ({ history, loading }) => {
                         </div>
                     </div>
                 </div>
-                <div className='row my-3'>
+                <div className='row mt45'>
                     <div className='col-lg-12 px-0'>
                     <button
                         className="btn btn-lg btn-block btn-cool"

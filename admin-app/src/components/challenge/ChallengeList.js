@@ -85,13 +85,15 @@ const ChallengeList = ({ loading, total, challenges }) => {
         }, 3000)
     }
 
+    const isFirstInRow = (currentIndex) => currentIndex % 3 === 0
+
     console.log('from abpve component', selectedUserIds)
     return (
-        <div className='mt-5 challenge'>
+        <div className='mt-4 challenge'>
             <div className='challenge-header d-flex justify-content-between px-3'>
                 <h1 className='f-32 mb-0 d-flex align-items-center'>Challenges</h1>
                 <div className="btn-group">
-                    <button type="button" className="btn btn-cool" style={{ height: '40px' }} onClick={() => {
+                    <button type="button" className="btn btn-cool mr-3" style={{ height: '40px' }} onClick={() => {
                         setShowQuestionStyle(true)
                     }} >
                         Create New Challenge
@@ -101,7 +103,7 @@ const ChallengeList = ({ loading, total, challenges }) => {
             <div className='row mt-3 px-3'>
                 {
                     challenges && challenges.length > 0 ? 
-                        challenges.map(challenge => (<Challenge challenge={challenge} />)) : (
+                        challenges.map((challenge, index) => (<Challenge challenge={challenge} isFirstInRow={isFirstInRow(index)} />)) : (
                             <div className='p-3'>No challenges have been created</div>
                         )
                 }

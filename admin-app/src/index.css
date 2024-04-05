@@ -103,11 +103,11 @@ input, select {
     box-shadow: none !important;
 }
 
-input {
+input, textarea {
   font-size: 14px !important;
 }
 
-input::placeholder {
+input::placeholder, textarea::placeholder {
   font-size: 14px; /* Adjust the font size as needed */
 }
 
@@ -373,24 +373,24 @@ iframe[title='Sign in with Google Button'] {
   margin-right: 8px;
 }
 
-.sidebar-container li:hover, .sidebar-container li div:hover {
-  background-color: #fff;
+li.side-nav-link:hover, li.side-nav-link div:hover {
+  /* background-color: #fff;
   color: #161f2e;
   fill: #161f2e;
   border-radius: 6px;
-  transition: fill 0.5s ease;
+  transition: fill 0.5s ease; */
 }
 
 
-.sidebar-container li:hover {
-  background-color: #fff;
+li.side-nav-link:hover {
+  /* background-color: #fff;
   color: #161f2e;
   fill: #161f2e;
   border-radius: 6px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; */
 }
 
-.sidebar-container li:hover svg {
+li.side-nav-link:hover svg {
   color: #161f2e !important;
   fill: #161f2e !important;
   transition: fill 0.5s ease;
@@ -408,4 +408,12 @@ iframe[title='Sign in with Google Button'] {
 .challenge-preview .questions ol li::before {
   content: counter(list-counter, upper-alpha) "). ";
   counter-increment: list-counter;
+}
+
+.mb45 {
+  margin-bottom: 30px !important;
+}
+
+.mt45 {
+  margin-top: 30px !important;
 }
