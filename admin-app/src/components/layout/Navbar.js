@@ -5,6 +5,9 @@ import { logOutUser } from '../../redux/actions/authedActions';
 import { googleLogout } from '@react-oauth/google';
 
 class Navbar extends Component {
+    state = {
+        searchInput: ''
+    }
     handleLogOut = e => {
         const { history } = this.props;
         googleLogout();
@@ -13,6 +16,7 @@ class Navbar extends Component {
 
     render() {
         const { loggedInUser } = this.props;
+        const { searchInput } = this.state
         return (
             <nav className="navbar navbar-expand-lg navbar-light text-white sticky-top bg-cool px-5" style={{ background: '#ccc' }} >
                 <div className='container-fluid px-0' >
@@ -25,22 +29,15 @@ class Navbar extends Component {
 
                     <div className="collapse navbar-collapse navbar-rel-links justify-content-center" id="navbarSupportedContent">
                         {loggedInUser && (
-                            <ul className="navbar-nav mr-auto">
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/home'>Home</Link>
-                                </li>
-                                <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Challenges
-                                    </a>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <Link className="dropdown-item text-cool" to="/challenges" style={{ color: '#212529'}}>My Challenges</Link>
-                                        <Link to='/challenge-invites' className="dropdown-item text-cool"  style={{ color: '#212529'}}>Challenge Invites</Link>
+                            <ul className="navbar-nav ml-5" style={{ marginLeft: '0 40px !important'}}>
+                                {/* <li className="nav-item" style={{ width: '400px'}}>
+                                    <div className="input-icon w-100">
+                                        <i className="bi bi-lock"></i>
+                                        <input type={'text'} className='form-control password-input' id="searchInput" name="searchInput" value={searchInput} onChange={({ target })  => this.setState({ searchInput: target.value })} 
+                                        placeholder='Search here' />
                                     </div>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/leaderboard'>Leaderboard</Link>
-                                </li>
+                                </li> */}
+                                
                             </ul>
                         )}
                         <ul className='navbar-nav ml-auto'>

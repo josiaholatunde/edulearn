@@ -23,8 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,12 +46,18 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private int defaultMultipleChoiceQuestions;
 
     @Override
-    public Page<ChallengeDTO> getChallenges(PageRequest pageRequest) {
-        UserDetails userDetails = userService.getLoggedInUser();
-        StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
-        Page<Challenge> challenges = challengeRepository
-                .findAllByStudentUserAndLevelOrCreatedBy(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
+    public Page<ChallengeDTO> getChallenges(PageRequest pageRequest, RoleType createdBy) {
+        Page<Challenge> challenges = null;
+        if (createdBy == RoleType.ADMIN) {
+            challenges = challengeRepository.findAllByCreatedBy(createdBy, pageRequest);
+        } else {
+            UserDetails userDetails = userService.getLoggedInUser();
+            StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
+             challenges = challengeRepository
+                    .findAllByStudentUserAndLevelOrCreatedBy(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
+        }
+
 
         List<ChallengeDTO> challengesDTO = challenges
                 .stream()
@@ -74,6 +78,22 @@ public class ChallengeServiceImpl implements ChallengeService  {
         assignChallengeQuestions(challenge);
 
         return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    @Override
+    @Transactional
+    public ChallengeDTO createChallengeAndQuestions(ChallengeDTO challengeDTO) {
+
+        Challenge challenge = createChallengeFromRequest(challengeDTO, challengeDTO.getCreatedBy() == RoleType.ADMIN ? null : retrieveStudentUser());
+
+        saveChallengeQuestions(challenge, challengeDTO);
+
+        return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {
+        challenge.setChallengeQuestions(challengeDTO.getChallengeQuestions());
+        return challengeRepository.save(challenge);
     }
 
     private void sendPushNotificationToParticipants(List<String> userEmails, String message) {
@@ -107,12 +127,20 @@ public class ChallengeServiceImpl implements ChallengeService  {
         }
         challenge.setTitle(challengeTitle);
         challenge.setCategory(challengeDTO.getCategory() == null ? "random" : challengeDTO.getCategory());
-        challenge.setStudentUser(studentUser);
+
+        if (challengeDTO.getCreatedBy() == RoleType.STUDENT_USER) {
+            challenge.setStudentUser(studentUser);
+        }
+
+        challenge.setCreatedBy(challengeDTO.getCreatedBy());
+
         challenge.setFriendlyType(challengeDTO.getFriendlyType());
         challenge.setType(challengeDTO.getType());
-        challenge.setCreatedBy(studentUser.getUser().getRoleType());
-        challenge.setLevel(studentUser.getLevel());
-        challenge.setStartDate(Timestamp.from(Instant.now()));
+        if (studentUser != null) {
+            challenge.setLevel(studentUser.getLevel());
+        } else {
+            challenge.setLevel(challenge.getLevel());
+        }
         challenge.setChallengeStatus(ChallengeStatus.NOT_STARTED);
         challenge.setParticipantType(challengeDTO.getParticipantType());
         return challengeRepository.save(challenge);
@@ -155,6 +183,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         return studentUserRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
     }
+
 
 
     @Override

@@ -6,6 +6,7 @@ import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
+import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.ChallengeSubmissionService;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,9 @@ public class ChallengeController {
     private final ChallengeSubmissionService challengeSubmissionService;
 
     @GetMapping
-    public Page<ChallengeDTO> getAllChallenges(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public Page<ChallengeDTO> getAllChallenges(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) RoleType createdBy) {
 
-        return challengeService.getChallenges(PageRequest.of(page, size));
+        return challengeService.getChallenges(PageRequest.of(page, size), createdBy);
     }
 
 

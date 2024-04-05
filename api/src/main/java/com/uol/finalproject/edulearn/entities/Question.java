@@ -41,7 +41,7 @@ public class Question extends BaseAuditableModel {
     @OneToOne(mappedBy = "question")
     private AlgorithmQuestion algorithmQuestion;
 
-    @OneToOne(mappedBy = "question")
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
     private MultipleChoiceQuestion multipleChoiceQuestion;
 
 

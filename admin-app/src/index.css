@@ -395,3 +395,17 @@ iframe[title='Sign in with Google Button'] {
   fill: #161f2e !important;
   transition: fill 0.5s ease;
 }
+
+.fw-500 {
+  font-weight: 500;
+}
+
+.challenge-preview .questions ol {
+  counter-reset: list-counter;
+  list-style: none;
+}
+
+.challenge-preview .questions ol li::before {
+  content: counter(list-counter, upper-alpha) "). ";
+  counter-increment: list-counter;
+}

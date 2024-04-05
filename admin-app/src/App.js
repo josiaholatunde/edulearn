@@ -50,10 +50,8 @@ function App() {
         <WebSocket />
           <Switch>
             <Route path='/login' exact component={SignIn} />
-            {/* <Route path='/home' exact component={HomePage} /> */}
             <Route path='/register' exact component={Register} />
             <Route component={AuthenticatedApp} />
-            <Route component={NotFound} />
           </Switch>
       </Router>
     </div>

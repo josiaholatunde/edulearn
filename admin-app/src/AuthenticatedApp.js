@@ -25,6 +25,9 @@ import HomePage from './components/layout/HomePage';
 import WebSocket from './components/web-socket/WebSocket';
 import Sidebar from './components/layout/Sidebar';
 import Settings from './components/settings/Settings';
+import ChallengeList from './components/challenge/ChallengeList';
+import QuestionsList from './components/question/QuestionsList';
+import AddChallenge from './components/challenge/AddChallenge';
 
 
 const token = localStorage.getItem('token');
@@ -45,8 +48,21 @@ function AuthenticatedApp() {
   return (
   
       <Router>
-        <div className="container-fluid pl-0">
+        <div className="container-fluid pl-0 d-flex">
           <Sidebar />
+          <div className='py-3 px-4' style={{ width: '80%'}}>
+          <Switch>
+            <Route path='/home' exact component={HomePage} />
+            <Route path="/dashboard" exact component={HomePage} />
+            <Route path="/leaderboard" exact component={Leaderboard} />
+            <Route path="/challenges" exact component={ChallengeList} />
+            <Route path="/challenges/add" exact component={AddChallenge} />
+            <Route path="/questions" exact component={QuestionsList} />
+            <Route path="/settings" exact component={Settings} />
+            <Route component={NotFound} />
+          </Switch>
+          </div>
+
         </div>
       </Router>
   );
