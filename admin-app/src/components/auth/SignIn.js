@@ -54,7 +54,7 @@ const SignIn = ({ history, location, loading }) => {
 
   return (
     <div className="row">
-      <div className="col-lg-6 offset-lg-3">
+      <div className="col-lg-5 offset-lg-4">
         <div className="card mt-5 text-center">
           <div className="card-header">
             <h3 className="card-header-main">Welcome Back!</h3>

@@ -46,12 +46,12 @@ if (token && user && Object.keys(user).length > 0) {
   })
 }
 
-function AuthenticatedApp() {
+function AuthenticatedApp({ history}) {
   return (
   
       <Router>
         <div className="container-fluid pl-0 d-flex">
-          <Sidebar />
+          <Sidebar history={history}/>
           <div className='py-3 px-4' style={{ width: '80%'}}>
           <Switch>
             <Route path='/home' exact component={HomePage} />

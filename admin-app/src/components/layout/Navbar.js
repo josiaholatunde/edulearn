@@ -17,6 +17,7 @@ class Navbar extends Component {
     render() {
         const { loggedInUser } = this.props;
         const { searchInput } = this.state
+        console.log('logg user', loggedInUser)
         return (
             <nav className="navbar navbar-expand-lg navbar-light text-white sticky-top bg-cool px-5" style={{ background: '#ccc' }} >
                 <div className='container-fluid px-0' >
@@ -47,13 +48,19 @@ class Navbar extends Component {
                                         <a className="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             
                                                 {loggedInUser.studentUser && loggedInUser.studentUser.imageUrl ? (
-                                                    <div className="navbar-img-container">
-                                                    <img
-                                                        src={loggedInUser.studentUser.imageUrl}
-                                                        alt="avatar"
-                                                        className="img-fluid rounded-circle"
-                                                    />
-                                                    </div>
+                                                    <Fragment>
+                                                        <div className="navbar-img-container">
+                                                        <img
+                                                            src={loggedInUser.studentUser.imageUrl}
+                                                            alt="avatar"
+                                                            className="img-fluid rounded-circle"
+                                                        />
+                                                        </div>
+                                                        <div className='ml-2'>
+                                                            <span style={{ fontSize: '14px'}}>{ loggedInUser?.username }</span>
+                                                            <div style={{ fontSize: '12px'}}>Admin Manager</div>
+                                                        </div>
+                                                    </Fragment>
                                                 ) : (
                                                     <i className="bi bi-person-circle"></i>
                                                 )}
@@ -61,7 +68,6 @@ class Navbar extends Component {
                                         </a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                             <Link to='/profile' className="dropdown-item text-cool"  style={{ color: '#212529'}}>Profile</Link>
-                                            <Link className="dropdown-item text-cool" to="/challenges" style={{ color: '#212529'}}>My Challenges</Link>
                                             <button  type='button'  className='dropdown-item btn btn-outline-light' onClick={this.handleLogOut} >
                                                 <i className="bi bi-box-arrow-right mr-2"></i>
                                                 Logout
