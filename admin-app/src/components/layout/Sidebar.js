@@ -28,12 +28,12 @@ const Sidebar = ({ history }) => {
                 </NavLink>
             </li>
             <li className='side-nav-link'>
-                <div activeclassName='active-link text-white' to={'/leaderboard'} className='text-white'>
+                <NavLink activeclassName='active-link text-white' to={'/leaderboard'} className='text-white'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M2 21V9H7.5V21H2ZM9.25 21V3H14.75V21H9.25ZM16.5 21V11H22V21H16.5Z" fill="#fff"/>
                 </svg>
                     <span>Leaderboard</span>
-                </div>
+                </NavLink>
             </li>
             <li className='side-nav-link'>
                 <NavLink activeclassName='active-link text-white' to={'/challenges'} className='text-white'>

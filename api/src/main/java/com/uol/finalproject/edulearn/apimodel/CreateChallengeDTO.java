@@ -76,7 +76,7 @@ public class CreateChallengeDTO {
             if (ChallengeType.ALGORITHMS == challenge.getType()) {
                 populateSampleProgrammingLanguages(challenge);
             }
-            challengeDTO.setChallengeQuestions(challenge.getChallengeQuestions());
+//            challengeDTO.setChallengeQuestions(challenge.getChallengeQuestions());
         }
         return challengeDTO;
     }

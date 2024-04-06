@@ -124,6 +124,121 @@ const AddChallenge = ({ history, loading }) => {
     }
 
 
+
+
+    const renderAddMultipleChoiceQuestionForm = () => {
+        return <form className='add-question-form'>
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="title">Title<span className="text-danger">*</span></label>
+            <input 
+            type='text' className='form-control' id="title" name="title" 
+            placeholder="Enter question title" value={questionTitle} onChange={({ target }) => {
+                setErrorIfEmpty(target.name, target.value)
+                setQuestionTitle(target.value) }}  />
+        
+            <span className="text-danger"> { errors[questionTitle] && errors[questionTitle] }</span>
+        </div>
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="category">Category<span className="text-danger">*</span></label>
+            <input 
+            type='text' className='form-control' id="category" name="category" 
+            placeholder="Enter question category" value={questionCategory} onChange={({ target }) => {
+                setErrorIfEmpty(target.name, target.value)
+                setQuestionCategory(target.value) }}  />
+        
+            <span className="text-danger"> { errors[questionCategory] && errors[questionCategory] }</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="difficultyLevel">Difficulty Level<span className="text-danger">*</span></label>
+            <select
+            id="difficultyLevel"
+            className='h-100 form-control'
+            name='difficultyLevel'
+            value={difficultyLevel}
+            onChange={({ target }) => setDifficultyLevel(target.value)}
+            >
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+        
+            <span className="text-danger"> { errors[difficultyLevel] && errors[difficultyLevel] }</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="optionType">Option Type<span className="text-danger">*</span></label>
+            <select
+            id="languageSelect"
+            className='h-100 form-control'
+            name='optionType'
+            value={optionType}
+            onChange={({ target }) => setOptionType(target.value)}
+            >
+            <option value="RADIO">Radio</option>
+            <option value="CHECKBOX">Checkbox</option>
+            </select>
+        
+            <span className="text-danger"> { errors[questionCategory] && errors[questionCategory] }</span>
+        </div>
+
+        {options.map((option, index) => (
+            <div key={index} className="form-group mb-4 d-flex flex-row align-items-center">
+                <input
+                    type={optionType === 'RADIO' ? 'radio' : 'checkbox'}
+                    id={`option-${index}`}
+                    name={optionType === 'RADIO' ? 'option': `option-${index}`}
+                    value={option.value}
+                    checked={type === 'RADIO' ? checkedOption === option.value : option.checked}
+                    onChange={(e) => handleOptionChange(e, index)}
+                />
+                <input
+                    type={'text'}
+                    id={`option-${index}`}
+                    name={`option-${index}`}
+                    value={option.title}
+                    className='form-control ml-2'
+                    onChange={(e) => {
+                        const updatedOptions = [...options];
+                        updatedOptions[index].title = e.target.value;
+                        updatedOptions[index].value = e.target.value;
+                        setOptions(updatedOptions);
+                    }}
+                    placeholder={`Option ${index + 1}`}
+                />
+                {/* <label className='mb-0 ml-2' htmlFor={`option-${index}`}>{`Option ${index + 1}`}</label> */}
+                <div type="button" className='pointer ml-2 ' onClick={() => handleRemoveOption(index)}>
+                    <i class="bi bi-dash-lg"></i>
+                </div>
+            </div>
+        ))}
+        <div className='pointer mb45' style={{ fontSize: '14px'}} type="button" onClick={handleAddOption}>
+            <i class="bi bi-plus-lg mr-1"></i>
+            Add Option
+        </div>
+
+        <div className='form-group mb45 d-flex flex-column align-items-start'>
+            <button
+            type="button"
+            className="btn btn-lg btn-block btn-cool"
+            style={{ fontSize: '16px'}}
+            onClick={handleAddQuestion}
+            >
+            
+                {   
+                    loading ? (<span className="spinner-border spinner-border-sm mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>)
+                    :  <i className="bi bi-box-arrow-in-right mr12" id="login-btn-icon"></i> 
+                }
+                Add Question
+            </button>
+        </div>
+    </form>
+    }
+
+
+    
+
+
     const renderQuestionForm = (type) => {
 
         switch(type) {
@@ -133,112 +248,7 @@ const AddChallenge = ({ history, loading }) => {
                 </form>
             case 'MULTIPLE_CHOICE':
             default:
-                return <form className='add-question-form'>
-                    <div className="form-group mb-4 d-flex flex-column align-items-start">
-                        <label htmlFor="title">Title<span className="text-danger">*</span></label>
-                        <input 
-                        type='text' className='form-control' id="title" name="title" 
-                        placeholder="Enter question title" value={questionTitle} onChange={({ target }) => {
-                            setErrorIfEmpty(target.name, target.value)
-                            setQuestionTitle(target.value) }}  />
-                    
-                        <span className="text-danger"> { errors[questionTitle] && errors[questionTitle] }</span>
-                    </div>
-                    <div className="form-group mb-4 d-flex flex-column align-items-start">
-                        <label htmlFor="category">Category<span className="text-danger">*</span></label>
-                        <input 
-                        type='text' className='form-control' id="category" name="category" 
-                        placeholder="Enter question category" value={questionCategory} onChange={({ target }) => {
-                            setErrorIfEmpty(target.name, target.value)
-                            setQuestionCategory(target.value) }}  />
-                    
-                        <span className="text-danger"> { errors[questionCategory] && errors[questionCategory] }</span>
-                    </div>
-
-                    <div className="form-group mb-4 d-flex flex-column align-items-start">
-                        <label htmlFor="difficultyLevel">Difficulty Level<span className="text-danger">*</span></label>
-                        <select
-                        id="difficultyLevel"
-                        className='h-100 form-control'
-                        name='difficultyLevel'
-                        value={difficultyLevel}
-                        onChange={({ target }) => setDifficultyLevel(target.value)}
-                        >
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
-                    
-                        <span className="text-danger"> { errors[difficultyLevel] && errors[difficultyLevel] }</span>
-                    </div>
-
-                    <div className="form-group mb-4 d-flex flex-column align-items-start">
-                        <label htmlFor="optionType">Option Type<span className="text-danger">*</span></label>
-                        <select
-                        id="languageSelect"
-                        className='h-100 form-control'
-                        name='optionType'
-                        value={optionType}
-                        onChange={({ target }) => setOptionType(target.value)}
-                        >
-                        <option value="RADIO">Radio</option>
-                        <option value="CHECKBOX">Checkbox</option>
-                        </select>
-                    
-                        <span className="text-danger"> { errors[questionCategory] && errors[questionCategory] }</span>
-                    </div>
-
-                    {options.map((option, index) => (
-                        <div key={index} className="form-group mb-4 d-flex flex-row align-items-center">
-                            <input
-                                type={optionType === 'RADIO' ? 'radio' : 'checkbox'}
-                                id={`option-${index}`}
-                                name={optionType === 'RADIO' ? 'option': `option-${index}`}
-                                value={option.value}
-                                checked={type === 'RADIO' ? checkedOption === option.value : option.checked}
-                                onChange={(e) => handleOptionChange(e, index)}
-                            />
-                            <input
-                                type={'text'}
-                                id={`option-${index}`}
-                                name={`option-${index}`}
-                                value={option.title}
-                                className='form-control ml-2'
-                                onChange={(e) => {
-                                    const updatedOptions = [...options];
-                                    updatedOptions[index].title = e.target.value;
-                                    updatedOptions[index].value = e.target.value;
-                                    setOptions(updatedOptions);
-                                }}
-                                placeholder={`Option ${index + 1}`}
-                            />
-                            {/* <label className='mb-0 ml-2' htmlFor={`option-${index}`}>{`Option ${index + 1}`}</label> */}
-                            <div type="button" className='pointer ml-2 ' onClick={() => handleRemoveOption(index)}>
-                                <i class="bi bi-dash-lg"></i>
-                            </div>
-                        </div>
-                    ))}
-                    <div className='pointer mb45' style={{ fontSize: '14px'}} type="button" onClick={handleAddOption}>
-                        <i class="bi bi-plus-lg mr-1"></i>
-                        Add Option
-                    </div>
-
-                    <div className='form-group mb45 d-flex flex-column align-items-start'>
-                        <button
-                        type="button"
-                        className="btn btn-lg btn-block btn-cool"
-                        style={{ fontSize: '16px'}}
-                        onClick={handleAddQuestion}
-                        >
-                        
-                            {   
-                                loading ? (<span className="spinner-border spinner-border-sm mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>)
-                                :  <i className="bi bi-box-arrow-in-right mr12" id="login-btn-icon"></i> 
-                            }
-                            Add Question
-                        </button>
-                    </div>
-                </form>
+                return renderAddMultipleChoiceQuestionForm()
         }
     }
 

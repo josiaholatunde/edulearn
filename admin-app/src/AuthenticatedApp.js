@@ -28,6 +28,7 @@ import Settings from './components/settings/Settings';
 import ChallengeList from './components/challenge/ChallengeList';
 import QuestionsList from './components/question/QuestionsList';
 import AddChallenge from './components/challenge/AddChallenge';
+import LeaderboardList from './components/leaderboard/LeaderboardList';
 
 
 const token = localStorage.getItem('token');
@@ -54,7 +55,7 @@ function AuthenticatedApp() {
           <Switch>
             <Route path='/home' exact component={HomePage} />
             <Route path="/dashboard" exact component={HomePage} />
-            <Route path="/leaderboard" exact component={Leaderboard} />
+            <Route path="/leaderboard" exact component={LeaderboardList} />
             <Route path="/challenges" exact component={ChallengeList} />
             <Route path="/challenges/add" exact component={AddChallenge} />
             <Route path="/questions" exact component={QuestionsList} />

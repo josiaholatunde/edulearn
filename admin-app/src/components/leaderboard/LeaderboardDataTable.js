@@ -39,7 +39,7 @@ const LeaderboardDataTable = ({ users, currentPage, setCurrentPage, loading, tot
             columns={columns}
             dataSource={users}
             pagination={{ 
-              pageSize: 5,
+              pageSize: 10,
               current: currentPage,
               onChange: setCurrentPage,
               total: totalItems

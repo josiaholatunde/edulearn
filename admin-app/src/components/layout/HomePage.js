@@ -29,7 +29,6 @@ const HomePage = ({ history, user, challengeInvites }) => {
         <div className='row mt-5'>
             <div className='col-lg-5 pl-0'>
                 <div className='content d-flex align-items-center'>
-                    <div className='avatar' style={{ background: 'black', borderRadius: '50%', height: '100px', width: '100px' }}></div>
                     <h2>Home Page</h2>
                 </div>
             </div>
