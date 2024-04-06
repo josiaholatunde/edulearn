@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.controllers;
 
+import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.request.LoginRequestDTO;
 import com.uol.finalproject.edulearn.apimodel.request.RegisterStudentUserDTO;
 import com.uol.finalproject.edulearn.apimodel.response.BaseApiResponseDTO;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/categories")
+@WrapResponse
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -25,5 +27,18 @@ public class CategoryController {
     }
 
     @PostMapping
-    public
+    public Category createCategory(@RequestBody Category category) {
+        return categoryService.createCategory(category);
+    }
+
+    @PutMapping
+    public Category updateCategory(@RequestBody Category category) {
+        return categoryService.updateCategory(category);
+    }
+
+
+    @DeleteMapping("{categoryId}")
+    public void deleteCategory(@PathVariable long categoryId) {
+        categoryService.deleteCategory(categoryId);
+    }
 }

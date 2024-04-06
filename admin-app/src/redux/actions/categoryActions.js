@@ -1,13 +1,13 @@
 import { showNotification } from "../../utils/showNotification"
 import { hideLoading, showLoading } from "./shared"
-import { GET_LEADER_BOARD } from "./types"
+import { GET_CATEGORIES } from "./types"
 import axios from '../../utils/axiosConfig'
 
 
 
 export function fetchCategories(categories, total, page, size) {
     return {
-        type: GET_LEADER_BOARD,
+        type: GET_CATEGORIES,
         categories,
         total,
         page,
@@ -39,3 +39,69 @@ export const getCategories = ({ page, size, name }) => dispatch => {
     }, 1000)
 }
 
+
+
+export const createCategory = (categoryRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.post(`categories`, categoryRequest)
+            if (data) {
+                console.log('immm after call', data)
+                const categoryId = data?.data?.id
+                showNotification('success', 'Successfully created category')
+                if (callBack) callBack(categoryId)
+                dispatch(getCategories({ page: 1, size: 10}))
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while creating category')
+        }
+    }, 1000)
+}
+
+
+export const editCategory = (categoryRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.put(`categories`, categoryRequest)
+            if (data) {
+                console.log('immm after call', data)
+                const categoryId = data?.data?.id
+                showNotification('success', 'Successfully edited category')
+                if (callBack) callBack(categoryId)
+                dispatch(getCategories({ page: 1, size: 10}))
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while editing category')
+        }
+    }, 1000)
+}
+
+
+export const deleteCategory = (categoryRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.delete(`categories/${categoryRequest?.id}`)
+            if (data) {
+                console.log('immm after call', data)
+                const categoryId = data?.data?.id
+                showNotification('success', 'Successfully deleted category')
+                if (callBack) callBack(categoryId)
+                dispatch(getCategories({ page: 1, size: 10}))
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while deleting category')
+        }
+    }, 1000)
+}
