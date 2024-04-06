@@ -17,15 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MultipleChoiceOptionDTO {
 
-    private Long id;
     private String title;
 
-    private String category;
-
-    private QuestionType type;
-
-    private int level;
-
-    @Builder.Default
-    private List<MultipleChoiceAnswer> answerList = new ArrayList<>();
+    private String value;
 }

@@ -236,7 +236,7 @@ const AddChallenge = ({ history, loading }) => {
     }
 
 
-    
+
 
 
     const renderQuestionForm = (type) => {

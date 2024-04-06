@@ -1,10 +1,7 @@
 package com.uol.finalproject.edulearn.apimodel;
 
 
-import com.uol.finalproject.edulearn.entities.Challenge;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceAnswer;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
-import com.uol.finalproject.edulearn.entities.Question;
+import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
@@ -16,6 +13,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -34,8 +32,20 @@ public class QuestionDTO {
 
     private QuestionType type;
 
+    private String difficultyLevel;
+
     private int level;
+    private int noOfUsersLiked = 0;
+
+    private MultipleChoiceQuestionDTO multipleChoiceQuestion;
 
     @Builder.Default
     private List<MultipleChoiceAnswer> answerList = new ArrayList<>();
+
+
+    public static QuestionDTO fromQuestion(Question question) {
+        QuestionDTO questionDTO = QuestionDTO.builder().build();
+        BeanUtils.copyProperties(question, questionDTO);
+        return questionDTO;
+    }
 }

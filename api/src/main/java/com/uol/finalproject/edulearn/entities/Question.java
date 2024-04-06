@@ -27,6 +27,9 @@ public class Question extends BaseAuditableModel {
     @Builder.Default
     private int level = 10;
 
+    @Column(name = "difficulty_level")
+    private String difficultyLevel;
+
     @Builder.Default
     @Column(name = "no_of_users_liked")
     private int noOfUsersLiked = 0;

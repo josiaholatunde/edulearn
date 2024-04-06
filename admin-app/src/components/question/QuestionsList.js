@@ -1,13 +1,73 @@
-import React from 'react'
+import React, { Fragment, useEffect, useState } from 'react'
+import { connect, useDispatch } from 'react-redux';
+import { getQuestions } from '../../redux/actions/questionActions';
+import AddQuestionModal from './AddQuestionModal';
+import QuestionsDataTable from './QuestionsDataTable'
 
 
+const mapQuestions = (questions, currentPage, pageSize) => {
+    const pageStart = currentPage * pageSize;
+    return questions && questions?.map((question, index) => ({
+        key: index,
+        position: pageStart + (index + 1),
+        title: question?.title,
+        type: question?.type == 'MULTIPLE_CHOICE' ? 'Multiple Choice' : 'Algorithms',
+        level: question?.level || '10',
+        difficultyLevel: question?.difficultyLevel || 'N/A',
+        category: question?.category || 'N/A',
+        noOfUsersLiked: questions?.noOfUsersLiked || 0
+    }));
+};
 
-const QuestionsList = () => {
+const QuestionsList = ({ questionList, loading, total }) => {
+    const [page, setCurrentPage] = useState(1);
+    const [size, setSize] = useState(10);
+    const [showAddQuestionModal, setShowAddQuestionModal ] = useState(false)
 
 
+    const dispatch = useDispatch();
 
-    return <h3>Questions List</h3>
+
+    const handleCloseQuestionFormModal = () => {
+        setShowAddQuestionModal(false)
+    }
+
+    useEffect(() => {
+        dispatch(getQuestions({ page, size }));
+    }, [page])
+
+
+    return <Fragment>
+            <div className='row my-3'>
+                <div className='col-lg-5 d-flex align-items-center'>
+                    <h3 className='mb-0' style={{ fontSize: '24px'}}>Questions</h3>
+                </div>
+                <div className='col-lg-7 d-flex justify-content-end align-items-center'>
+                    <button className="btn btn-cool" type="button" onClick={() => setShowAddQuestionModal(true)} >
+                        <i class="bi bi-plus-lg mr-1"></i>
+                        Create Question
+                    </button>
+                </div>
+            </div>
+            <QuestionsDataTable 
+                questions={questionList} 
+                currentPage={page}
+                setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
+                loading={loading}
+                totalItems={total}
+            />
+            <AddQuestionModal 
+                handleCloseSuccessModal={handleCloseQuestionFormModal}
+                showQuestionModal={showAddQuestionModal}
+            />
+        </Fragment>
 }
 
-
-export default QuestionsList
+const mapStateToProps = ({ questions: { questions, total, currentPage, pageSize }, loading }) => ({
+    questionList: questions ? mapQuestions(questions, currentPage, pageSize) : [],
+    total,
+    currentPage,
+    pageSize,
+    loading
+});
+export default connect(mapStateToProps, { getQuestions })(QuestionsList)

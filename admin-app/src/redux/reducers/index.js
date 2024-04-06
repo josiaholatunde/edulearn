@@ -6,6 +6,7 @@ import leaderboardReducer from './leaderboardReducer.js'
 import challengeReducer from './challengeReducer.js'
 import challengeInvitesReducer from './challengeInviteReducer.js'
 import challengeParticipantsReducer from './challengeParticipantsReducer.js'
+import questionReducer from './questionReducer.js'
 
 
 export default combineReducers({
@@ -15,5 +16,6 @@ export default combineReducers({
     leaderboardUsers: leaderboardReducer,
     challenges: challengeReducer,
     challengeInvites: challengeInvitesReducer,
-    challengeParticipants: challengeParticipantsReducer
+    challengeParticipants: challengeParticipantsReducer,
+    questions: questionReducer
 })
