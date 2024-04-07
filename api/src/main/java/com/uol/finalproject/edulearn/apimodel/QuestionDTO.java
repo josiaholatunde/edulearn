@@ -38,6 +38,7 @@ public class QuestionDTO {
     private int noOfUsersLiked = 0;
 
     private MultipleChoiceQuestionDTO multipleChoiceQuestion;
+    private AlgorithmQuestionDTO algorithmQuestion;
 
     @Builder.Default
     private List<MultipleChoiceAnswer> answerList = new ArrayList<>();

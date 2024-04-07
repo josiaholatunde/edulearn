@@ -1,15 +1,11 @@
 package com.uol.finalproject.edulearn.services.impl;
 
+import com.uol.finalproject.edulearn.apimodel.AlgorithmSolutionDTO;
 import com.uol.finalproject.edulearn.apimodel.MultipleChoiceAnswerDTO;
 import com.uol.finalproject.edulearn.apimodel.QuestionDTO;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceAnswer;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceQuestion;
-import com.uol.finalproject.edulearn.entities.Question;
+import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
-import com.uol.finalproject.edulearn.repositories.MultipleChoiceOptionRepository;
-import com.uol.finalproject.edulearn.repositories.MultipleChoiceQuestionRepository;
-import com.uol.finalproject.edulearn.repositories.QuestionRepository;
+import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +26,10 @@ public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
     private final MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
+
+    private final AlgorithmQuestionRepository algorithmQuestionRepository;
+    private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
+
     @Override
     public Page<QuestionDTO> getQuestions(PageRequest pageRequest) {
 
@@ -63,6 +63,26 @@ public class QuestionServiceImpl implements QuestionService {
                         .build());
             }
             multipleChoiceQuestionRepository.save(multipleChoiceQuestion);
+
+        } else {
+            AlgorithmQuestion algorithmQuestion = AlgorithmQuestion.fromAlgorithmQuestionDTO(questionDTO.getAlgorithmQuestion());
+            algorithmQuestion.setQuestion(question);
+            algorithmQuestionRepository.save(algorithmQuestion);
+
+            List<AlgorithmQuestionExample> algorithmQuestionExamples = questionDTO.getAlgorithmQuestion().getExamples().stream().map(AlgorithmQuestionExample::fromQuestionExampleDTO).collect(Collectors.toList());
+            for (AlgorithmQuestionExample algorithmQuestionExample: algorithmQuestionExamples) {
+                algorithmQuestionExample.setAlgorithmQuestion(algorithmQuestion);
+            }
+            algorithmQuestionExampleRepository.saveAll(algorithmQuestionExamples);
+
+            for (AlgorithmSolutionDTO algorithmSolutionDTO: questionDTO.getAlgorithmQuestion().getSolutions()) {
+                AlgorithmSolution algorithmSolution = AlgorithmSolution.builder()
+                        .algorithmQuestion(algorithmQuestion)
+                        .build();
+                BeanUtils.copyProperties(algorithmSolutionDTO, algorithmSolution);
+                algorithmQuestion.getSolutions().add(algorithmSolution);
+            }
+            algorithmQuestionRepository.save(algorithmQuestion);
 
         }
         return QuestionDTO.fromQuestion(question);

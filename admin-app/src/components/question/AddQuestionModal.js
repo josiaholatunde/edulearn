@@ -19,6 +19,14 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
     const [questionTypeLoader, setQuestionTypeLoader ] = useState(false)
     const [errors, setErrors] = useState({})
 
+    const [introduction, setIntroduction] = useState('')
+    const [inputDescription, setInputDescription] = useState('')
+    const [outputDescription, setOutputDescription] = useState('')
+    const [methodName, setMethodName] = useState('')
+    const [methodArguments, setMethodArguments] = useState('')
+    const [methodReturnType, setMethodReturnType] = useState('')
+    const [examples, setExamples] = useState([{ input: '', output: '', explanation: '', inputArguments: '' }]);
+
 
     const dispatch = useDispatch()
 
@@ -81,6 +89,185 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
         setQuestionTitle('')
         setQuestionCategory('')
         setOptions([{  value: '', title: '' }])
+    }
+
+    const renderAlgorithmQuestionForm = () => {
+        return <form className='add-question-form'>
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="title">Title<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="title" name="title"
+                placeholder="Enter question title" value={questionTitle} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setQuestionTitle(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[questionTitle] && errors[questionTitle]}</span>
+        </div>
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="category">Category<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="category" name="category"
+                placeholder="Enter question category" value={questionCategory} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setQuestionCategory(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[questionCategory] && errors[questionCategory]}</span>
+        </div>
+      
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="level">Level<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="level" name="level"
+                placeholder="Enter question level" value={level} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setLevel(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[level] && errors[level]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="difficultyLevel">Difficulty Level<span className="text-danger">*</span></label>
+            <select
+                id="difficultyLevel"
+                className='h-100 form-control'
+                name='difficultyLevel'
+                value={difficultyLevel}
+                onChange={({ target }) => setDifficultyLevel(target.value)}
+            >
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select>
+
+            <span className="text-danger"> {errors[difficultyLevel] && errors[difficultyLevel]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="introduction">Introduction<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="introduction" name="introduction"
+                placeholder="Enter introduction" value={introduction} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setIntroduction(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[introduction] && errors[introduction]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="inputDescription">Input Description<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="introduction" name="introduction"
+                placeholder="Enter introduction description" value={inputDescription} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setInputDescription(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[inputDescription] && errors[inputDescription]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="outputDescription">Output Description<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="outputDescription" name="outputDescription"
+                placeholder="Enter output description" value={outputDescription} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setOutputDescription(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[outputDescription] && errors[outputDescription]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="methodName">Method Name<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="methodName" name="methodName"
+                placeholder="Enter method name" value={methodName} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setMethodName(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[methodName] && errors[methodName]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="methodArguments">Method Parameters<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="methodArguments" name="methodArguments"
+                placeholder="Enter method arguments" value={methodArguments} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setMethodArguments(target.value)
+                }}
+            />
+            <span className="text-danger"> {errors[methodArguments] && errors[methodArguments]}</span>
+        </div>
+
+        <div className="form-group mb-4 d-flex flex-column align-items-start">
+            <label htmlFor="methodReturnType">Method Return Type<span className="text-danger">*</span></label>
+            <input
+                type='text' className='form-control' id="methodReturnType" name="methodReturnType"
+                placeholder="Enter method arguments" value={methodReturnType} onChange={({ target }) => {
+                    setErrorIfEmpty(target.name, target.value)
+                    setMethodReturnType(target.value)
+                }} />
+
+            <span className="text-danger"> {errors[methodReturnType] && errors[methodReturnType]}</span>
+        </div>
+
+        {options.map((option, index) => (
+            <div key={index} className="form-group mb-4 d-flex flex-row align-items-center">
+                <input
+                    type={optionType === 'RADIO' ? 'radio' : 'checkbox'}
+                    id={`option-${index}`}
+                    name={optionType === 'RADIO' ? 'option' : `option-${index}`}
+                    value={option.value}
+                    checked={type === 'RADIO' ? checkedOption === option.value : option.checked}
+                    onChange={(e) => handleOptionChange(e, index)}
+                />
+                <input
+                    type={'text'}
+                    id={`option-${index}`}
+                    name={`option-${index}`}
+                    value={option.title}
+                    className='form-control ml-2'
+                    onChange={(e) => {
+                        const updatedOptions = [...options];
+                        updatedOptions[index].title = e.target.value;
+                        updatedOptions[index].value = e.target.value;
+                        setOptions(updatedOptions);
+                    }}
+                    placeholder={`Option ${index + 1}`}
+                />
+                {/* <label className='mb-0 ml-2' htmlFor={`option-${index}`}>{`Option ${index + 1}`}</label> */}
+                <div type="button" className='pointer ml-2 ' onClick={() => handleRemoveOption(index)}>
+                    <i class="bi bi-dash-lg"></i>
+                </div>
+            </div>
+        ))}
+        <div className='pointer mb45' style={{ fontSize: '14px' }} type="button" onClick={handleAddOption}>
+            <i class="bi bi-plus-lg mr-1"></i>
+            Add Option
+        </div>
+
+        <div className='form-group mb45 d-flex flex-column align-items-start'>
+            <button
+                type="button"
+                className="btn btn-lg btn-block btn-cool"
+                style={{ fontSize: '16px' }}
+                onClick={handleAddQuestion}
+            >
+
+                {
+                    loading ? (<span className="spinner-border spinner-border-sm mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>)
+                        : <i className="bi bi-box-arrow-in-right mr12" id="login-btn-icon"></i>
+                }
+                Add Question
+            </button>
+        </div>
+    </form>
     }
 
 
@@ -247,6 +434,10 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
     const renderAddQuestionForm = () => {
         console.log('type ', type)
         switch (type) {
+            case QUESTION_TYPE.ALGORITHMS:
+                return <div className='col-lg-12'>
+                { renderAlgorithmQuestionForm() }
+            </div>
             case QUESTION_TYPE.MULTIPLE_CHOICE:
                 return <div className='col-lg-12'>
                     { renderAddMultipleChoiceQuestionForm() }
@@ -261,7 +452,7 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
             <Modal.Title className='pl-3 text-center'>Create Question</Modal.Title>
         </Modal.Header>
         <Modal.Body className="w-100 pt-3 d-flex justify-content-center align-items-center">
-            <div className='row p-3 w-100'>
+            <div className='row p-2 w-100'>
             {
                 showQuestionTypeForm ? renderQuestionTypeForm() : renderAddQuestionForm()
             }
