@@ -56,7 +56,7 @@ class Navbar extends Component {
                                                             className="img-fluid rounded-circle"
                                                         />
                                                         </div>
-                                                        <div className='ml-2'>
+                                                        <div className='ml-2 text-left'>
                                                             <span style={{ fontSize: '14px'}}>{ loggedInUser?.username }</span>
                                                             <div style={{ fontSize: '12px'}}>Admin Manager</div>
                                                         </div>

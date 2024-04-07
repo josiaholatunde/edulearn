@@ -20,5 +20,6 @@ public class AlgorithmQuestionExampleDTO {
     private String output;
     private String explanation;
 
-    private LinkedHashMap<String, Object> inputArguments;
+    @Builder.Default
+    private LinkedHashMap<String, Object> inputArguments = new LinkedHashMap<>();
 }

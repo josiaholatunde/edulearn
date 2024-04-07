@@ -42,6 +42,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDTO createQuestion(QuestionDTO questionDTO) {
         Question question = Question.builder().build();
         BeanUtils.copyProperties(questionDTO, question);
+        question.setDifficultyLevel(question.getDifficultyLevel());
         questionRepository.save(question);
         if (questionDTO.getType() == QuestionType.MULTIPLE_CHOICE) {
             MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestion.fromMultipleChoiceQuestionDTO(questionDTO.getMultipleChoiceQuestion());
@@ -76,10 +77,10 @@ public class QuestionServiceImpl implements QuestionService {
             algorithmQuestionExampleRepository.saveAll(algorithmQuestionExamples);
 
             for (AlgorithmSolutionDTO algorithmSolutionDTO: questionDTO.getAlgorithmQuestion().getSolutions()) {
-                AlgorithmSolution algorithmSolution = AlgorithmSolution.builder()
-                        .algorithmQuestion(algorithmQuestion)
-                        .build();
+                AlgorithmSolution algorithmSolution = AlgorithmSolution.builder().build();
                 BeanUtils.copyProperties(algorithmSolutionDTO, algorithmSolution);
+                algorithmSolution.setAlgorithmQuestion(algorithmQuestion);
+
                 algorithmQuestion.getSolutions().add(algorithmSolution);
             }
             algorithmQuestionRepository.save(algorithmQuestion);

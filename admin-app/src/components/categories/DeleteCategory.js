@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { connect, useDispatch } from 'react-redux'
-import { createCategory, deleteCategory } from '../../redux/actions/categoryActions'
+import {  deleteCategory } from '../../redux/actions/categoryActions'
 import { Modal } from 'react-bootstrap'
 
 

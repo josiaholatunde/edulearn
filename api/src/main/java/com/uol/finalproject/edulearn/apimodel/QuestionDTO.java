@@ -2,20 +2,13 @@ package com.uol.finalproject.edulearn.apimodel;
 
 
 import com.uol.finalproject.edulearn.entities.*;
-import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
-import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
-import com.uol.finalproject.edulearn.entities.enums.RoleType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.BeanUtils;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 

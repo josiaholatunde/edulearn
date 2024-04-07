@@ -27,8 +27,10 @@ public class AlgorithmQuestionDTO {
     private String methodName;
     private JsonNode methodArguments;
 
+    @Builder.Default
     private List<AlgorithmQuestionExampleDTO> examples = new ArrayList<>();
 
+    @Builder.Default
     private List<AlgorithmSolutionDTO> solutions = new ArrayList<>();
 
     private String returnType;

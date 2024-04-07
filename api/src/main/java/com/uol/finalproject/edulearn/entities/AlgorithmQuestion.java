@@ -57,11 +57,13 @@ public class AlgorithmQuestion extends BaseAuditableModel {
     @JsonIgnore
     private Question question;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<AlgorithmQuestionExample> examples = new ArrayList<>();
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<AlgorithmSolution> solutions = new ArrayList<>();
 
     private String returnType;
@@ -75,7 +77,7 @@ public class AlgorithmQuestion extends BaseAuditableModel {
 
     public static AlgorithmQuestion fromAlgorithmQuestionDTO(AlgorithmQuestionDTO algorithmQuestionDTO) {
         AlgorithmQuestion algorithmQuestion = AlgorithmQuestion.builder().build();
-        BeanUtils.copyProperties(algorithmQuestion, algorithmQuestion);
+        BeanUtils.copyProperties(algorithmQuestionDTO, algorithmQuestion);
         return algorithmQuestion;
     }
 }

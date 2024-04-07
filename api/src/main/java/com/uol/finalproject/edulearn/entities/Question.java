@@ -119,4 +119,12 @@ public class Question extends BaseAuditableModel {
     public void setMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion) {
         this.multipleChoiceQuestion = multipleChoiceQuestion;
     }
+
+    public String getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(String difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
+    }
 }
