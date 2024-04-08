@@ -19,6 +19,7 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
     const [type, setQuestionType] = useState(QUESTION_TYPE.MULTIPLE_CHOICE)
     const [questionTypeLoader, setQuestionTypeLoader] = useState(false)
     const [errors, setErrors] = useState({})
+    const [algorithmQuestion, setAlgorithmQuestion] = useState({})
 
 
 
@@ -93,15 +94,13 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
         }
     };
 
-    const handleAddQuestion = () => {
-        const question = {
-            title: questionTitle,
-            category: questionCategory,
-            difficultyLevel,
-            type,
-            level
-        }
+    const handleAddQuestion = (e, question) => {
+       
         if (type == 'MULTIPLE_CHOICE') {
+            question.title  = questionTitle
+            question.category  = questionCategory
+            question.type  = type
+            question.level  = level
             question.multipleChoiceQuestion = {};
             if (optionType == 'CHECK_BOX') {
                 question.multipleChoiceQuestion.hasMultipleAnswers = true;
@@ -111,36 +110,7 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
                 .map(option => ({ optionTitle: option?.title }))
             question.multipleChoiceQuestion.answerList = [...answers]
 
-        } else {
-            const examplesCopy = [...examples]
-            for (let example of examplesCopy) {
-                const pararmObj = {}
-                for (const param of example.parameters) {
-                    pararmObj[param.name] = param.value
-                }
-                example.inputArguments = pararmObj
-            }
-            console.log('examples copy ', examplesCopy)
-            question.algorithmQuestion = {
-                introduction,
-                inputDescription,
-                outputDescription,
-                pythonSampleCode,
-                javaSampleCode,
-                javascriptSampleCode,
-                methodName,
-                methodArguments,
-                returnType: methodReturnType,
-                examples: examplesCopy,
-                solutions: [{
-                    description,
-                    code,
-                    timeComplexity,
-                    spaceComplexity,
-                    relevantResources
-                }]
-            }
-        }
+        } 
         console.log('req ', question)
         dispatch(createQuestion(question, () => {
             clearInput()
@@ -209,6 +179,7 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
                 spaceComplexity={spaceComplexity}
                 relevantResources={relevantResources}
                 populateExamplesWithRequiredMethodParameters={populateExamplesWithRequiredMethodParameters}
+                setAlgorithmQuestion={setAlgorithmQuestion}
             />
 
         </form>

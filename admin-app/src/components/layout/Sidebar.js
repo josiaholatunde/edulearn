@@ -55,8 +55,7 @@ const Sidebar = ({ history }) => {
             <li className='side-nav-link'>
                 <NavLink activeclassName='active-link text-white' to={'/categories'} className='text-white'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
-                        <rect width="24" height="24" fill="black" rx="12" />
-                        <path fill="white" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm1-12h-2v6h2v-2h-1c0-.55.45-1 1-1s1 .45 1 1v2c0 .55-.45 1-1 1h-1c-.55 0-1-.45-1-1V8h2v2z" />
+                        <path fill='white' d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zM11 7h2v2h-2zm0 4h2v6h-2zm4-4v2h-2v-2zm0 4h-2v-2h2zm0 4h-2v-2h2z"/>
                     </svg>
                     <span>Categories</span>
                 </NavLink>

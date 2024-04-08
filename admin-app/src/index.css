@@ -418,4 +418,10 @@ li.side-nav-link:hover svg {
   margin-top: 30px !important;
 }
 
+.list-style-none {
+  list-style-type: none !important;
+}
 
+.list-style-none li {
+  list-style-type: none !important;
+}

@@ -42,7 +42,7 @@ public class QuestionServiceImpl implements QuestionService {
     public QuestionDTO createQuestion(QuestionDTO questionDTO) {
         Question question = Question.builder().build();
         BeanUtils.copyProperties(questionDTO, question);
-        question.setDifficultyLevel(question.getDifficultyLevel());
+        question.setDifficultyLevel(questionDTO.getDifficultyLevel());
         questionRepository.save(question);
         if (questionDTO.getType() == QuestionType.MULTIPLE_CHOICE) {
             MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestion.fromMultipleChoiceQuestionDTO(questionDTO.getMultipleChoiceQuestion());
