@@ -17,8 +17,11 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
     const dispatch = useDispatch()
 
     useEffect(() => {
-        setIsCurrentQuestionAnswer(isAnswerCorrect(questions[currentQuestion], challengeResult))
-    }, [currentQuestion, challengeResult?.multipleChoiceResult])
+        console.log('i ran men ooop ', challengeDetail)
+        if (challengeDetail && challengeDetail.challengeQuestions && challengeDetail.challengeQuestions.length > 0) {
+            setIsCurrentQuestionAnswer(isAnswerCorrect(challengeDetail.challengeQuestions[currentQuestion], challengeResult))
+        } 
+    }, [currentQuestion, challengeResult, challengeDetail])
 
 
     
@@ -83,7 +86,7 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
         if (result && result.multipleChoiceResult) {
             const currentQuestionResult = result.multipleChoiceResult?.find(res => res.question.id == currentQuestion.id)
             console.log('found ', currentQuestionResult)
-            const answerOptions = currentQuestionResult?.question?.answerList?.map(answer => answer?.option?.id) || []
+            const answerOptions = currentQuestion?.multipleChoiceQuestion?.answers?.map(answer => answer?.option?.id) || []
             console.log('answer options ', answerOptions)
             setCorrrectOptionsId(answerOptions)
             return currentQuestionResult?.correct;
@@ -133,7 +136,7 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
                                         className="form-contro"
                                         id={`option${option.id}`}
                                         name="option"
-                                        disabled="true"
+                                        disabled={true}
                                         checked={correctOptionsId?.includes(option.id)}
                                     />
                                     <label
@@ -190,7 +193,8 @@ const MultipleChoiceSolutionDetail = ({ history, challengeId, questions, loading
 const mapStateToProps = ({ loading, challenges: { challengeDetail, challengeResult } }) => {
     return ({
         loading,
-        challengeResult
+        challengeResult,
+        challengeDetail
     })
 }
 export default connect(mapStateToProps, { submitChallengeResponse  })(MultipleChoiceSolutionDetail)

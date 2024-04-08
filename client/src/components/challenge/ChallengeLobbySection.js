@@ -28,9 +28,9 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            dispatch(getChallengeParticipants({ challengeId, page, size }))
+            dispatch(getChallengeParticipants({ history, challengeId, page, size }))
             dispatch(getChallengeDetails(challengeId))
-        }, 10000)
+        }, 5000)
 
         console.log('challenge details before the koko', challengeDetail)
         if (!isLoggedInUserCreatorOfChallenge() && challengeId == challengeDetail?.id && challengeDetail?.challengeStatus == 'STARTED') {
@@ -72,11 +72,20 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
                 style={{ height: "142px" }}
             >
                 <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
-                    <h3>{challengeDetail?.title || DEFAULT_CHALLENGE_TITLE} </h3>
-                    <div>
-                        {/* <i className="bi bi-envelope-open"></i>{" "} */}
-                        <span className="f-14">({challengeDetail?.totalInvitations} people invited)</span>
-                    </div>
+                    {
+                        true ? (<div className="col-lg-12">
+                        <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
+                            <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
+                        </div>
+                    </div>) : (<Fragment>
+                        <h3>{challengeDetail?.title || DEFAULT_CHALLENGE_TITLE} </h3>
+                        <div>
+                            {/* <i className="bi bi-envelope-open"></i>{" "} */}
+                            <span className="f-14">({challengeDetail?.totalInvitations} people invited)</span>
+                        </div>
+                    </Fragment>)
+                    }
+                    
                 </div>
             </div>
 

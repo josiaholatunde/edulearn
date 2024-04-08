@@ -44,6 +44,7 @@ const extractUpdateAction = status => {
     return status === 'ACCEPTED' ? 'accepted' : 'declined'
 }
 
+
 export const updateChallengeInvite = (challengeInviteDTO, callBack) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
@@ -51,7 +52,7 @@ export const updateChallengeInvite = (challengeInviteDTO, callBack) => dispatch 
             challengeInviteDTO.createdAt = Date.parse(challengeInviteDTO.createdAt)
             const { data } = await axios.put(`/challenge-invites`, challengeInviteDTO)
             if (data) {
-                showNotification('success', `Successfully ${extractUpdateAction(challengeInviteDTO?.status)} invite from ${challengeInviteDTO?.fullName}`)
+                showNotification('success', `Successfully ${extractUpdateAction(challengeInviteDTO?.status)} invite from ${challengeInviteDTO?.studentUser?.fullName}`)
                 dispatch(getChallengeInvites({ page: 0, size: 5}))
                 dispatch(hideLoading())
                 if (callBack) callBack()

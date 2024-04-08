@@ -32,7 +32,6 @@ public class MultipleChoiceQuestion extends BaseAuditableModel {
     private List<MultipleChoiceOption> options = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
-    @JsonIgnore
     @Builder.Default
     private List<MultipleChoiceAnswer> answers = new ArrayList<>();
 
