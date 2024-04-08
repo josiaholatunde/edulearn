@@ -7,6 +7,7 @@ import { showNotification } from '../../utils/showNotification'
 import { connect } from 'react-redux'
 import AlgorithmStepForm from '../question/AlgorithmStepForm'
 import QuestionsList from '../question/QuestionsList'
+import SearchQuestionsDataTable from '../question/SearchQuestionsDataTable'
 
 const AddChallenge = ({ history, loading }) => {
     const [title, setTitle] = useState('')
@@ -17,6 +18,7 @@ const AddChallenge = ({ history, loading }) => {
     const [category, setCategory] = useState('')
     const [errors, setErrors] = useState({})
     const [showAddQuestionModal, setShowAddQuestionModal] = useState(false)
+    const [showSearchQuestionModal, setShowSearchQuestionModal] = useState(false)
     const [type, setType] = useState('')
     const [questionList, setQuestionList] = useState([])
     const [questionTitle, setQuestionTitle] = useState('')
@@ -26,6 +28,7 @@ const AddChallenge = ({ history, loading }) => {
     const [checkedOption, setCheckedOption] = useState('');
     const [options, setOptions] = useState([{ value: '', title: '' }]);
     const [algorithmQuestion, setAlgorithmQuestion] = useState({})
+    const [selectedQuestions, setSelectedQuestions] = useState([])
 
     const dispatch = useDispatch()
     const location = useLocation()
@@ -82,6 +85,8 @@ const AddChallenge = ({ history, loading }) => {
     }
 
     const handleCloseQuestionStyle = () => setShowAddQuestionModal(false)
+
+    const handleCloseSearchQuestionModal = () => setShowSearchQuestionModal(false)
 
 
     const handleOptionChange = (e, optionIndex) => {
@@ -241,6 +246,12 @@ const AddChallenge = ({ history, loading }) => {
     }
 
 
+    const handleAddQuestionsToList = () => {
+        setQuestionList([...questionList, ...selectedQuestions])
+        showNotification('success', 'Successfully added question')
+    }
+
+
 
 
 
@@ -354,7 +365,7 @@ const AddChallenge = ({ history, loading }) => {
                             <i class="bi bi-plus-lg mr-1"></i>
                             Add Challenge Question
                         </label>
-                        <label htmlFor="level" className='pointer ml-3' onClick={() => setShowAddQuestionModal(true)} style={{ fontSize: '14px'}}>
+                        <label htmlFor="level" className='pointer ml-3' onClick={() => setShowSearchQuestionModal(true)} style={{ fontSize: '14px'}}>
                             <i class="bi bi-search mr-1"></i>
                             Choose from question bank
                         </label>
@@ -493,6 +504,27 @@ const AddChallenge = ({ history, loading }) => {
                         {
                             renderQuestionForm(type)
                         }
+                    </div>
+                </div>
+
+            </Modal.Body>
+        </Modal>
+
+
+        <Modal show={showSearchQuestionModal} onHide={handleCloseSearchQuestionModal}  size={`lg`} centered className="question-style-modal" >
+            <Modal.Header closeButton={handleCloseSearchQuestionModal}>
+                <Modal.Title className='pl-3 text-center w-100'>Search Questions</Modal.Title>
+            </Modal.Header>
+            <Modal.Body className="container">
+                <div className='row p-3'>
+                    <div className='col-lg-12 px-0'>
+                        <SearchQuestionsDataTable selectedQuestions={selectedQuestions} 
+                        type={type}
+                        setSelectedQuestions={setSelectedQuestions}
+                        showQuestionStyle={() => {
+                            setShowSearchQuestionModal(false);
+                            handleAddQuestionsToList()}
+                        } />
                     </div>
                 </div>
 

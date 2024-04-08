@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,4 +29,11 @@ public class AlgorithmSolutionDTO {
     private String spaceComplexity;
 
     private String relevantResources;
+
+
+    public static AlgorithmSolutionDTO fromAlgorithmSolution(AlgorithmSolution algorithmSolution) {
+        AlgorithmSolutionDTO algorithmSolutionDTO = AlgorithmSolutionDTO.builder().build();
+        BeanUtils.copyProperties(algorithmSolution, algorithmSolutionDTO);
+        return algorithmSolutionDTO;
+    }
 }

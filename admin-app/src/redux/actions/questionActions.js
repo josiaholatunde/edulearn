@@ -15,7 +15,7 @@ export function fetchQuestions(questions, total, page, size) {
     }
 }
 
-export const getQuestions = ({ page, size }) => dispatch => {
+export const getQuestions = ({ page, size, type }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
@@ -23,6 +23,7 @@ export const getQuestions = ({ page, size }) => dispatch => {
             page = (page - 1) < 0 ? 0 : (page - 1)
             let pageSize = size || 5
             let queryParams = `page=${page}&size=${pageSize}`
+            if (type) queryParams += `&type=${type}`
 
             const { data } = await axios.get(`/questions?${queryParams}`)
             if (data) {

@@ -60,7 +60,7 @@ const CERTIFICATION_FORM_MODE = {
         <div className="col-lg-10 profile-card text-center">
           <div
             className="profile-container  h-100 d-flex align-items-center"
-            style={{ borderRight: "1px solid black;" }}
+            style={{ borderRight: "1px solid black" }}
           >
             <div className="profile-img-container d-flex flex-column">
               <div className="profile-img-container">

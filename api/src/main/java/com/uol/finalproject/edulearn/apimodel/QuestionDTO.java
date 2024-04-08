@@ -40,6 +40,11 @@ public class QuestionDTO {
     public static QuestionDTO fromQuestion(Question question) {
         QuestionDTO questionDTO = QuestionDTO.builder().build();
         BeanUtils.copyProperties(question, questionDTO);
+        if (question.getAlgorithmQuestion() != null) {
+            questionDTO.setAlgorithmQuestion(AlgorithmQuestionDTO.fromAlgorithmQuestion(question.getAlgorithmQuestion()));
+        } else if (question.getMultipleChoiceQuestion() != null) {
+            questionDTO.setMultipleChoiceQuestion(MultipleChoiceQuestionDTO.fromMultipleChoiceQuestion(question.getMultipleChoiceQuestion()));
+        }
         return questionDTO;
     }
 }

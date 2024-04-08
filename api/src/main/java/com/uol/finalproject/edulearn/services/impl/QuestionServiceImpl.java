@@ -31,9 +31,13 @@ public class QuestionServiceImpl implements QuestionService {
     private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
 
     @Override
-    public Page<QuestionDTO> getQuestions(PageRequest pageRequest) {
-
-        Page<Question> questionPage = questionRepository.findAll(pageRequest);
+    public Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type) {
+        Page<Question> questionPage = null;
+        if (type != null) {
+            questionPage = questionRepository.findAllByTypeOrderByNoOfUsersLikedDesc(type, pageRequest);
+        } else {
+            questionPage = questionRepository.findAll(pageRequest);
+        }
         List<QuestionDTO> questionDTOS = questionPage.stream().map(QuestionDTO::fromQuestion).collect(Collectors.toList());
         return new PageImpl<>(questionDTOS, pageRequest, questionPage.getTotalElements());
     }

@@ -165,7 +165,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         challenge.setTitle(challengeTitle);
         challenge.setCategory(challengeDTO.getCategory() == null ? "random" : challengeDTO.getCategory());
 
-        if (challengeDTO.getCreatedBy() == RoleType.STUDENT_USER) {
+        if (challengeDTO.getCreatedBy() != RoleType.ADMIN) {
             challenge.setStudentUser(studentUser);
         }
 
