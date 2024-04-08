@@ -28,7 +28,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
     const [startChallenge, setStartChallenge] = useState(false)
     const [userResponse, setUserResponses] = useState({})
     const [challengeEndDate, setChallengeEndDate] = useState(null)
-
+    const [firstTimePageLoad, setFirstTimePageLoad] = useState(true)
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
     const DEFAULT_CHALLENGE_DURATION_MINUTES = 1;
 
@@ -59,8 +59,9 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
             setChallenge(challengeDetail)
             setQuestions(challengeDetail?.challengeQuestions || [])
         } 
+       
         
-    }, [challengeIdentifier, mode, challengeDetail?.title]);
+    }, [ firstTimePageLoad,challengeIdentifier, mode, challengeDetail?.title]);
 
     const getChallenge = (challengeIdentifier) => {
         dispatch(getChallengeDetails(challengeIdentifier))
@@ -134,7 +135,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
                 style={{ height: "192px" }}
             >
                 {
-                    loadingChallengeDetails ? (<div className="col-lg-12">
+                   loadingChallengeDetails ? (<div className="col-lg-12">
                         <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
                             <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
                         </div>

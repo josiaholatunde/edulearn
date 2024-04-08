@@ -14,6 +14,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
     const [challenge, setChallenge] = useState({})
     const [page, setCurrentPage] = useState(1)
     const [size, setSize] = useState(5)
+    const [firstTimePageLoad, setFirstTimePageLoad] = useState(true)
 
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
 
@@ -32,6 +33,10 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
             dispatch(getChallengeDetails(challengeId))
         }, 5000)
 
+        if (challengeMode && challengeDetail?.id) {
+            setFirstTimePageLoad(false)
+        }
+
         console.log('challenge details before the koko', challengeDetail)
         if (!isLoggedInUserCreatorOfChallenge() && challengeId == challengeDetail?.id && challengeDetail?.challengeStatus == 'STARTED') {
             console.log('Redirecting user to challenge start page')
@@ -39,7 +44,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
         }
 
         return () => clearInterval(intervalId)
-    }, [challengeDetail?.challengeStatus]);
+    }, [firstTimePageLoad,challengeDetail?.challengeStatus]);
 
     const isLoggedInUserCreatorOfChallenge = () => {
         return challengeDetail?.studentUser?.id == user?.id
@@ -73,7 +78,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
             >
                 <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
                     {
-                        true ? (<div className="col-lg-12">
+                        firstTimePageLoad ? (<div className="col-lg-12">
                         <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
                             <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
                         </div>
@@ -87,6 +92,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
                     }
                     
                 </div>
+                
             </div>
 
             <InstructionDescription questionType={type} />
@@ -109,7 +115,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
                             ))
                         ) : (
                             <h5 className="my-5">
-                                {isLoggedInUserCreatorOfChallenge() && "Waiting for other participants to join the challenge"}
+                                {isLoggedInUserCreatorOfChallenge() && "Waiting for other participants to join the challenge..."}
                             </h5>
                         )
                     )}

@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react'
+import React, { useState, Fragment, useEffect } from 'react'
 import { Modal } from 'react-bootstrap'
 import { connect, useDispatch } from 'react-redux'
 import { createQuestion, getQuestions } from '../../redux/actions/questionActions'
@@ -6,7 +6,7 @@ import { QUESTION_TYPE } from '../../utils/constants'
 import AlgorithmStepForm from './AlgorithmStepForm'
 
 
-const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading }) => {
+const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading, formMode, question }) => {
 
     const [questionTitle, setQuestionTitle] = useState('')
     const [questionCategory, setQuestionCategory] = useState('')
@@ -22,16 +22,6 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
     const [algorithmQuestion, setAlgorithmQuestion] = useState({})
 
 
-
-    const [introduction, setIntroduction] = useState('')
-    const [inputDescription, setInputDescription] = useState('')
-    const [outputDescription, setOutputDescription] = useState('')
-    const [methodName, setMethodName] = useState('')
-    const [methodArguments, setMethodArguments] = useState('')
-    const [methodReturnType, setMethodReturnType] = useState('')
-    const [pythonSampleCode, setPythonSampleCode] = useState('')
-    const [javaSampleCode, setJavaSampleCode] = useState('')
-    const [javascriptSampleCode, setJavascriptSampleCode] = useState('')
 
 
     const [examples, setExamples] = useState([{
@@ -51,6 +41,20 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading 
 
 
     const dispatch = useDispatch()
+
+
+
+    useEffect(() => {
+            console.log('question ', question)
+            if (question) {
+                setQuestionTitle(question?.title)
+                setQuestionCategory(question?.category)
+                setLevel(question?.level)
+                setOptions(question?.multipleChoiceQuestion?.options || [])
+                setShowQuestionTypeForm(false)
+                setOptionType(question?.multipleChoiceQuestion?.hasMultipleAnswers ? 'CHECK_BOX': 'RADIO')
+            }
+    }, [question?.id])
 
 
     const populateExamplesWithRequiredMethodParameters = numOfParameters => {

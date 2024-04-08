@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { getQuestions } from '../../redux/actions/questionActions';
+import capitalizeAndReplace from '../../utils/capitalizeAndReplace';
 import AddQuestionModal from './AddQuestionModal';
 import QuestionsDataTable from './QuestionsDataTable'
 
@@ -8,13 +9,14 @@ import QuestionsDataTable from './QuestionsDataTable'
 const mapQuestions = (questions, currentPage, pageSize) => {
     const pageStart = currentPage * pageSize;
     return questions && questions?.map((question, index) => ({
+        ...question,
         key: index,
         position: pageStart + (index + 1),
         title: question?.title,
         type: question?.type == 'MULTIPLE_CHOICE' ? 'Multiple Choice' : 'Algorithms',
         level: question?.level || '10',
         difficultyLevel: question?.difficultyLevel || 'N/A',
-        category: question?.category || 'N/A',
+        category: capitalizeAndReplace(question?.category) || 'N/A',
         noOfUsersLiked: questions?.noOfUsersLiked || 0
     }));
 };
@@ -23,7 +25,8 @@ const QuestionsList = ({ questionList, loading, total }) => {
     const [page, setCurrentPage] = useState(1);
     const [size, setSize] = useState(10);
     const [showAddQuestionModal, setShowAddQuestionModal ] = useState(false)
-
+    const [formMode, setFormMode] = useState('CREATE')
+    const [currentQuestion, setCurrentQuestion] = useState({})
 
     const dispatch = useDispatch();
 
@@ -55,10 +58,17 @@ const QuestionsList = ({ questionList, loading, total }) => {
                 setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
                 loading={loading}
                 totalItems={total}
+                handleEdit={(question) => {
+                    setCurrentQuestion(question)
+                    setShowAddQuestionModal(true)
+                }}
             />
             <AddQuestionModal 
                 handleCloseSuccessModal={handleCloseQuestionFormModal}
                 showQuestionModal={showAddQuestionModal}
+                formMode={formMode}
+                question={currentQuestion}
+
             />
         </Fragment>
 }
