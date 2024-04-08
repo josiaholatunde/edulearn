@@ -27,6 +27,9 @@ public class Question extends BaseAuditableModel {
     @Builder.Default
     private int level = 10;
 
+    @Column(name = "difficulty_level")
+    private String difficultyLevel;
+
     @Builder.Default
     @Column(name = "no_of_users_liked")
     private int noOfUsersLiked = 0;
@@ -41,7 +44,7 @@ public class Question extends BaseAuditableModel {
     @OneToOne(mappedBy = "question")
     private AlgorithmQuestion algorithmQuestion;
 
-    @OneToOne(mappedBy = "question")
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
     private MultipleChoiceQuestion multipleChoiceQuestion;
 
 
@@ -115,5 +118,13 @@ public class Question extends BaseAuditableModel {
 
     public void setMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion) {
         this.multipleChoiceQuestion = multipleChoiceQuestion;
+    }
+
+    public String getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(String difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
     }
 }

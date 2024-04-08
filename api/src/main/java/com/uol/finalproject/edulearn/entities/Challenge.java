@@ -65,7 +65,7 @@ public class Challenge extends BaseAuditableModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private StudentUser studentUser;
 
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL })
     @JoinTable(name = "challenge_questions", joinColumns = @JoinColumn(name = "challenge_id"),
     inverseJoinColumns = @JoinColumn(name = "question_id"))
     @Builder.Default

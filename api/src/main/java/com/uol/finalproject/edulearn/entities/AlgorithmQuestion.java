@@ -3,6 +3,7 @@ package com.uol.finalproject.edulearn.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.uol.finalproject.edulearn.apimodel.AlgorithmQuestionDTO;
 import com.uol.finalproject.edulearn.apimodel.MethodArgument;
 import com.uol.finalproject.edulearn.apimodel.MethodArgumentWrapper;
 import com.uol.finalproject.edulearn.converters.JsonNodeConverter;
@@ -11,6 +12,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,11 +57,13 @@ public class AlgorithmQuestion extends BaseAuditableModel {
     @JsonIgnore
     private Question question;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<AlgorithmQuestionExample> examples = new ArrayList<>();
 
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "algorithmQuestion", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<AlgorithmSolution> solutions = new ArrayList<>();
 
     private String returnType;
@@ -69,5 +73,11 @@ public class AlgorithmQuestion extends BaseAuditableModel {
         ObjectMapper objectMapper = new ObjectMapper();
         MethodArgumentWrapper methodArgumentWrapper = objectMapper.convertValue(getMethodArguments(), MethodArgumentWrapper.class);
         return methodArgumentWrapper.getArguments();
+    }
+
+    public static AlgorithmQuestion fromAlgorithmQuestionDTO(AlgorithmQuestionDTO algorithmQuestionDTO) {
+        AlgorithmQuestion algorithmQuestion = AlgorithmQuestion.builder().build();
+        BeanUtils.copyProperties(algorithmQuestionDTO, algorithmQuestion);
+        return algorithmQuestion;
     }
 }

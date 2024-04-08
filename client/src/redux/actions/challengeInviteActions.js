@@ -16,7 +16,7 @@ export function fetchChallengeInvites(challengeInvites, total, page, size) {
 }
 
 
-export const getChallengeInvites = ({ page, size }) => dispatch => {
+export const getChallengeInvites = ({ page, size, status }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
@@ -24,6 +24,7 @@ export const getChallengeInvites = ({ page, size }) => dispatch => {
             page = (page - 1) < 0 ? 0 : (page - 1)
             let pageSize = size || 5
             let queryParams = `page=${page}&size=${pageSize}`
+            if (status) queryParams += `&status=${status}`
 
             const { data } = await axios.get(`/challenge-invites?${queryParams}`)
             if (data) {
@@ -44,6 +45,7 @@ const extractUpdateAction = status => {
     return status === 'ACCEPTED' ? 'accepted' : 'declined'
 }
 
+
 export const updateChallengeInvite = (challengeInviteDTO, callBack) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
@@ -51,8 +53,7 @@ export const updateChallengeInvite = (challengeInviteDTO, callBack) => dispatch 
             challengeInviteDTO.createdAt = Date.parse(challengeInviteDTO.createdAt)
             const { data } = await axios.put(`/challenge-invites`, challengeInviteDTO)
             if (data) {
-                showNotification('success', `Successfully ${extractUpdateAction(challengeInviteDTO?.status)} invite from ${challengeInviteDTO?.fullName}`)
-                dispatch(getChallengeInvites({ page: 0, size: 5}))
+                showNotification('success', `Successfully ${extractUpdateAction(challengeInviteDTO?.status)} invite from ${challengeInviteDTO?.studentUser?.fullName}`)
                 dispatch(hideLoading())
                 if (callBack) callBack()
             }

@@ -1,10 +1,12 @@
 package com.uol.finalproject.edulearn.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.uol.finalproject.edulearn.apimodel.MultipleChoiceQuestionDTO;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.BeanUtils;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -29,8 +31,8 @@ public class MultipleChoiceQuestion extends BaseAuditableModel {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
     private List<MultipleChoiceOption> options = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
-    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
+    @Builder.Default
     private List<MultipleChoiceAnswer> answers = new ArrayList<>();
 
     @Override
@@ -45,5 +47,12 @@ public class MultipleChoiceQuestion extends BaseAuditableModel {
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), hasMultipleAnswers, question, options, answers);
+    }
+
+
+    public static MultipleChoiceQuestion fromMultipleChoiceQuestionDTO(MultipleChoiceQuestionDTO multipleChoiceQuestionDTO) {
+        MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestion.builder().build();
+        BeanUtils.copyProperties(multipleChoiceQuestionDTO, multipleChoiceQuestion);
+        return multipleChoiceQuestion;
     }
 }

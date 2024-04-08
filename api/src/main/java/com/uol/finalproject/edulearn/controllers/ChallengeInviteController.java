@@ -6,6 +6,7 @@ import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeInviteDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
+import com.uol.finalproject.edulearn.entities.enums.ChallengeInviteStatus;
 import com.uol.finalproject.edulearn.services.ChallengeInviteService;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +23,8 @@ public class ChallengeInviteController {
     private final ChallengeInviteService challengeInviteService;
 
     @GetMapping
-    public Page<ChallengeInviteDTO> getAllChallengeInvites(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-        return challengeInviteService.getInvites(PageRequest.of(page, size));
+    public Page<ChallengeInviteDTO> getAllChallengeInvites(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false, name = "status")ChallengeInviteStatus inviteStatus) {
+        return challengeInviteService.getInvites(PageRequest.of(page, size),inviteStatus);
     }
 
     @PutMapping

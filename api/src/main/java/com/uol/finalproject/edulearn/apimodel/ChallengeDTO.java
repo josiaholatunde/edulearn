@@ -2,6 +2,7 @@ package com.uol.finalproject.edulearn.apimodel;
 
 
 import com.uol.finalproject.edulearn.entities.Challenge;
+import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
 import com.uol.finalproject.edulearn.entities.Question;
 import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
@@ -17,7 +18,9 @@ import org.springframework.beans.BeanUtils;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @Builder
@@ -58,6 +61,8 @@ public class ChallengeDTO {
     private List<Question> challengeQuestions = new ArrayList<>();
 
     private List<Long> challengeUsers = new ArrayList<>();
+
+    private Map<String, List<MultipleChoiceOption>> optionAnswers = new HashMap<>();
 
 
     public static ChallengeDTO fromChallenge(Challenge challenge) {

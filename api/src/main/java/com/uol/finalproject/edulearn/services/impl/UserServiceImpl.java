@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             return ((UserDetails) authentication.getPrincipal());
         }
-        throw new AuthenticationException("User is not authorized to access resource");
+        throw new AuthorizationException("User is not authorized to access resource");
     }
 
 

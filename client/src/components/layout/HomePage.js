@@ -13,13 +13,16 @@ const HomePage = ({ history, user, challengeInvites }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getChallengeInvites({ page: 1, size: 5 }))
+        dispatch(getChallengeInvites({ page: 1, size: 5, status: 'PENDING' }))
     }, [])
 
-    const handleUpdateInvite = (challenge, action) => {
-        challenge.status = action
-        dispatch(updateChallengeInvite(challenge, () => {
-          routeToPath(history, `/challenge-lobby/${challenge.id}?type=${challenge.type}&mode=group`)
+    const handleUpdateInvite = (challengeInvite, action) => {
+        challengeInvite.status = action
+        dispatch(updateChallengeInvite(challengeInvite, () => {
+            dispatch(getChallengeInvites({ page: 0, size: 5, status: 'PENDING' }))
+            if (action === 'ACCEPTED') {
+                routeToPath(history, `/challenge-lobby/${challengeInvite.challengeId}?type=${challengeInvite.type}&mode=group`)
+            }
         }))
     }
 
@@ -89,7 +92,7 @@ const HomePage = ({ history, user, challengeInvites }) => {
 
                                         <div className='d-flex justify-content-end mb-3' style={{ fontSize: '13px' }}>
                                             <div className='pointer' onClick={() => handleUpdateInvite(challengeInvite, 'ACCEPTED')}>Accept</div>
-                                            <div className='ml-2' onClick={() => handleUpdateInvite(challengeInvite, 'DECLINED')}>Decline</div>
+                                            <div className='ml-2 pointer' onClick={() => handleUpdateInvite(challengeInvite, 'DECLINED')}>Decline</div>
                                         </div>
                                     </Fragment>))) : (<div>You do not have any challenge invites</div>) 
                             }

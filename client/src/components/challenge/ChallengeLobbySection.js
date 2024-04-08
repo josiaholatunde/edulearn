@@ -14,6 +14,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
     const [challenge, setChallenge] = useState({})
     const [page, setCurrentPage] = useState(1)
     const [size, setSize] = useState(5)
+    const [firstTimePageLoad, setFirstTimePageLoad] = useState(true)
 
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
 
@@ -28,9 +29,13 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
 
     useEffect(() => {
         const intervalId = setInterval(() => {
-            dispatch(getChallengeParticipants({ challengeId, page, size }))
+            dispatch(getChallengeParticipants({ history, challengeId, page, size }))
             dispatch(getChallengeDetails(challengeId))
-        }, 10000)
+        }, 5000)
+
+        if (challengeMode && challengeDetail?.id) {
+            setFirstTimePageLoad(false)
+        }
 
         console.log('challenge details before the koko', challengeDetail)
         if (!isLoggedInUserCreatorOfChallenge() && challengeId == challengeDetail?.id && challengeDetail?.challengeStatus == 'STARTED') {
@@ -39,7 +44,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
         }
 
         return () => clearInterval(intervalId)
-    }, [challengeDetail?.challengeStatus]);
+    }, [firstTimePageLoad,challengeDetail?.challengeStatus]);
 
     const isLoggedInUserCreatorOfChallenge = () => {
         return challengeDetail?.studentUser?.id == user?.id
@@ -72,19 +77,29 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
                 style={{ height: "142px" }}
             >
                 <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
-                    <h3>{challengeDetail?.title || DEFAULT_CHALLENGE_TITLE} </h3>
-                    <div>
-                        {/* <i className="bi bi-envelope-open"></i>{" "} */}
-                        <span className="f-14">({challengeDetail?.totalInvitations} people invited)</span>
-                    </div>
+                    {
+                        firstTimePageLoad ? (<div className="col-lg-12">
+                        <div className='w-100 h-100 d-flex justify-content-center align-items-center'>
+                            <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
+                        </div>
+                    </div>) : (<Fragment>
+                        <h3>{challengeDetail?.title || DEFAULT_CHALLENGE_TITLE} </h3>
+                        <div>
+                            {/* <i className="bi bi-envelope-open"></i>{" "} */}
+                            <span className="f-14">({challengeDetail?.totalInvitations} people invited)</span>
+                        </div>
+                    </Fragment>)
+                    }
+                    
                 </div>
+                
             </div>
 
             <InstructionDescription questionType={type} />
 
             <div className="main-cotent text-center my-1 d-flex justify-content-center align-items-center flex-column">
                 {
-                    challengeDetail && challengeDetail.studentUser && (<div className="p-2 my-2" style={{ backgroundColor: '#C0C0C0', width: '249px', borderRadius: '5px' }}> {challengeDetail?.studentUser?.fullName} created this challenge</div>)
+                    challengeDetail && challengeDetail.studentUser && (<div className="p-2 my-2" style={{ backgroundColor: '#C0C0C0', width: '320px', borderRadius: '5px' }}> {challengeDetail?.studentUser?.fullName} created this challenge</div>)
                 }
 
                 <div className="joined-candidates challenge-participants my-2">
@@ -100,7 +115,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
                             ))
                         ) : (
                             <h5 className="my-5">
-                                {isLoggedInUserCreatorOfChallenge() && "Waiting for other participants to join the challenge"}
+                                {isLoggedInUserCreatorOfChallenge() && "Waiting for other participants to join the challenge..."}
                             </h5>
                         )
                     )}

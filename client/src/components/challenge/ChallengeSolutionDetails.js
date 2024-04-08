@@ -51,7 +51,8 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
             setSubmissionId(queryParams.get('submissionId'))
         }
         console.log('ccc', !challengeResult, 'submissionId', submissionId)
-        if (!challengeResult && submissionId) {
+        if ((!challengeResult || !challengeResult?.multipleChoiceResult?.length == 0) && submissionId) {
+            console.log('i ran sub ', submissionId)
             dispatch(getChallengeSubmissionResponse(submissionId))
         }
         if (!!challenge) {
