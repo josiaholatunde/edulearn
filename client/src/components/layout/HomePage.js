@@ -13,12 +13,13 @@ const HomePage = ({ history, user, challengeInvites }) => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        dispatch(getChallengeInvites({ page: 1, size: 5 }))
+        dispatch(getChallengeInvites({ page: 1, size: 5, status: 'PENDING' }))
     }, [])
 
     const handleUpdateInvite = (challengeInvite, action) => {
         challengeInvite.status = action
         dispatch(updateChallengeInvite(challengeInvite, () => {
+            dispatch(getChallengeInvites({ page: 0, size: 5, status: 'PENDING' }))
             if (action === 'ACCEPTED') {
                 routeToPath(history, `/challenge-lobby/${challengeInvite.challengeId}?type=${challengeInvite.type}&mode=group`)
             }
