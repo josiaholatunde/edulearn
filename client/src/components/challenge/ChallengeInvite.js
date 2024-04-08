@@ -32,6 +32,7 @@ const CHALLENGE_TYPE = {
 const mapToChallengeInvites = (challengeInvites, currentPage, pageSize) => {
     const pageStart = currentPage * pageSize;
     return challengeInvites?.map((challenge, index) => ({
+        ...challenge,
         key: pageStart + (index + 1),
         position: pageStart + (index + 1),
         title: challenge?.title,

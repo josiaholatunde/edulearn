@@ -25,6 +25,17 @@ const CHALLENGE_TYPE = {
     }
 }
 
+function formatChallengeType (challengeType) {
+    switch (challengeType) {
+        case 'MULTIPLE_CHOICE':
+            return 'Multiple Choice'
+        case 'ALGORITHMS':
+            return 'Algorithms'
+        default:
+            return challengeType;
+    }
+}
+
 
 
 const mapChallenge = (challenges, currentPage, pageSize) => {
@@ -33,11 +44,11 @@ const mapChallenge = (challenges, currentPage, pageSize) => {
         key: pageStart + (index + 1),
         position: pageStart + (index + 1),
         title: challenge?.title,
-        friendlyType: challenge?.friendlyType,
+        friendlyType: formatChallengeType(challenge?.friendlyType),
         type: challenge?.type,
         level: challenge?.level || 'N/A',
-        startDate: moment(challenge?.startDate).format('MMMM Do YYYY, h:mm:ss a') || 'N/A',
-        endDate: moment(challenge.endDate).format('MMMM Do YYYY, h:mm:ss a'),
+        startDate: challenge?.startDate ? moment(challenge?.startDate).format('MMMM Do YYYY, h:mm:ss a') : 'N/A',
+        endDate: challenge.endDate ? moment(challenge.endDate).format('MMMM Do YYYY, h:mm:ss a') : 'N/A',
         submissions: challenge?.submissions,
         id: challenge?.id
     }))

@@ -37,7 +37,7 @@ const axiosDefaultInstance = axios.create({
     return response;
   }, function (error) {
     console.log('error', error)
-    if ( error.response && error.response.status === 403) {
+    if ( error.response && (error.response.status === 403)) {
         const message = 'Token expired';
         showNotification('danger', message)
         logOutUserOnTokenExpiration();

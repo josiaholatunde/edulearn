@@ -23,8 +23,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,16 +42,23 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final AlgorithmChallengeServiceImpl algorithmChallengeService;
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
     private final StompNotificationService stompNotificationService;
+    private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
 
     @Override
-    public Page<ChallengeDTO> getChallenges(PageRequest pageRequest) {
-        UserDetails userDetails = userService.getLoggedInUser();
-        StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
-                .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
-        Page<Challenge> challenges = challengeRepository
-                .findAllByStudentUserAndLevelOrCreatedBy(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
+    public Page<ChallengeDTO> getChallenges(PageRequest pageRequest, RoleType createdBy) {
+        Page<Challenge> challenges = null;
+        if (createdBy == RoleType.ADMIN) {
+            challenges = challengeRepository.findAllByCreatedBy(createdBy, pageRequest);
+        } else {
+            UserDetails userDetails = userService.getLoggedInUser();
+            StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
+             challenges = challengeRepository
+                    .findAllByStudentUserAndLevelOrCreatedBy(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
+        }
+
 
         List<ChallengeDTO> challengesDTO = challenges
                 .stream()
@@ -74,6 +79,58 @@ public class ChallengeServiceImpl implements ChallengeService  {
         assignChallengeQuestions(challenge);
 
         return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    @Override
+    @Transactional
+    public ChallengeDTO createChallengeAndQuestions(ChallengeDTO challengeDTO) {
+
+        Challenge challenge = createChallengeFromRequest(challengeDTO, challengeDTO.getCreatedBy() == RoleType.ADMIN ? null : retrieveStudentUser());
+
+        saveChallengeQuestions(challenge, challengeDTO);
+        saveChallengeAnswers(challenge, challengeDTO);
+
+        return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void saveChallengeAnswers(Challenge challenge, ChallengeDTO challengeDTO) {
+        for (Question question: challenge.getChallengeQuestions()) {
+            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
+                List<MultipleChoiceOption> optionAnswers = challengeDTO.getOptionAnswers().get(question.getTitle());
+                if (optionAnswers != null && !optionAnswers.isEmpty()) {
+                    List<MultipleChoiceAnswer> multipleChoiceAnswers = optionAnswers.stream()
+                            .map(optionAnswer -> MultipleChoiceAnswer.builder()
+                                    .option(optionAnswer)
+                                    .question(question.getMultipleChoiceQuestion())
+                                    .build())
+                            .collect(Collectors.toList());
+
+                    question.getMultipleChoiceQuestion().getAnswers().addAll(multipleChoiceAnswers);
+                    questionRepository.save(question);
+                }
+            }
+        }
+    }
+
+    private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {
+
+        for (Question question : challengeDTO.getChallengeQuestions()) {
+            questionRepository.save(question);
+
+            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
+                MultipleChoiceQuestion multipleChoiceQuestion = question.getMultipleChoiceQuestion();
+                multipleChoiceQuestion.setQuestion(question);
+                questionRepository.save(question);
+
+                List<MultipleChoiceOption> multipleChoiceOptions = multipleChoiceQuestion.getOptions();
+                for (MultipleChoiceOption option : multipleChoiceOptions) {
+                    option.setQuestion(multipleChoiceQuestion);
+                }
+                multipleChoiceOptionRepository.saveAll(multipleChoiceOptions);
+            }
+        }
+        challenge.setChallengeQuestions(challengeDTO.getChallengeQuestions());
+        return challengeRepository.save(challenge);
     }
 
     private void sendPushNotificationToParticipants(List<String> userEmails, String message) {
@@ -107,14 +164,24 @@ public class ChallengeServiceImpl implements ChallengeService  {
         }
         challenge.setTitle(challengeTitle);
         challenge.setCategory(challengeDTO.getCategory() == null ? "random" : challengeDTO.getCategory());
-        challenge.setStudentUser(studentUser);
+
+        if (challengeDTO.getCreatedBy() != RoleType.ADMIN) {
+            challenge.setStudentUser(studentUser);
+        }
+
+        challenge.setCreatedBy(challengeDTO.getCreatedBy());
+
         challenge.setFriendlyType(challengeDTO.getFriendlyType());
         challenge.setType(challengeDTO.getType());
-        challenge.setCreatedBy(studentUser.getUser().getRoleType());
-        challenge.setLevel(studentUser.getLevel());
-        challenge.setStartDate(Timestamp.from(Instant.now()));
+        if (studentUser != null) {
+            challenge.setLevel(studentUser.getLevel());
+        } else {
+            challenge.setLevel(challengeDTO.getLevel());
+        }
         challenge.setChallengeStatus(ChallengeStatus.NOT_STARTED);
         challenge.setParticipantType(challengeDTO.getParticipantType());
+        challenge.setDuration(challenge.getDuration());
+
         return challengeRepository.save(challenge);
     }
 
@@ -155,6 +222,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         return studentUserRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
     }
+
 
 
     @Override

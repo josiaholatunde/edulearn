@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { Table } from 'antd';
 import { connect, useDispatch } from 'react-redux';
-import { updateChallengeInvite } from '../../redux/actions/challengeInviteActions';
+import { getChallengeInvites, updateChallengeInvite } from '../../redux/actions/challengeInviteActions';
 import { routeToPath } from '../../utils/routeUtil';
 
 
@@ -55,6 +55,7 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
   const handleUpdateInvite = (challenge, action) => {
     challenge.status = action
     dispatch(updateChallengeInvite(challenge, () => {
+      dispatch(getChallengeInvites({ page: 0, size: 5 }))
       routeToPath(history, `/challenge-lobby/${challenge?.challengeId}?type=${challenge?.type}&mode=group`)
     }))
   }
@@ -84,4 +85,4 @@ const mapStateToProps = ({ challenges: { challengeDetail }, loading }) => {
       loadingChallengeDetails: loading
   })
 }
-export default connect(mapStateToProps, null)(ChallengeInviteDataTable);
+export default connect(mapStateToProps, { getChallengeInvites })(ChallengeInviteDataTable);

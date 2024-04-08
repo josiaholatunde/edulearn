@@ -49,7 +49,7 @@ const EditSocialProfileLinks = ({ showModal, handleClose, user, loading }) => {
                 
                 <div className="form-group mb-3 d-flex flex-column align-items-start">
                     <div className="input-icon w-100">
-                        <i class="bi bi-linkedin"></i>
+                        <i className="bi bi-linkedin"></i>
                             <input
                             type='text'
                             className="form-control password-input"
@@ -64,7 +64,7 @@ const EditSocialProfileLinks = ({ showModal, handleClose, user, loading }) => {
 
                 <div className="form-group mb-3 d-flex flex-column align-items-start">
                     <div className="input-icon w-100">
-                        <i class="bi bi-github"></i>
+                        <i className="bi bi-github"></i>
                             <input
                             type='text'
                             className="form-control password-input"
@@ -80,7 +80,7 @@ const EditSocialProfileLinks = ({ showModal, handleClose, user, loading }) => {
 
                 <div className="form-group mb-3 d-flex flex-column align-items-start">
                     <div className="input-icon w-100">
-                        <i class="bi bi-twitter"></i>
+                        <i className="bi bi-twitter"></i>
                             <input
                             type='text'
                             className="form-control password-input"
@@ -96,7 +96,7 @@ const EditSocialProfileLinks = ({ showModal, handleClose, user, loading }) => {
 
                 <div className="form-group mb-3 d-flex flex-column align-items-start">
                     <div className="input-icon w-100">
-                        <i class="bi bi-discord"></i>
+                        <i className="bi bi-discord"></i>
                             <input
                             type='text'
                             className="form-control password-input"

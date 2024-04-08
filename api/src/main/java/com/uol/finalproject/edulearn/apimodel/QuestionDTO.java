@@ -1,23 +1,14 @@
 package com.uol.finalproject.edulearn.apimodel;
 
 
-import com.uol.finalproject.edulearn.entities.Challenge;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceAnswer;
-import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
-import com.uol.finalproject.edulearn.entities.Question;
-import com.uol.finalproject.edulearn.entities.enums.ChallengeParticipantType;
-import com.uol.finalproject.edulearn.entities.enums.ChallengeType;
+import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
-import com.uol.finalproject.edulearn.entities.enums.RoleType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +25,26 @@ public class QuestionDTO {
 
     private QuestionType type;
 
+    private String difficultyLevel;
+
     private int level;
+    private int noOfUsersLiked = 0;
+
+    private MultipleChoiceQuestionDTO multipleChoiceQuestion;
+    private AlgorithmQuestionDTO algorithmQuestion;
 
     @Builder.Default
     private List<MultipleChoiceAnswer> answerList = new ArrayList<>();
+
+
+    public static QuestionDTO fromQuestion(Question question) {
+        QuestionDTO questionDTO = QuestionDTO.builder().build();
+        BeanUtils.copyProperties(question, questionDTO);
+        if (question.getAlgorithmQuestion() != null) {
+            questionDTO.setAlgorithmQuestion(AlgorithmQuestionDTO.fromAlgorithmQuestion(question.getAlgorithmQuestion()));
+        } else if (question.getMultipleChoiceQuestion() != null) {
+            questionDTO.setMultipleChoiceQuestion(MultipleChoiceQuestionDTO.fromMultipleChoiceQuestion(question.getMultipleChoiceQuestion()));
+        }
+        return questionDTO;
+    }
 }

@@ -21,6 +21,7 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
     Page<Challenge> findAllByStudentUser_EmailOrCreatedBy(String email, RoleType createdBy, Pageable pageable);
     Page<Challenge> findAllByStudentUserAndLevelOrCreatedBy(StudentUser studentUser, long level, RoleType createdBy, Pageable pageable);
+    Page<Challenge> findAllByCreatedBy(RoleType createdBy, Pageable pageable);
 
     @Transactional
     @Modifying

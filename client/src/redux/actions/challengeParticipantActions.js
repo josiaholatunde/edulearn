@@ -16,7 +16,7 @@ export function fetchChallengeParticipants(challengeParticipants, total, page, s
 }
 
 
-export const getChallengeParticipants = ({ challengeId, page, size }) => dispatch => {
+export const getChallengeParticipants = ({ history, challengeId, page, size }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
@@ -35,6 +35,7 @@ export const getChallengeParticipants = ({ challengeId, page, size }) => dispatc
             dispatch(hideLoading())
             let errorMessage = error.response && error.response.data.message;
             showNotification('danger', errorMessage || 'Error occurred while retrieving challenge participants')
+            history.push('/challenges')
         }
     }, 1000)
 }
