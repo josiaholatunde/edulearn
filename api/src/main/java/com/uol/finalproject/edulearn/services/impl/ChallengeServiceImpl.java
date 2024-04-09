@@ -5,6 +5,7 @@ import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.NotificationMessage;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
+import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
 import com.uol.finalproject.edulearn.exceptions.BadRequestException;
@@ -12,6 +13,7 @@ import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.UserService;
+import com.uol.finalproject.edulearn.specifications.ChallengeSpecification;
 import com.uol.finalproject.edulearn.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,10 +57,13 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private int defaultMultipleChoiceQuestions;
 
     @Override
-    public Page<ChallengeDTO> getChallenges(PageRequest pageRequest, RoleType createdBy) {
+    public Page<ChallengeDTO> getChallenges(ChallengeSpecificationSearchCriteria specificationSearchCriteria) {
         Page<Challenge> challenges = null;
+        PageRequest pageRequest = PageRequest.of(specificationSearchCriteria.getPage(), specificationSearchCriteria.getSize());
+        RoleType createdBy = specificationSearchCriteria.getCreatedBy();
+
         if (createdBy == RoleType.ADMIN) {
-            challenges = challengeRepository.findAllByCreatedBy(createdBy, pageRequest);
+            challenges = challengeRepository.findAll(ChallengeSpecification.buildSearchPredicate(specificationSearchCriteria), pageRequest);
         } else {
             UserDetails userDetails = userService.getLoggedInUser();
             StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())

@@ -4,13 +4,14 @@ import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
+import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
 public interface ChallengeService {
 
-    Page<ChallengeDTO> getChallenges(PageRequest pageRequest, RoleType createdBy);
+    Page<ChallengeDTO> getChallenges(ChallengeSpecificationSearchCriteria specificationSearchCriteria);
 
 
     ChallengeDTO getChallengeDetails(long challengeId);
