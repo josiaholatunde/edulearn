@@ -9,4 +9,6 @@ public interface QuestionService {
     Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type);
 
     QuestionDTO createQuestion(QuestionDTO questionDTO);
+
+    QuestionDTO updateQuestion(QuestionDTO questionDTO);
 }

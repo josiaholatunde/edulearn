@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -29,6 +30,7 @@ public class MultipleChoiceQuestionDTO {
     public static MultipleChoiceQuestionDTO fromMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion) {
         MultipleChoiceQuestionDTO multipleChoiceQuestionDTO = MultipleChoiceQuestionDTO.builder().build();
         BeanUtils.copyProperties(multipleChoiceQuestion, multipleChoiceQuestionDTO);
+        multipleChoiceQuestionDTO.setOptions(multipleChoiceQuestion.getOptions().stream().map(MultipleChoiceOptionDTO::fromMultipleChoiceOption).collect(Collectors.toList()));
         return multipleChoiceQuestionDTO;
     }
 }

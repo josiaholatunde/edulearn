@@ -1,8 +1,9 @@
 import React, { useState, Fragment, useEffect } from 'react'
 import { Modal } from 'react-bootstrap'
 import { connect, useDispatch } from 'react-redux'
-import { createQuestion, getQuestions } from '../../redux/actions/questionActions'
+import { createQuestion, getQuestions, updateQuestion } from '../../redux/actions/questionActions'
 import { QUESTION_TYPE } from '../../utils/constants'
+import { showNotification } from '../../utils/showNotification'
 import AlgorithmStepForm from './AlgorithmStepForm'
 
 
@@ -46,15 +47,18 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading,
 
     useEffect(() => {
             console.log('question ', question)
-            if (question) {
+            if (formMode == 'CREATE') {
+                clearInput()
+            } 
+            if (formMode != 'CREATE' && question) {
                 setQuestionTitle(question?.title)
                 setQuestionCategory(question?.category)
                 setLevel(question?.level)
                 setOptions(question?.multipleChoiceQuestion?.options || [])
                 setShowQuestionTypeForm(false)
                 setOptionType(question?.multipleChoiceQuestion?.hasMultipleAnswers ? 'CHECK_BOX': 'RADIO')
-            }
-    }, [question?.id])
+            } 
+    }, [question, formMode])
 
 
     const populateExamplesWithRequiredMethodParameters = numOfParameters => {
@@ -105,27 +109,41 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading,
             question.category  = questionCategory
             question.type  = type
             question.level  = level
+            question.difficultyLevel = difficultyLevel
             question.multipleChoiceQuestion = {};
-            if (optionType == 'CHECK_BOX') {
-                question.multipleChoiceQuestion.hasMultipleAnswers = true;
-            }
+            question.multipleChoiceQuestion.hasMultipleAnswers = optionType == 'CHECK_BOX' ? true : false;
             question.multipleChoiceQuestion.options = [...options]
+            if (!options || options.length == 0) {
+                return showNotification('danger', 'Kindly specify at least one option for this question')
+            }
             const answers = question.multipleChoiceQuestion.options.filter(option => option.checked || option.value == checkedOption)
                 .map(option => ({ optionTitle: option?.title }))
+            if (!answers || answers?.length == 0) {
+                return showNotification('danger', 'Kindly specify the answer for the question')
+            }
             question.multipleChoiceQuestion.answerList = [...answers]
 
         } 
         console.log('req ', question)
-        dispatch(createQuestion(question, () => {
-            clearInput()
-            handleCloseSuccessModal()
-        }))
+       if (formMode == 'CREATE') {
+            if ('id' in question) delete question['id']
+            dispatch(createQuestion(question, () => {
+                clearInput()
+                handleCloseSuccessModal()
+            }))
+       } else {
+            dispatch(updateQuestion(question, () => {
+                clearInput()
+                handleCloseSuccessModal()
+            }))
+       }
     }
 
     const clearInput = () => {
         setQuestionTitle('')
         setQuestionCategory('')
         setOptions([{ value: '', title: '' }])
+        setDifficultyLevel('EASY')
     }
 
     const handleExampleInputChange = (e, index, field) => {
@@ -300,14 +318,14 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading,
                     type="button"
                     className="btn btn-lg btn-block btn-cool"
                     style={{ fontSize: '16px' }}
-                    onClick={handleAddQuestion}
+                    onClick={(e) => handleAddQuestion(e, question)}
                 >
 
                     {
                         loading ? (<span className="spinner-border spinner-border-sm mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>)
                             : <i className="bi bi-box-arrow-in-right mr12" id="login-btn-icon"></i>
                     }
-                    Add Question
+                    { formMode == 'CREATE' ? 'Add' : 'Update'} Question
                 </button>
             </div>
         </form>
@@ -368,7 +386,7 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading,
 
     return <Modal show={showQuestionModal} onHide={handleCloseSuccessModal} size={`${type === 'MULTIPLE_CHOICE' ? 'md' : 'lg'}`} centered className="success-modal" >
         <Modal.Header closeButton={handleCloseSuccessModal}>
-            <Modal.Title className='pl-3 text-center'>Create Question</Modal.Title>
+            <Modal.Title className='pl-3 text-center'>{ formMode == 'CREATE' ? 'Create' : 'Edit'} Question</Modal.Title>
         </Modal.Header>
         <Modal.Body className="w-100 pt-3 d-flex justify-content-center align-items-center">
             <div className='row p-2 w-100'>

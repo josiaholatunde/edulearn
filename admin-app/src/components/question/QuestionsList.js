@@ -13,7 +13,7 @@ const mapQuestions = (questions, currentPage, pageSize) => {
         key: index,
         position: pageStart + (index + 1),
         title: question?.title,
-        type: question?.type == 'MULTIPLE_CHOICE' ? 'Multiple Choice' : 'Algorithms',
+        friendlyType: question?.type == 'MULTIPLE_CHOICE' ? 'Multiple Choice' : 'Algorithms',
         level: question?.level || '10',
         difficultyLevel: question?.difficultyLevel || 'N/A',
         category: capitalizeAndReplace(question?.category) || 'N/A',
@@ -46,7 +46,10 @@ const QuestionsList = ({ questionList, loading, total }) => {
                     <h3 className='mb-0' style={{ fontSize: '24px'}}>Questions</h3>
                 </div>
                 <div className='col-lg-7 d-flex justify-content-end align-items-center'>
-                    <button className="btn btn-cool" type="button" onClick={() => setShowAddQuestionModal(true)} >
+                    <button className="btn btn-cool" type="button" onClick={() => {
+                        setFormMode('CREATE')
+                        setShowAddQuestionModal(true)
+                    }} >
                         <i class="bi bi-plus-lg mr-1"></i>
                         Create Question
                     </button>
@@ -60,7 +63,9 @@ const QuestionsList = ({ questionList, loading, total }) => {
                 totalItems={total}
                 handleEdit={(question) => {
                     setCurrentQuestion(question)
+                    setFormMode('EDIT')
                     setShowAddQuestionModal(true)
+                    
                 }}
             />
             <AddQuestionModal 
