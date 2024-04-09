@@ -123,11 +123,19 @@ const AddChallenge = ({ history, loading }) => {
             question.category  = questionCategory
             question.type  = type
             question.level  = level
+            question.difficultyLevel = difficultyLevel
             question.multipleChoiceQuestion = {};
-            if (optionType == 'CHECK_BOX') {
-                question.multipleChoiceQuestion.hasMultipleAnswers = true;
-            }
+            question.multipleChoiceQuestion.hasMultipleAnswers = optionType == 'CHECK_BOX' ? true : false;
             question.multipleChoiceQuestion.options = [...options]
+            if (!options || options.length == 0) {
+                return showNotification('danger', 'Kindly specify at least one option for this question')
+            }
+            const answers = question.multipleChoiceQuestion.options.filter(option => option.checked || option.value == checkedOption)
+                .map(option => ({ optionTitle: option?.title }))
+            if (!answers || answers?.length == 0) {
+                return showNotification('danger', 'Kindly specify the answer for the question')
+            }
+            question.multipleChoiceQuestion.answerList = [...answers]
         }
         setQuestionList([...questionList, question])
         setShowAddQuestionModal(false);
@@ -236,7 +244,7 @@ const AddChallenge = ({ history, loading }) => {
                     type="button"
                     className="btn btn-lg btn-block btn-cool"
                     style={{ fontSize: '16px' }}
-                    onClick={handleAddQuestion}
+                    onClick={(e) => handleAddQuestion(e, {})}
                 >
 
                     {
@@ -251,11 +259,12 @@ const AddChallenge = ({ history, loading }) => {
 
 
     const handleAddQuestionsToList = (selectedQuestions) => {
+        console.log('before selected questions ', selectedQuestions, 'List of all ', questionList)
         for (const question of selectedQuestions) {
             if (questionList.map(q => q?.id).includes(question?.id)) continue;
-            setQuestionList([...questionList, question])
+            setQuestionList(prevQuestionList => [...prevQuestionList, question])
         }
-        
+        console.log('after selected questions ', selectedQuestions, 'List of all ', questionList)
         showNotification('success', 'Successfully added question')
     }
 

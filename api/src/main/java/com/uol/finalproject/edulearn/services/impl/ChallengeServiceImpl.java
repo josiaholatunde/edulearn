@@ -18,6 +18,7 @@ import com.uol.finalproject.edulearn.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
@@ -133,9 +134,16 @@ public class ChallengeServiceImpl implements ChallengeService  {
         List<Question> challengeQuestions = new ArrayList<>();
 
         for (Question question : challengeDTO.getChallengeQuestions()) {
-            question.setCreatedAt(DateUtil.getCurrentDate());
-            question.setUpdatedAt(DateUtil.getCurrentDate());
-            questionRepository.save(question);
+            log.info("Current Question {}", question.getTitle());
+            if (question.getId() == null) {
+                Question newQuestion = Question.builder().build();
+                BeanUtils.copyProperties(newQuestion, question);
+                question = questionRepository.save(newQuestion);
+            } else {
+                question.setCreatedAt(DateUtil.getCurrentDate());
+                question.setUpdatedAt(DateUtil.getCurrentDate());
+                questionRepository.save(question);
+            }
 
             if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
                 if (question.getMultipleChoiceQuestion().getId() == null) {
@@ -154,6 +162,23 @@ public class ChallengeServiceImpl implements ChallengeService  {
                         answer.setQuestion(multipleChoiceQuestion);
                     }
                     multipleChoiceAnswerRepository.saveAll(multipleChoiceAnswers);
+                } else {
+                    if (question.getMultipleChoiceQuestion().getQuestion() == null) {
+                        question.getMultipleChoiceQuestion().setQuestion(question);
+                    }
+
+                    for (MultipleChoiceOption option: question.getMultipleChoiceQuestion().getOptions()) {
+                        if (option.getQuestion() == null) {
+                            option.setQuestion(question.getMultipleChoiceQuestion());
+                        }
+                    }
+
+                    for (MultipleChoiceAnswer answer: question.getMultipleChoiceQuestion().getAnswers()) {
+                        if (answer.getQuestion() == null) {
+                            answer.setQuestion(question.getMultipleChoiceQuestion());
+                        }
+                    }
+                    multipleChoiceQuestionRepository.save(question.getMultipleChoiceQuestion());
                 }
 
             } else if (question.getType() == QuestionType.ALGORITHMS) {
