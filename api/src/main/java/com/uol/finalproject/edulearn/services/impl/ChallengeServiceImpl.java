@@ -7,10 +7,12 @@ import com.uol.finalproject.edulearn.apimodel.NotificationMessage;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
+import com.uol.finalproject.edulearn.exceptions.BadRequestException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.UserService;
+import com.uol.finalproject.edulearn.util.DateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -43,6 +45,12 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
     private final StompNotificationService stompNotificationService;
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
+    private final AlgorithmQuestionRepository algorithmQuestionRepository;
+    private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
+    private final AlgorithmSolutionRepository algorithmSolutionRepository;
+    private final MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
+    private final MultipleChoiceAnswerRepository multipleChoiceAnswerRepository;
+
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
 
@@ -84,13 +92,17 @@ public class ChallengeServiceImpl implements ChallengeService  {
     @Override
     @Transactional
     public ChallengeDTO createChallengeAndQuestions(ChallengeDTO challengeDTO) {
-
+        validateChallenge(challengeDTO);
         Challenge challenge = createChallengeFromRequest(challengeDTO, challengeDTO.getCreatedBy() == RoleType.ADMIN ? null : retrieveStudentUser());
 
         saveChallengeQuestions(challenge, challengeDTO);
-        saveChallengeAnswers(challenge, challengeDTO);
 
         return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void validateChallenge(ChallengeDTO challengeDTO) {
+        if (Strings.isBlank(challengeDTO.getTitle())) throw new BadRequestException("Challenge title is required");
+        if (challengeRepository.existsByTitle(challengeDTO.getTitle())) throw new BadRequestException("Challenge title has been taken");
     }
 
     private void saveChallengeAnswers(Challenge challenge, ChallengeDTO challengeDTO) {
@@ -113,23 +125,65 @@ public class ChallengeServiceImpl implements ChallengeService  {
     }
 
     private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {
+        List<Question> challengeQuestions = new ArrayList<>();
 
         for (Question question : challengeDTO.getChallengeQuestions()) {
+            question.setCreatedAt(DateUtil.getCurrentDate());
+            question.setUpdatedAt(DateUtil.getCurrentDate());
             questionRepository.save(question);
 
             if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
-                MultipleChoiceQuestion multipleChoiceQuestion = question.getMultipleChoiceQuestion();
-                multipleChoiceQuestion.setQuestion(question);
-                questionRepository.save(question);
+                if (question.getMultipleChoiceQuestion().getId() == null) {
+                    MultipleChoiceQuestion multipleChoiceQuestion = question.getMultipleChoiceQuestion();
+                    multipleChoiceQuestion.setQuestion(question);
+                    multipleChoiceQuestionRepository.save(multipleChoiceQuestion);
 
-                List<MultipleChoiceOption> multipleChoiceOptions = multipleChoiceQuestion.getOptions();
-                for (MultipleChoiceOption option : multipleChoiceOptions) {
-                    option.setQuestion(multipleChoiceQuestion);
+                    List<MultipleChoiceOption> multipleChoiceOptions = multipleChoiceQuestion.getOptions();
+                    for (MultipleChoiceOption option : multipleChoiceOptions) {
+                        option.setQuestion(multipleChoiceQuestion);
+                    }
+                    multipleChoiceOptionRepository.saveAll(multipleChoiceOptions);
+
+                    List<MultipleChoiceAnswer> multipleChoiceAnswers = multipleChoiceQuestion.getAnswers();
+                    for (MultipleChoiceAnswer answer: multipleChoiceAnswers) {
+                        answer.setQuestion(multipleChoiceQuestion);
+                    }
+                    multipleChoiceAnswerRepository.saveAll(multipleChoiceAnswers);
                 }
-                multipleChoiceOptionRepository.saveAll(multipleChoiceOptions);
+
+            } else if (question.getType() == QuestionType.ALGORITHMS) {
+                if (question.getAlgorithmQuestion().getId() == null) {
+                    AlgorithmQuestion algorithmQuestion = question.getAlgorithmQuestion();
+                    algorithmQuestion.setQuestion(question);
+                    algorithmQuestionRepository.save(algorithmQuestion);
+
+                    algorithmQuestion.getExamples().forEach(example -> example.setAlgorithmQuestion(algorithmQuestion));
+                    algorithmQuestionExampleRepository.saveAll(algorithmQuestion.getExamples());
+
+                    algorithmQuestion.getSolutions().forEach(solution -> solution.setAlgorithmQuestion(algorithmQuestion));
+                    algorithmSolutionRepository.saveAll(algorithmQuestion.getSolutions());
+                } else {
+                    if (question.getAlgorithmQuestion().getQuestion() == null) {
+                        question.getAlgorithmQuestion().setQuestion(question);
+                    }
+
+                    for (AlgorithmQuestionExample example: question.getAlgorithmQuestion().getExamples()) {
+                        if (example.getAlgorithmQuestion() == null) {
+                            example.setAlgorithmQuestion(question.getAlgorithmQuestion());
+                        }
+                    }
+
+                    for (AlgorithmSolution solution: question.getAlgorithmQuestion().getSolutions()) {
+                        if (solution.getAlgorithmQuestion() == null) {
+                            solution.setAlgorithmQuestion(question.getAlgorithmQuestion());
+                        }
+                    }
+                    algorithmQuestionRepository.save(question.getAlgorithmQuestion());
+                }
             }
+            challengeQuestions.add(question);
         }
-        challenge.setChallengeQuestions(challengeDTO.getChallengeQuestions());
+        challenge.setChallengeQuestions(challengeQuestions);
         return challengeRepository.save(challenge);
     }
 

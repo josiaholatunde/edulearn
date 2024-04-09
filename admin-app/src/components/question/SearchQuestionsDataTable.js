@@ -94,6 +94,7 @@ const SearchQuestionsDataTable = ({ showQuestionStyle, loading, questions, total
         <div className='col-lg-12'>
           <button type="button" className="btn btn-cool" onClick={() => {
             showQuestionStyle(selectedQuestions)
+            setSelectedQuestions([])
           }}>
             Add Questions
           </button>

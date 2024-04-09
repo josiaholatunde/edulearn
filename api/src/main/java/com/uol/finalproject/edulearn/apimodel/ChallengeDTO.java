@@ -41,6 +41,7 @@ public class ChallengeDTO {
     private String friendlyType;
 
     private int level;
+    private Long duration;
 
     private Timestamp startDate;
 

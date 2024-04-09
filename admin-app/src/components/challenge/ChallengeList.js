@@ -8,6 +8,7 @@ import { createChallenge, getChallenges } from '../../redux/actions/challengeAct
 import moment from 'moment'
 import Challenge from './Challenge';
 import history from '../../utils/history';
+import { CategoryScale } from 'chart.js';
 
 
 const CHALLENGE_MODE = {
@@ -32,6 +33,7 @@ const CHALLENGE_TYPE = {
 const mapChallenge = (challenges, currentPage, pageSize) => {
     const pageStart = currentPage * pageSize;
     return challenges?.map((challenge, index) => ({
+        ...challenge,
         key: pageStart + (index + 1),
         position: pageStart + (index + 1),
         title: challenge?.title,
@@ -104,7 +106,7 @@ const ChallengeList = ({ loading, total, challenges }) => {
                 {
                     challenges && challenges.length > 0 ? 
                         challenges.map((challenge, index) => (<Challenge challenge={challenge} isFirstInRow={isFirstInRow(index)} />)) : (
-                            <div className='p-3'>No challenges have been created</div>
+                            <div className='col-lg-12 d-flex text-center p-3'>Loading Challenges...</div>
                         )
                 }
             </div>

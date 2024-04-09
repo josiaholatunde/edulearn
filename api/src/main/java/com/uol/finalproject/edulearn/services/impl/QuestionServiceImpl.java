@@ -3,6 +3,7 @@ package com.uol.finalproject.edulearn.services.impl;
 import com.uol.finalproject.edulearn.apimodel.*;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.QuestionType;
+import com.uol.finalproject.edulearn.exceptions.BadRequestException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.QuestionService;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,6 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
     private final MultipleChoiceAnswerRepository multipleChoiceAnswerRepository;
     private final AlgorithmSolutionRepository algorithmSolutionRepository;
     private final ChallengeRepository challengeRepository;
+    private final UserChallengeAnswerRepository userChallengeAnswerRepository;
 
     @Override
     public Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type) {
@@ -185,31 +188,79 @@ public class QuestionServiceImpl implements QuestionService {
         }
         multipleChoiceQuestionRepository.save(multipleChoiceQuestion);
 
-        multipleChoiceQuestion.getOptions().clear();
+        List<MultipleChoiceOption> multipleChoiceOptions =  questionDTO.getMultipleChoiceQuestion().getOptions().stream().map(MultipleChoiceOption::fromMultipleChoiceOptionDTO).collect(Collectors.toList());
+        removeDeletedOptionsFromMultipleChoiceQuestion(multipleChoiceQuestion, multipleChoiceOptions);
+        for (MultipleChoiceOption option : multipleChoiceOptions) {
+            if (option.getId() != null) {
+                for (MultipleChoiceOption existingOption: multipleChoiceQuestion.getOptions()) {
+                    if (existingOption.getId() == option.getId()) {
+                        existingOption.setTitle(option.getTitle());
+                        existingOption.setValue(option.getValue());
+                    }
+                }
+            } else {
+                option.setQuestion(multipleChoiceQuestion);
+                multipleChoiceQuestion.getOptions().add(option);
+            }
+
+        }
         multipleChoiceOptionRepository.saveAll(multipleChoiceQuestion.getOptions());
 
-        List<MultipleChoiceOption> multipleChoiceOptions =  questionDTO.getMultipleChoiceQuestion().getOptions().stream().map(MultipleChoiceOption::fromMultipleChoiceOptionDTO).collect(Collectors.toList());
-        for (MultipleChoiceOption option : multipleChoiceOptions) {
-            option.setQuestion(multipleChoiceQuestion);
-        }
-        multipleChoiceOptionRepository.saveAll(multipleChoiceOptions);
 
-        multipleChoiceQuestion.getAnswers().clear();
-        multipleChoiceQuestionRepository.save(multipleChoiceQuestion);
+
+        removeExistingDeletedAnswers(multipleChoiceQuestion, questionDTO.getMultipleChoiceQuestion().getAnswerList());
 
         for (MultipleChoiceAnswerDTO multipleChoiceAnswerDTO : questionDTO.getMultipleChoiceQuestion().getAnswerList()) {
-            Optional<MultipleChoiceOption> first = multipleChoiceOptions.stream()
+            Optional<MultipleChoiceOption> answerOptional = multipleChoiceQuestion.getOptions().stream()
                     .filter(option -> option.getTitle().equals(multipleChoiceAnswerDTO.getOptionTitle()))
                     .findFirst();
-            if (first.isPresent()) {
-                multipleChoiceQuestion.getAnswers().add(MultipleChoiceAnswer.builder()
-                        .question(multipleChoiceQuestion)
-                        .option(first.get())
-                        .build());
+            if (answerOptional.isPresent()) {
+                if (doesAnswerNotPreviouslyExist(multipleChoiceQuestion, answerOptional)) {
+                    multipleChoiceQuestion.getAnswers().add(MultipleChoiceAnswer.builder()
+                            .question(multipleChoiceQuestion)
+                            .option(answerOptional.get())
+                            .build());
+                }
             }
         }
 
         return multipleChoiceQuestion;
+    }
+
+    private static boolean doesAnswerNotPreviouslyExist(MultipleChoiceQuestion multipleChoiceQuestion, Optional<MultipleChoiceOption> answerOptional) {
+        return !multipleChoiceQuestion.getAnswers().stream().map(answer -> answer.getOption()).collect(Collectors.toList()).contains(answerOptional.get());
+    }
+
+    private void removeExistingDeletedAnswers(MultipleChoiceQuestion multipleChoiceQuestion, List<MultipleChoiceAnswerDTO> answerList) {
+        for (MultipleChoiceAnswer currentAnswer: multipleChoiceQuestion.getAnswers()) {
+            if (!answerList.stream().map(answer -> answer.getOptionId()).collect(Collectors.toList()).contains(currentAnswer.getOption().getId())) {
+                multipleChoiceQuestion.getAnswers().remove(currentAnswer);
+            }
+        }
+    }
+
+    private void removeDeletedOptionsFromMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion, List<MultipleChoiceOption> newOptions) {
+        if (multipleChoiceQuestion.getOptions() != null && !multipleChoiceQuestion.getOptions().isEmpty()) {
+            Iterator<MultipleChoiceOption> iterator = multipleChoiceQuestion.getOptions().iterator();
+            while (iterator.hasNext()) {
+                MultipleChoiceOption existingOption = iterator.next();
+                log.info("Existing Option {}", existingOption);
+                if (!newOptions.contains(existingOption)) {
+                    if (userChallengeAnswerRepository.existsByOption(existingOption)) throw new BadRequestException("You can not edit a question that users have responded to");
+
+                    iterator.remove();
+                    // Remove the option from the answers list if it exists
+                    if (multipleChoiceQuestion.getAnswers() != null) {
+                        multipleChoiceQuestion.getAnswers().removeIf(answer -> {
+                            if (answer.getOption() == null) return true;
+                           return answer.getOption().getId() == existingOption.getId();
+                        });
+                        multipleChoiceAnswerRepository.saveAll(multipleChoiceQuestion.getAnswers());
+                    }
+                    multipleChoiceOptionRepository.delete(existingOption);
+                }
+            }
+        }
     }
 
     private AlgorithmQuestion updateAlgorithmQuestion(QuestionDTO questionDTO, Question question) {

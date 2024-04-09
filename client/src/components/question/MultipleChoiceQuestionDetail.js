@@ -14,7 +14,10 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
     
 
     const handleOptionChange = (questionIndex, optionIndex) => {
+      
         const newAnswers = [...answers];
+        console.log('new answers ', newAnswers, 'questionIndex ', questionIndex)
+        if (!newAnswers || !Array.isArray(newAnswers[questionIndex])) return;
         let updatedAnswer = [...newAnswers[questionIndex]];
         const index = updatedAnswer.indexOf(optionIndex);
         if (index === -1) {

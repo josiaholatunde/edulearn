@@ -1,5 +1,6 @@
 package com.uol.finalproject.edulearn.repositories;
 
+import com.uol.finalproject.edulearn.entities.MultipleChoiceOption;
 import com.uol.finalproject.edulearn.entities.User;
 import com.uol.finalproject.edulearn.entities.UserChallengeAnswers;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
@@ -10,4 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface UserChallengeAnswerRepository extends JpaRepository<UserChallengeAnswers, Long> {
+
+    boolean existsByOption(MultipleChoiceOption multipleChoiceOption);
 }

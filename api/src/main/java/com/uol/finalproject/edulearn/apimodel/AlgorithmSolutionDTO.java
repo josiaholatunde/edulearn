@@ -20,6 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 public class AlgorithmSolutionDTO {
 
+    private Long id;
     private String description;
 
     private String code;

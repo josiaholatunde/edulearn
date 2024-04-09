@@ -69,7 +69,8 @@ const AddChallenge = ({ history, loading }) => {
             friendlyType: type,
             level: parseInt(level),
             createdBy: 'ADMIN',
-            challengeQuestions: questionList
+            challengeQuestions: questionList,
+            duration
         }
         if (type === 'MULTIPLE_CHOICE') {
             createChallengeRequest.optionAnswers = {}
@@ -86,7 +87,10 @@ const AddChallenge = ({ history, loading }) => {
 
     const handleCloseQuestionStyle = () => setShowAddQuestionModal(false)
 
-    const handleCloseSearchQuestionModal = () => setShowSearchQuestionModal(false)
+    const handleCloseSearchQuestionModal = () => {
+        setShowSearchQuestionModal(false)
+        setSelectedQuestions([])
+    }
 
 
     const handleOptionChange = (e, optionIndex) => {
@@ -246,8 +250,12 @@ const AddChallenge = ({ history, loading }) => {
     }
 
 
-    const handleAddQuestionsToList = () => {
-        setQuestionList([...questionList, ...selectedQuestions])
+    const handleAddQuestionsToList = (selectedQuestions) => {
+        for (const question of selectedQuestions) {
+            if (questionList.map(q => q?.id).includes(question?.id)) continue;
+            setQuestionList([...questionList, question])
+        }
+        
         showNotification('success', 'Successfully added question')
     }
 
@@ -521,9 +529,9 @@ const AddChallenge = ({ history, loading }) => {
                         <SearchQuestionsDataTable selectedQuestions={selectedQuestions} 
                         type={type}
                         setSelectedQuestions={setSelectedQuestions}
-                        showQuestionStyle={() => {
+                        showQuestionStyle={(selectedQuestions) => {
                             setShowSearchQuestionModal(false);
-                            handleAddQuestionsToList()}
+                            handleAddQuestionsToList(selectedQuestions)}
                         } />
                     </div>
                 </div>

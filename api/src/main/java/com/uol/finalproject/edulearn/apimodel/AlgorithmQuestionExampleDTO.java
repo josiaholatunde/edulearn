@@ -17,6 +17,7 @@ import java.util.LinkedHashMap;
 @AllArgsConstructor
 public class AlgorithmQuestionExampleDTO {
 
+    private Long id;
     private String input;
 
     private String output;

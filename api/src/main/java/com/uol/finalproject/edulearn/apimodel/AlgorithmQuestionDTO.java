@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class AlgorithmQuestionDTO {
 
+    private Long id;
     private String introduction;
     private String inputDescription;
     private String outputDescription;

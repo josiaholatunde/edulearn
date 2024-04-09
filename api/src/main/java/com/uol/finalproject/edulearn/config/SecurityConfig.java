@@ -6,6 +6,7 @@ import com.uol.finalproject.edulearn.services.impl.DefaultJwtValidator;
 import com.uol.finalproject.edulearn.services.impl.GoogleJwtValidator;
 import com.uol.finalproject.edulearn.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,6 +41,9 @@ public class SecurityConfig {
     private final GoogleIdTokenVerifier googleIdTokenVerifier;
     private final DefaultJwtValidator defaultJwtValidator;
     private final GoogleJwtValidator googleJwtValidator;
+
+    @Value("${app.cors.allowedOrigins:http://localhost:3000,http://localhost:3001}")
+    private String[] allowedOrigins;
 
     private final String[] APPLICATION_OPEN_APIS = new String[] {
             "/api/auth/login", "/api/auth/register"
@@ -86,7 +90,7 @@ public class SecurityConfig {
     protected FilterRegistrationBean corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:3001"));
+        config.setAllowedOrigins(List.of(allowedOrigins));
         config.addExposedHeader("sign-in-mode");
         config.addExposedHeader("Authorization");
         config.setAllowedHeaders(Collections.singletonList("*"));

@@ -19,6 +19,7 @@ import java.util.Optional;
 @Repository
 public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
 
+    boolean existsByTitle(String title);
     Page<Challenge> findAllByStudentUser_EmailOrCreatedBy(String email, RoleType createdBy, Pageable pageable);
     Page<Challenge> findAllByStudentUserAndLevelOrCreatedBy(StudentUser studentUser, long level, RoleType createdBy, Pageable pageable);
     Page<Challenge> findAllByCreatedBy(RoleType createdBy, Pageable pageable);
