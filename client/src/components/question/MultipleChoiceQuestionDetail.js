@@ -5,7 +5,7 @@ import { submitChallengeResponse } from '../../redux/actions/challengeActions';
 
 const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessModal, loading, userResponse, setUserResponses, setStartChallenge }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [answers, setAnswers] = useState(Array(questions.length).fill([]));
+    const [answers, setAnswers] = useState(Array(questions?.length).fill([]));
 
     const dispatch = useDispatch()
 

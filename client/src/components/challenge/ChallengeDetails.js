@@ -50,7 +50,11 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (queryParams.has('showInstruction')) {
             setShouldShowInstruction(false)
             setStartChallenge(true)
-            setChallengeEndDate(Date.now() + (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000))
+            let challengeDurationMilliSeconds = (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000)
+            if (challengeDetail?.duration) {
+                challengeDurationMilliSeconds = parseInt(challengeDetail?.duration) * 60 * 1000;
+            }
+            setChallengeEndDate(Date.now() + challengeDurationMilliSeconds)
         }
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
@@ -58,6 +62,11 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (!!challenge) {
             setChallenge(challengeDetail)
             setQuestions(challengeDetail?.challengeQuestions || [])
+            let challengeDurationMilliSeconds = (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000)
+            if (challengeDetail?.duration) {
+                challengeDurationMilliSeconds = parseInt(challengeDetail?.duration) * 60 * 1000;
+            }
+            setChallengeEndDate(Date.now() + challengeDurationMilliSeconds)
         } 
        
         

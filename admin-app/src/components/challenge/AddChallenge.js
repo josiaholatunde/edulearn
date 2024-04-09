@@ -61,6 +61,9 @@ const AddChallenge = ({ history, loading }) => {
     const handleCreateChallenge = (e) => {
         e?.preventDefault()
         console.log('i ran oo men from challenge')
+        if (questionList && questionList.length == 0) {
+            return showNotification('danger', 'Please select one or more questions to add to this challenge')
+        }
         const createChallengeRequest = {
             title,
             category,

@@ -11,6 +11,7 @@ const AlgorithmStep2Form = ({
     setStep,
     loading
 }) => {
+    console.log('examples ', examples)
     return (
         <Fragment>
             <div className='mt-0 mb-1 pointer d-flex' onClick={() => {
@@ -20,7 +21,7 @@ const AlgorithmStep2Form = ({
                 <div className=' mb-3'><div style={{ fontSize: '20px' }}>Step 2 - Add Sample Test Cases</div></div>
             </div>
 
-            {examples.map((example, index) => (
+            {examples?.map((example, index) => (
                 <div className='d-flex flex-column w-100' key={index}>
                     <div className="form-group mb-4 d-flex flex-column w-100">
                         <label htmlFor='inputDescription'>Input Description</label>
@@ -62,7 +63,7 @@ const AlgorithmStep2Form = ({
                     </div>
 
                     <div className='mb-2'>Add Method Parameter Values</div>
-                    {example.parameters.map((param, paramIndex) => (
+                    {example?.parameters.map((param, paramIndex) => (
                         <Fragment key={paramIndex}>
 
                             <div className='text-cool btn-sm d-flex justify-content-end pointer' onClick={() => handleRemoveParameter(index, paramIndex)}>

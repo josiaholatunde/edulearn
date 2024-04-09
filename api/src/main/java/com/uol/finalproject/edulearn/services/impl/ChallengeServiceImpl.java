@@ -1,5 +1,7 @@
 package com.uol.finalproject.edulearn.services.impl;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.uol.finalproject.edulearn.apimodel.*;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
@@ -159,6 +161,20 @@ public class ChallengeServiceImpl implements ChallengeService  {
         }
     }
 
+    private void sendChallengeStartedPushNotificationToParticipants(List<String> userEmails, Challenge challenge) {
+        JsonObject message = new JsonObject();
+        message.addProperty("challengeId", challenge.getId());
+        message.addProperty("type", challenge.getType().toString());
+
+        for (String userEmail: userEmails) {
+            log.info("About to send challenge started push notification to user {}", userEmail);
+            stompNotificationService.sendNotificationToDestination(String.format("/topic/user/%s/challenge-started/notification", userEmail), NotificationMessage.builder()
+                    .message(new Gson().toJson(message))
+                    .build());
+            log.info("Successfully sent challenge started push notification to user {}", userEmail);
+        }
+    }
+
     @Override
     public ChallengeSummaryDTO getChallengesSummary() {
         return null;
@@ -169,6 +185,10 @@ public class ChallengeServiceImpl implements ChallengeService  {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
         challenge.setChallengeStatus(challengeDTO.getChallengeStatus());
         challengeRepository.updateChallengeStatus(challengeDTO.getChallengeStatus(), challenge.getId());
+        if (challengeDTO.getChallengeStatus() == ChallengeStatus.STARTED) {
+            List<String> userEmails = challenge.getChallengeParticipants().stream().map(participant -> participant.getStudentUser().getEmail()).collect(Collectors.toList());
+            sendChallengeStartedPushNotificationToParticipants(userEmails, challenge);
+        }
         return ChallengeDTO.fromChallenge(challenge);
     }
 
@@ -277,8 +297,8 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         expirePendingChallengeInvites(challenge);
 
+        challengeRepository.incrementSubmissions(challenge.getId());
         challenge.setSubmissions(challenge.getSubmissions() + 1);
-        challengeRepository.save(challenge);
     }
 
     private void expirePendingChallengeInvites(Challenge challenge) {

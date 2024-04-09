@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import io from 'socket.io-client';
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
+import { routeToPath } from '../../utils/routeUtil';
 import { showNotification } from '../../utils/showNotification';
+import history from '../../utils/history'
 
 const WebSocketComponent = ({ user }) => {
 
@@ -23,6 +25,13 @@ const WebSocketComponent = ({ user }) => {
               const notification = JSON.parse(message.body);
               console.log('Received notification:', notification);
                 showNotification('success', notification?.message);
+            });
+
+            stompClient.subscribe(`/topic/user/${userId}/challenge-started/notification`, (message) => {
+              const challengeNotification = JSON.parse(message.body);
+              console.log('Received challenge started notification:', challengeNotification);
+                const challengeObject = JSON.parse(challengeNotification?.message);
+                routeToPath(history, `/challenge/${challengeObject?.challengeId}/details?type=${challengeObject?.type}&mode=group&showInstruction=false`)
             });
           });
 
