@@ -9,7 +9,7 @@ const QuestionsDataTable = ({ questions, currentPage, setCurrentPage, loading, t
 
   const columns = [
     {
-      title: 'Position',
+      title: 'S/N',
       dataIndex: 'position',
       key: 'position',
     },
@@ -25,8 +25,8 @@ const QuestionsDataTable = ({ questions, currentPage, setCurrentPage, loading, t
     },
     {
       title: 'Type',
-      dataIndex: 'type',
-      key: 'type',
+      dataIndex: 'friendlyType',
+      key: 'friendlyType',
     },
     {
       title: 'Difficulty Level',

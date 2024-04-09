@@ -5,10 +5,7 @@ import com.uol.finalproject.edulearn.apimodel.QuestionDTO;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.QuestionService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,5 +24,10 @@ public class AdminController {
     @PostMapping("/questions")
     public QuestionDTO adminCreateQuestion(@RequestBody QuestionDTO questionDTO) {
         return questionService.createQuestion(questionDTO);
+    }
+
+    @PutMapping("/questions")
+    public QuestionDTO adminUpdateQuestion(@RequestBody QuestionDTO questionDTO) {
+        return questionService.updateQuestion(questionDTO);
     }
 }

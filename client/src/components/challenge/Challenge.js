@@ -98,8 +98,11 @@ const Challenge = ({ history, loading, total, challenges }) => {
         setTimeout(() => {
             dispatch(createChallenge(challengeRequest, (challengeId) => {
                 setCreateChallengeLoader(false);
-                routeToPath(`/challenge-lobby/${challengeId}?type=${type}&mode=${challengeMode}`)
-                // routeToPath(`/challenge/${challengeId}/details?type=${type}&mode=${challengeMode}`)
+                if (challengeMode == 'GROUP') {
+                    routeToPath(`/challenge-lobby/${challengeId}?type=${type}&mode=${challengeMode}`)
+                } else {
+                    routeToPath(`/challenge/${challengeId}/details?type=${type}&mode=${challengeMode}`)
+                }
             }));
         }, 3000)
     }
