@@ -50,6 +50,11 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public QuestionDTO createQuestion(QuestionDTO questionDTO) {
+        return QuestionDTO.fromQuestion(createQuestionAndReturnEntity(questionDTO));
+    }
+
+    @Override
+    public Question createQuestionAndReturnEntity(QuestionDTO questionDTO) {
         Question question = saveQuestionDetails(questionDTO);
 
         if (questionDTO.getType() == QuestionType.MULTIPLE_CHOICE) {
@@ -59,8 +64,7 @@ public class QuestionServiceImpl implements QuestionService {
             AlgorithmQuestion algorithmQuestion = createAlgorithmQuestion(questionDTO, question);
             algorithmQuestionRepository.save(algorithmQuestion);
         }
-
-        return QuestionDTO.fromQuestion(question);
+        return question;
     }
 
 
@@ -136,6 +140,7 @@ public class QuestionServiceImpl implements QuestionService {
     private MultipleChoiceQuestion createMultipleChoiceQuestion(QuestionDTO questionDTO, Question question) {
         MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestion.fromMultipleChoiceQuestionDTO(questionDTO.getMultipleChoiceQuestion());
         multipleChoiceQuestion.setQuestion(question);
+        question.setMultipleChoiceQuestion(multipleChoiceQuestion);
         multipleChoiceQuestionRepository.save(multipleChoiceQuestion);
 
         List<MultipleChoiceOption> multipleChoiceOptions =  questionDTO.getMultipleChoiceQuestion().getOptions().stream().map(MultipleChoiceOption::fromMultipleChoiceOptionDTO).collect(Collectors.toList());
@@ -159,6 +164,7 @@ public class QuestionServiceImpl implements QuestionService {
     private AlgorithmQuestion createAlgorithmQuestion(QuestionDTO questionDTO, Question question) {
         AlgorithmQuestion algorithmQuestion = AlgorithmQuestion.fromAlgorithmQuestionDTO(questionDTO.getAlgorithmQuestion());
         algorithmQuestion.setQuestion(question);
+        question.setAlgorithmQuestion(algorithmQuestion);
         algorithmQuestionRepository.save(algorithmQuestion);
 
         List<AlgorithmQuestionExample> algorithmQuestionExamples = questionDTO.getAlgorithmQuestion().getExamples().stream().map(AlgorithmQuestionExample::fromQuestionExampleDTO).collect(Collectors.toList());

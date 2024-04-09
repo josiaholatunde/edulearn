@@ -125,7 +125,7 @@ const ChallengeList = ({ loading, total, challenges }) => {
                 </div>) : (
                     challenges && challenges.length > 0 ? 
                         challenges.map((challenge, index) => (<Challenge challenge={challenge} isFirstInRow={isFirstInRow(index)} />)) : (
-                            <div className='col-lg-12 d-flex text-center p-3'>Loading Challenges...</div>
+                            <div className='col-lg-12 d-flex text-center p-3'>No challenge was found...Kindly create a challenge or change your filter</div>
                         ))
                 }
             </div>

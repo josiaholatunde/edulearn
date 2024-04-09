@@ -19,7 +19,7 @@ public class ChallengeSpecification {
             final List<Predicate> allSearchPredicates = new ArrayList<>();
 
             if (Strings.isNotBlank(specificationSearchCriteria.getTitle())) {
-                Predicate titlePredicate = builder.equal(builder.lower(root.get("title")), specificationSearchCriteria.getTitle().toLowerCase());
+                Predicate titlePredicate = builder.like(builder.lower(root.get("title")), "%" + specificationSearchCriteria.getTitle().toLowerCase()+ "%");
                 allSearchPredicates.add(titlePredicate);
             }
 

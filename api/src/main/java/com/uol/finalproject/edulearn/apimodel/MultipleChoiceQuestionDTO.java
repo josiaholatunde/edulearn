@@ -25,12 +25,16 @@ public class MultipleChoiceQuestionDTO {
 
     @Builder.Default
     private List<MultipleChoiceAnswerDTO> answerList = new ArrayList<>();
+
+    @Builder.Default
+    private List<MultipleChoiceAnswerDTO> answers = new ArrayList<>();
     private List<MultipleChoiceOptionDTO> options = new ArrayList<>();
 
     public static MultipleChoiceQuestionDTO fromMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion) {
         MultipleChoiceQuestionDTO multipleChoiceQuestionDTO = MultipleChoiceQuestionDTO.builder().build();
         BeanUtils.copyProperties(multipleChoiceQuestion, multipleChoiceQuestionDTO);
         multipleChoiceQuestionDTO.setOptions(multipleChoiceQuestion.getOptions().stream().map(MultipleChoiceOptionDTO::fromMultipleChoiceOption).collect(Collectors.toList()));
+        multipleChoiceQuestionDTO.setAnswers(multipleChoiceQuestion.getAnswers().stream().map(MultipleChoiceAnswerDTO::fromMultipleChoiceAnswer).collect(Collectors.toList()));
         return multipleChoiceQuestionDTO;
     }
 }

@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MultipleChoiceOptionDTO {
 
+    private Long id;
     private String title;
 
     private String value;
