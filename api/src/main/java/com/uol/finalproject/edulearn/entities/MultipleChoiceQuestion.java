@@ -28,10 +28,11 @@ public class MultipleChoiceQuestion extends BaseAuditableModel {
     @JsonIgnore
     private Question question;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", orphanRemoval = true, cascade = CascadeType.ALL)
+    @Builder.Default
     private List<MultipleChoiceOption> options = new ArrayList<>();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<MultipleChoiceAnswer> answers = new ArrayList<>();
 

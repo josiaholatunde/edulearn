@@ -60,3 +60,24 @@ export const createQuestion = (questionRequest, callBack) => dispatch => {
         }
     }, 1000)
 }
+
+export const updateQuestion = (questionRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.put(`admin/questions`, questionRequest)
+            if (data) {
+                console.log('immm after call', data)
+                const questionId = data?.data?.id
+                showNotification('success', 'Successfully updated question')
+                if (callBack) callBack(questionId)
+                dispatch(getQuestions({ page: 1, size: 10}))
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while updating question')
+        }
+    }, 1000)
+}
