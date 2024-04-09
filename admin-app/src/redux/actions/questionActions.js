@@ -81,3 +81,23 @@ export const updateQuestion = (questionRequest, callBack) => dispatch => {
         }
     }, 1000)
 }
+
+
+export const deleteQuestion = (questionRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const data = await axios.delete(`admin/questions/${questionRequest?.id}`)
+            dispatch(hideLoading())
+            showNotification('success', 'Successfully deleted question')
+            if (callBack) callBack()
+            dispatch(getQuestions({ page: 1, size: 10}))
+            
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while deleting question')
+        }
+    }, 1000)
+}

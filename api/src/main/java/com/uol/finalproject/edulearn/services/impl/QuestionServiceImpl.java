@@ -27,6 +27,9 @@ public class QuestionServiceImpl implements QuestionService {
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
     private final AlgorithmQuestionRepository algorithmQuestionRepository;
     private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
+    private final MultipleChoiceAnswerRepository multipleChoiceAnswerRepository;
+    private final AlgorithmSolutionRepository algorithmSolutionRepository;
+    private final ChallengeRepository challengeRepository;
 
     @Override
     public Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type) {
@@ -55,6 +58,44 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         return QuestionDTO.fromQuestion(question);
+    }
+
+
+    @Override
+    public void deleteQuestion(long questionId) {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Invalid question id"));
+        removeQuestionFromChallengeIfExists(question);
+        if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
+            deleteMultipleChoiceQuestion(question.getMultipleChoiceQuestion());
+        } else {
+            deleteAlgorithmQuestion(question.getAlgorithmQuestion());
+        }
+        questionRepository.delete(question);
+    }
+
+    private void removeQuestionFromChallengeIfExists(Question question) {
+        if (!question.getChallenges().isEmpty()) {
+            for (Challenge challenge: question.getChallenges()) {
+                challenge.getChallengeQuestions().remove(question);
+                challengeRepository.save(challenge);
+            }
+        }
+    }
+
+    private void deleteAlgorithmQuestion(AlgorithmQuestion algorithmQuestion) {
+        if (algorithmQuestion != null) {
+            algorithmQuestionExampleRepository.deleteAll(algorithmQuestion.getExamples());
+            algorithmSolutionRepository.deleteAll(algorithmQuestion.getSolutions());
+            algorithmQuestionRepository.delete(algorithmQuestion);
+        }
+    }
+
+    private void deleteMultipleChoiceQuestion(MultipleChoiceQuestion multipleChoiceQuestion) {
+        if (multipleChoiceQuestion != null) {
+            multipleChoiceOptionRepository.deleteAll(multipleChoiceQuestion.getOptions());
+            multipleChoiceAnswerRepository.deleteAll(multipleChoiceQuestion.getAnswers());
+            multipleChoiceQuestionRepository.delete(multipleChoiceQuestion);
+        }
     }
 
     @Override

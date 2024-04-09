@@ -30,4 +30,10 @@ public class AdminController {
     public QuestionDTO adminUpdateQuestion(@RequestBody QuestionDTO questionDTO) {
         return questionService.updateQuestion(questionDTO);
     }
+
+
+    @DeleteMapping("/questions/{questionId}")
+    public void deleteQuestion(@PathVariable long questionId) {
+        questionService.deleteQuestion(questionId);
+    }
 }
