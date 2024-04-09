@@ -3,7 +3,7 @@ import { Table } from 'antd';
 
 
 
-const QuestionsDataTable = ({ questions, currentPage, setCurrentPage, loading, totalItems, handleEdit  }) => {
+const QuestionsDataTable = ({ questions, currentPage, setCurrentPage, loading, totalItems, handleEdit, handleDelete  }) => {
   
     
 
@@ -42,9 +42,9 @@ const QuestionsDataTable = ({ questions, currentPage, setCurrentPage, loading, t
       'title': 'Action',
       dataIndex: 'action',
       key: 'action',
-      render: (_, question) => (<div className='d-flex pointer' onClick={() => handleEdit(question)}>
-        <i class="bi bi-pencil mr-2"></i>
-        <span>Edit</span>
+      render: (_, question) => (<div className='d-flex' >
+        <i class="bi bi-pencil mr-2 pointer" onClick={() => handleEdit(question)}></i>
+        <i class="bi bi-trash pointer" onClick={() => handleDelete(question)}></i>
       </div>)
     }
   ];

@@ -1,10 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux';
-import { getQuestions } from '../../redux/actions/questionActions';
+import { deleteQuestion, getQuestions } from '../../redux/actions/questionActions';
 import capitalizeAndReplace from '../../utils/capitalizeAndReplace';
 import AddQuestionModal from './AddQuestionModal';
 import QuestionsDataTable from './QuestionsDataTable'
-
+import { Modal } from 'react-bootstrap';
 
 const mapQuestions = (questions, currentPage, pageSize) => {
     const pageStart = currentPage * pageSize;
@@ -25,6 +25,7 @@ const QuestionsList = ({ questionList, loading, total }) => {
     const [page, setCurrentPage] = useState(1);
     const [size, setSize] = useState(10);
     const [showAddQuestionModal, setShowAddQuestionModal ] = useState(false)
+    const [showDeleteQuestionModal, setShowDeleteQuestionModal ] = useState(false)
     const [formMode, setFormMode] = useState('CREATE')
     const [currentQuestion, setCurrentQuestion] = useState({})
 
@@ -33,6 +34,16 @@ const QuestionsList = ({ questionList, loading, total }) => {
 
     const handleCloseQuestionFormModal = () => {
         setShowAddQuestionModal(false)
+    }
+
+    const handleCloseDeleteQuestionModal = () => {
+        setShowDeleteQuestionModal(false)
+    }
+
+    const handleDeleteQuestion = () => {
+        dispatch(deleteQuestion(currentQuestion, () => {
+            setShowDeleteQuestionModal(false)
+        }))
     }
 
     useEffect(() => {
@@ -67,6 +78,10 @@ const QuestionsList = ({ questionList, loading, total }) => {
                     setShowAddQuestionModal(true)
                     
                 }}
+                handleDelete = {(question) => {
+                    setCurrentQuestion(question)
+                    setShowDeleteQuestionModal(true)
+                }}
             />
             <AddQuestionModal 
                 handleCloseSuccessModal={handleCloseQuestionFormModal}
@@ -75,6 +90,26 @@ const QuestionsList = ({ questionList, loading, total }) => {
                 question={currentQuestion}
 
             />
+            <Modal show={showDeleteQuestionModal} onHide={handleCloseDeleteQuestionModal} size={`md`} centered className="success-modal" >
+                <Modal.Header closeButton={handleCloseDeleteQuestionModal}>
+                    <Modal.Title className='pl-3 text-center'>Delete Question</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="w-100 pt-3 d-flex justify-content-center align-items-center">
+                    <div className='row p-2 w-100'>
+                        <div className='col-lg-12'>
+                            Are you sure you want to delete this question ?
+                        </div>
+                       <div className='col-lg-12'>
+                            <button className="btn btn-cool mt-4" type="button" onClick={handleDeleteQuestion} >
+                            { loading && (<span className="spinner-border spinner-border-sm mr-2" id="login-btn-loader" role="status" aria-hidden="true"></span>) }
+
+                                Delete Question
+                            </button>
+                       </div>
+                    </div>
+
+                </Modal.Body>
+            </Modal>
         </Fragment>
 }
 
@@ -85,4 +120,4 @@ const mapStateToProps = ({ questions: { questions, total, currentPage, pageSize 
     pageSize,
     loading
 });
-export default connect(mapStateToProps, { getQuestions })(QuestionsList)
+export default connect(mapStateToProps, { getQuestions, deleteQuestion })(QuestionsList)

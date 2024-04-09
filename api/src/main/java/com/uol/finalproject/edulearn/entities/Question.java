@@ -41,7 +41,7 @@ public class Question extends BaseAuditableModel {
     @JsonIgnore
     private List<Challenge> challenges = new ArrayList<>();
 
-    @OneToOne(mappedBy = "question")
+    @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
     private AlgorithmQuestion algorithmQuestion;
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)
