@@ -11,4 +11,6 @@ public interface QuestionService {
     QuestionDTO createQuestion(QuestionDTO questionDTO);
 
     QuestionDTO updateQuestion(QuestionDTO questionDTO);
+
+    void deleteQuestion(long questionId);
 }
