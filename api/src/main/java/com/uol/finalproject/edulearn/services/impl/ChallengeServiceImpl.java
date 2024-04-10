@@ -70,8 +70,10 @@ public class ChallengeServiceImpl implements ChallengeService  {
             UserDetails userDetails = userService.getLoggedInUser();
             StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
                     .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
+            specificationSearchCriteria.setStudentUser(studentUser);
              challenges = challengeRepository
-                    .findAllByStudentUserAndLevelOrCreatedBy(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
+                    .findAll(ChallengeSpecification.buildSearchPredicate(specificationSearchCriteria), pageRequest);
+//                    .findAll(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
         }
 
 

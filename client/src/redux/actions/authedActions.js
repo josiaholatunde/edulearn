@@ -75,6 +75,18 @@ export const handleRegisterUser = (userToRegister, { history }) => dispatch => {
 
 }
 
+export const logoutUserOnAPI = async (userEmail) => {
+    try {
+        await axios.put(`/users/${userEmail}/logged-in-status/false`)
+
+    } catch (error) {
+        let errorMessage = error.response && error.response.data.message;
+        showNotification('danger', errorMessage || 'Error occurred while logging out user')
+    }
+ 
+
+}
+
 
 
 export const storeUserCredentialsInLocalStorage = ({ user, token }, authProvider) => {
@@ -89,8 +101,8 @@ export const storeUserCredentialsInLocalStorage = ({ user, token }, authProvider
     }
 }
 
-export const logOutUser = (history) => dispatch => {
-    
+export const logOutUser = (history, user) => async dispatch => {
+    await logoutUserOnAPI(user?.studentUser?.email)
     dispatch({ type: LOG_USER_OUT });
     clearUserInLocalStorage()
     history.push('/login')

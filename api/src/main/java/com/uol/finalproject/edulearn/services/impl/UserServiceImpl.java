@@ -142,4 +142,14 @@ public class UserServiceImpl implements UserService {
         return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
     }
 
+    @Override
+    public void updateLoggedInStatus(boolean isLoggedIn, String userEmail) {
+        studentUserRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        User user = userRepository.findByUsername(userEmail).orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        if (!user.isActive()) throw new AuthorizationException("User is not authorized to carry out action");
+
+        studentUserRepository.updateUserLoginStatus(isLoggedIn, userEmail);
+    }
+
 }

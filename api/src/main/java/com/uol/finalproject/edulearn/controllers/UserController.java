@@ -42,4 +42,9 @@ public class UserController {
     public StudentUserDTO editProfileImage(@PathVariable String userId, @RequestParam("profileImage") MultipartFile file) {
         return userService.editProfileImage(userId, file);
     }
+
+    @PutMapping("/{userId}/logged-in-status/{isLoggedIn}")
+    public void updateLoggedInStatus(@PathVariable String userId, @PathVariable boolean isLoggedIn) {
+        userService.updateLoggedInStatus(isLoggedIn, userId);
+    }
 }

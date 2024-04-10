@@ -1,6 +1,7 @@
 package com.uol.finalproject.edulearn.apimodel.specifications;
 
 
+import com.uol.finalproject.edulearn.entities.StudentUser;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,8 @@ public class ChallengeSpecificationSearchCriteria {
     private String title;
 
     private RoleType createdBy;
+
+    private StudentUser studentUser;
 
     @Builder.Default
     private int page = 0;

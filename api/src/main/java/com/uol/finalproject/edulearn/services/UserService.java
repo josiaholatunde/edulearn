@@ -26,4 +26,7 @@ public interface UserService {
     BaseApiResponseDTO getUserDetails();
 
     StudentUserDTO editProfileImage(String userId, MultipartFile file);
+
+
+    void updateLoggedInStatus(boolean isLoggedIn, String userEmail);
 }

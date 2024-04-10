@@ -29,7 +29,7 @@ export function handleChallengeResult(challengeResult) {
     }
 }
 
-export const getChallenges = ({ page, size }) => dispatch => {
+export const getChallenges = ({ page, size, title, category }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
@@ -37,6 +37,8 @@ export const getChallenges = ({ page, size }) => dispatch => {
             page = (page - 1) < 0 ? 0 : (page - 1)
             let pageSize = size || 5
             let queryParams = `page=${page}&size=${pageSize}`
+            if (title) queryParams += `&title=${title}`
+            if (category) queryParams += `&category=${category}`
 
             const { data } = await axios.get(`/challenges?${queryParams}`)
             if (data) {
