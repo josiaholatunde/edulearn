@@ -1,12 +1,11 @@
 import React, { Fragment, useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { submitChallengeResponse } from '../../redux/actions/challengeActions';
-import questionBank from '../../utils/questions';
 
 
 const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessModal, loading, userResponse, setUserResponses, setStartChallenge }) => {
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [answers, setAnswers] = useState(Array(questionBank.length).fill([]));
+    const [answers, setAnswers] = useState(Array(questions?.length).fill([]));
 
     const dispatch = useDispatch()
 
@@ -14,7 +13,10 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
     
 
     const handleOptionChange = (questionIndex, optionIndex) => {
+      
         const newAnswers = [...answers];
+        console.log('new answers ', newAnswers, 'questionIndex ', questionIndex)
+        if (!newAnswers || !Array.isArray(newAnswers[questionIndex])) return;
         let updatedAnswer = [...newAnswers[questionIndex]];
         const index = updatedAnswer.indexOf(optionIndex);
         if (index === -1) {
@@ -83,7 +85,7 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
         
     }
 
-    
+    console.log('questions ', questions, 'answers ', answers)
     return (!questions || questions?.length === 0) ? (<h6 className='mt-5'>Oops! There are no questions in this challenge. Kindly contact Admin...</h6>) : (<Fragment>
             <div className="row">
                 <div className="question-container col-lg-12 text-left mt-5 ml-0 pl-0">

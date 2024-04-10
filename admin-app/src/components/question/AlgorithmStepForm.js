@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { QUESTION_TYPE } from '../../utils/constants';
 import AlgorithmStep1Form from './AlgorithmStep1Form'
 import AlgorithmStep2Form from './AlgorithmStep2Form'
@@ -8,7 +8,9 @@ import AlgorithmStep4Form from './AlgorithmStep4Form'
 const AlgorithmStepForm = ({
     handleAddQuestion, 
     loading,
-    setAlgorithmQuestion
+    setAlgorithmQuestion,
+    question,
+    formMode
 
 }) => {
 
@@ -50,12 +52,54 @@ const AlgorithmStepForm = ({
         for (let i = 0; i < numOfParameters; i++) {
             parameters.push({ name: '', value: '' })
         }
-        const newExamples = examples.map(example => {
+        const newExamples = examples?.map(example => {
             example.parameters = [...parameters]
             return example
         })
         setExamples(newExamples)
     }
+
+    useEffect(() => {
+        if (formMode != 'CREATE' && question) {
+            setQuestionTitle(question?.title)
+            setQuestionCategory(question?.category)
+            setLevel(question?.level)
+            setDifficultyLevel(question?.difficultyLevel)
+            setIntroduction(question?.algorithmQuestion?.introduction)
+            setInputDescription(question?.algorithmQuestion?.inputDescription)
+            setOutputDescription(question?.algorithmQuestion?.outputDescription)
+            setMethodName(question?.algorithmQuestion?.methodName)
+            setMethodReturnType(question?.algorithmQuestion?.returnType)
+
+            const solution = question?.algorithmQuestion?.solutions?.[0];
+            setDescription(solution?.description)
+            setCode(solution?.code)
+            setTimeComplexity(solution?.timeComplexity)
+            setSpaceComplexity(solution?.spaceComplexity)
+            setRelevantResources(solution?.relevantResources)
+
+            setJavaSampleCode(question?.algorithmQuestion?.javaSampleCode)
+            setJavascriptSampleCode(question?.algorithmQuestion?.javaSampleCode)
+            setPythonSampleCode(question?.algorithmQuestion?.javaSampleCode)
+            
+            console.log('examples ', question)
+            let examples = question?.algorithmQuestion?.examples || []
+            if (!examples || examples.length == 0) {
+                examples = [{
+                    input: '', output: '', explanation: '', inputArguments: {},
+                    parameters: [
+                        { name: '', value: '' }
+                    ]
+                }]
+            } else {
+                examples = question?.algorithmQuestion?.examples.map(example => ({ ...example, parameters: [
+                    { name: '', value: '' }
+                ]}))
+            }
+            console.log('final example ', examples)
+            setExamples(examples)
+        } 
+    }, [formMode, question])
 
     const handleAddOption = () => {
         setOptions([...options, { value: '', title: '' }]);
@@ -69,6 +113,7 @@ const AlgorithmStepForm = ({
     }
 
     const handleExampleInputChange = (e, index, field) => {
+        console.log('eee ', e, 'index ', field)
         const { value } = e.target;
         const updatedExamples = [...examples];
         updatedExamples[index][field] = value;

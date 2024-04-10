@@ -39,13 +39,13 @@ if (token && user && Object.keys(user).length > 0) {
   })
 }
 
-function App() {
+function App({ history }) {
   return (
     <div className="App">
      <Router>
             <Navbar />
             <Notification />
-            <WebSocket />
+            <WebSocket history={history} />
             <div className='container'>
               <Switch>
                 <Route path='/login' exact component={SignIn} />

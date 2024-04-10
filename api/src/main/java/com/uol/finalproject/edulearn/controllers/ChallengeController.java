@@ -5,7 +5,9 @@ import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryV2DTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
+import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.ChallengeSubmissionService;
@@ -24,11 +26,9 @@ public class ChallengeController {
     private final ChallengeSubmissionService challengeSubmissionService;
 
     @GetMapping
-    public Page<ChallengeDTO> getAllChallenges(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(required = false) RoleType createdBy) {
-
-        return challengeService.getChallenges(PageRequest.of(page, size), createdBy);
+    public Page<ChallengeDTO> getAllChallenges(ChallengeSpecificationSearchCriteria specificationSearchCriteria) {
+        return challengeService.getChallenges(specificationSearchCriteria);
     }
-
 
     @GetMapping("/{challengeId}")
     public ChallengeDTO getChallengeDetails(@PathVariable long challengeId) {
@@ -59,7 +59,7 @@ public class ChallengeController {
 
 
     @GetMapping("/summary")
-    public ChallengeSummaryDTO getChallengesSummary() throws Exception {
+    public ChallengeSummaryV2DTO getChallengesSummary() throws Exception {
         return challengeService.getChallengesSummary();
     }
 

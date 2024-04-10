@@ -8,6 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,5 +24,13 @@ public class MultipleChoiceAnswerDTO {
     private String optionTitle;
 
     private MultipleChoiceOption option;
+
+
+    public static MultipleChoiceAnswerDTO fromMultipleChoiceAnswer(MultipleChoiceAnswer multipleChoiceAnswer) {
+        MultipleChoiceAnswerDTO multipleChoiceAnswerDTO = MultipleChoiceAnswerDTO.builder().build();
+        BeanUtils.copyProperties(multipleChoiceAnswer, multipleChoiceAnswerDTO);
+        multipleChoiceAnswerDTO.setOption(multipleChoiceAnswer.getOption());
+        return multipleChoiceAnswerDTO;
+    }
 
 }

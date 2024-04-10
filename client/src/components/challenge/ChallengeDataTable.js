@@ -15,6 +15,11 @@ const columns = [
     key: 'friendlyType',
   },
   {
+    title: 'Category',
+    dataIndex: 'category',
+    key: 'category',
+  },
+  {
     title: 'Level',
     dataIndex: 'level',
     key: 'level',

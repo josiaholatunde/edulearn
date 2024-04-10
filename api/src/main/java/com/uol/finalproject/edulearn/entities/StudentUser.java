@@ -12,7 +12,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "student_users")
+@Entity
+@Table(name = "student_users")
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

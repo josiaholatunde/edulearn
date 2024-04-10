@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,8 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
+public interface ChallengeRepository extends JpaRepository<Challenge, Long>, JpaSpecificationExecutor<Challenge> {
 
+    boolean existsByTitle(String title);
     Page<Challenge> findAllByStudentUser_EmailOrCreatedBy(String email, RoleType createdBy, Pageable pageable);
     Page<Challenge> findAllByStudentUserAndLevelOrCreatedBy(StudentUser studentUser, long level, RoleType createdBy, Pageable pageable);
     Page<Challenge> findAllByCreatedBy(RoleType createdBy, Pageable pageable);
@@ -27,4 +29,10 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long> {
     @Modifying
     @Query("UPDATE Challenge c SET c.challengeStatus=?1 WHERE c.id=?2")
     void updateChallengeStatus(ChallengeStatus challengeStatus, Long challengeId);
+
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Challenge c SET c.submissions=c.submissions + 1 WHERE c.id=?1")
+    void incrementSubmissions(Long challengeId);
 }

@@ -6,9 +6,10 @@ import { googleLogout } from '@react-oauth/google';
 
 class Navbar extends Component {
     handleLogOut = e => {
+        let user = JSON.parse(localStorage.getItem('user'));
         const { history } = this.props;
+        this.props.logOutUser(history, user);
         googleLogout();
-        this.props.logOutUser(history);
     }
 
     render() {

@@ -52,6 +52,7 @@ public class AuthServiceImpl implements AuthService {
             SecurityContextHolder.getContext().setAuthentication(authenticate);
             String jwtToken = jwtUtils.generateJwtToken(authenticate);
 
+
             UserDTO userDTO = buildUserDTO(user);
             LoginResponseDTO loginResponseDTO = new LoginResponseDTO(userDTO, jwtToken, jwtUtils.convertJwtExpiryToMilliSeconds());
             return new BaseApiResponseDTO(SUCCESS_LOGIN_CREDENTIALS_MESSAGE, loginResponseDTO, null);
@@ -62,12 +63,16 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
-    private static UserDTO buildUserDTO(User user) {
-        StudentUserDTO studentUserDTO = StudentUserDTO.builder().build();
-        BeanUtils.copyProperties(user.getStudentUser(), studentUserDTO);
+    private UserDTO buildUserDTO(User user) {
         UserDTO userDTO = UserDTO.builder().build();
+        if (user.getStudentUser() != null) {
+            StudentUserDTO studentUserDTO = StudentUserDTO.builder().build();
+            BeanUtils.copyProperties(user.getStudentUser(), studentUserDTO);
+            userDTO.setStudentUser(studentUserDTO);
+            user.getStudentUser().setUserLoginStatus(true);
+            studentUserRepository.save(user.getStudentUser());
+        }
         BeanUtils.copyProperties(user, userDTO);
-        userDTO.setStudentUser(studentUserDTO);
         return userDTO;
     }
 

@@ -57,7 +57,9 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading,
                 setOptions(question?.multipleChoiceQuestion?.options || [])
                 setShowQuestionTypeForm(false)
                 setOptionType(question?.multipleChoiceQuestion?.hasMultipleAnswers ? 'CHECK_BOX': 'RADIO')
+                setQuestionType(question?.type)
             } 
+            
     }, [question, formMode])
 
 
@@ -202,6 +204,8 @@ const AddQuestionModal = ({ handleCloseSuccessModal, showQuestionModal, loading,
                 relevantResources={relevantResources}
                 populateExamplesWithRequiredMethodParameters={populateExamplesWithRequiredMethodParameters}
                 setAlgorithmQuestion={setAlgorithmQuestion}
+                question={question}
+                formMode={formMode}
             />
 
         </form>

@@ -1,16 +1,21 @@
 package com.uol.finalproject.edulearn.services.impl;
 
-import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
-import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
-import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
-import com.uol.finalproject.edulearn.apimodel.NotificationMessage;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.uol.finalproject.edulearn.apimodel.*;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
+import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
 import com.uol.finalproject.edulearn.entities.*;
 import com.uol.finalproject.edulearn.entities.enums.*;
+import com.uol.finalproject.edulearn.exceptions.BadRequestException;
 import com.uol.finalproject.edulearn.exceptions.ResourceNotFoundException;
 import com.uol.finalproject.edulearn.repositories.*;
 import com.uol.finalproject.edulearn.services.ChallengeService;
+import com.uol.finalproject.edulearn.services.QuestionService;
 import com.uol.finalproject.edulearn.services.UserService;
+import com.uol.finalproject.edulearn.specifications.ChallengeSpecification;
+import com.uol.finalproject.edulearn.util.DateUtil;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -43,21 +48,29 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
     private final StompNotificationService stompNotificationService;
     private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
+    private final AlgorithmQuestionRepository algorithmQuestionRepository;
+    private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
+    private final AlgorithmSolutionRepository algorithmSolutionRepository;
+    private final MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
+    private final MultipleChoiceAnswerRepository multipleChoiceAnswerRepository;
+    private final QuestionService questionService;
+
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
 
     @Override
-    public Page<ChallengeDTO> getChallenges(PageRequest pageRequest, RoleType createdBy) {
+    public Page<ChallengeDTO> getChallenges(ChallengeSpecificationSearchCriteria specificationSearchCriteria) {
         Page<Challenge> challenges = null;
-        if (createdBy == RoleType.ADMIN) {
-            challenges = challengeRepository.findAllByCreatedBy(createdBy, pageRequest);
-        } else {
+        PageRequest pageRequest = PageRequest.of(specificationSearchCriteria.getPage(), specificationSearchCriteria.getSize());
+        RoleType createdBy = specificationSearchCriteria.getCreatedBy();
+
+        if (createdBy != RoleType.ADMIN) {
             UserDetails userDetails = userService.getLoggedInUser();
             StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
                     .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
-             challenges = challengeRepository
-                    .findAllByStudentUserAndLevelOrCreatedBy(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
+            specificationSearchCriteria.setStudentUser(studentUser);
         }
+        challenges = challengeRepository.findAll(ChallengeSpecification.buildSearchPredicate(specificationSearchCriteria), pageRequest);
 
 
         List<ChallengeDTO> challengesDTO = challenges
@@ -84,13 +97,17 @@ public class ChallengeServiceImpl implements ChallengeService  {
     @Override
     @Transactional
     public ChallengeDTO createChallengeAndQuestions(ChallengeDTO challengeDTO) {
-
+        validateChallenge(challengeDTO);
         Challenge challenge = createChallengeFromRequest(challengeDTO, challengeDTO.getCreatedBy() == RoleType.ADMIN ? null : retrieveStudentUser());
 
         saveChallengeQuestions(challenge, challengeDTO);
-        saveChallengeAnswers(challenge, challengeDTO);
 
         return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void validateChallenge(ChallengeDTO challengeDTO) {
+        if (Strings.isBlank(challengeDTO.getTitle())) throw new BadRequestException("Challenge title is required");
+        if (challengeRepository.existsByTitle(challengeDTO.getTitle())) throw new BadRequestException("Challenge title has been taken");
     }
 
     private void saveChallengeAnswers(Challenge challenge, ChallengeDTO challengeDTO) {
@@ -113,23 +130,22 @@ public class ChallengeServiceImpl implements ChallengeService  {
     }
 
     private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {
+        List<Question> challengeQuestions = new ArrayList<>();
 
-        for (Question question : challengeDTO.getChallengeQuestions()) {
-            questionRepository.save(question);
-
-            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
-                MultipleChoiceQuestion multipleChoiceQuestion = question.getMultipleChoiceQuestion();
-                multipleChoiceQuestion.setQuestion(question);
+        for (QuestionDTO questionDTO : challengeDTO.getChallengeQuestions()) {
+            log.info("Current Question {}", questionDTO.getTitle());
+            Question question = null;
+            if (questionDTO.getId() == null) {
+                question = questionService.createQuestionAndReturnEntity(questionDTO);
+            } else {
+                question = questionRepository.findById(questionDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Invalid question id"));
+                question.setCreatedAt(DateUtil.getCurrentDate());
+                question.setUpdatedAt(DateUtil.getCurrentDate());
                 questionRepository.save(question);
-
-                List<MultipleChoiceOption> multipleChoiceOptions = multipleChoiceQuestion.getOptions();
-                for (MultipleChoiceOption option : multipleChoiceOptions) {
-                    option.setQuestion(multipleChoiceQuestion);
-                }
-                multipleChoiceOptionRepository.saveAll(multipleChoiceOptions);
             }
+            challengeQuestions.add(question);
         }
-        challenge.setChallengeQuestions(challengeDTO.getChallengeQuestions());
+        challenge.setChallengeQuestions(challengeQuestions);
         return challengeRepository.save(challenge);
     }
 
@@ -143,9 +159,33 @@ public class ChallengeServiceImpl implements ChallengeService  {
         }
     }
 
+    private void sendChallengeStartedPushNotificationToParticipants(List<String> userEmails, Challenge challenge) {
+        JsonObject message = new JsonObject();
+        message.addProperty("challengeId", challenge.getId());
+        message.addProperty("type", challenge.getType().toString());
+
+        for (String userEmail: userEmails) {
+            log.info("About to send challenge started push notification to user {}", userEmail);
+            stompNotificationService.sendNotificationToDestination(String.format("/topic/user/%s/challenge-started/notification", userEmail), NotificationMessage.builder()
+                    .message(new Gson().toJson(message))
+                    .build());
+            log.info("Successfully sent challenge started push notification to user {}", userEmail);
+        }
+    }
+
     @Override
-    public ChallengeSummaryDTO getChallengesSummary() {
-        return null;
+    public ChallengeSummaryV2DTO getChallengesSummary() {
+        User loggedInUser = userService.getLoggedInUserDetailsAndReturnEntity();
+        if (loggedInUser.getStudentUser() == null) {
+            throw new BadRequestException("You need to be logged in to view your challenge summary");
+        }
+        Tuple challengeSubmissionSummary = challengeSubmissionRepository.getChallengeSubmissionSummary(loggedInUser.getStudentUser().getId());
+
+        return ChallengeSummaryV2DTO.builder()
+                .totalChallenges(challengeSubmissionSummary.get(0, Long.class))
+                .totalChallengesWon(challengeSubmissionSummary.get(1, Long.class))
+                .totalChallengesLost(challengeSubmissionSummary.get(2, Long.class))
+                .build();
     }
 
     @Override
@@ -153,6 +193,10 @@ public class ChallengeServiceImpl implements ChallengeService  {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
         challenge.setChallengeStatus(challengeDTO.getChallengeStatus());
         challengeRepository.updateChallengeStatus(challengeDTO.getChallengeStatus(), challenge.getId());
+        if (challengeDTO.getChallengeStatus() == ChallengeStatus.STARTED) {
+            List<String> userEmails = challenge.getChallengeParticipants().stream().map(participant -> participant.getStudentUser().getEmail()).collect(Collectors.toList());
+            sendChallengeStartedPushNotificationToParticipants(userEmails, challenge);
+        }
         return ChallengeDTO.fromChallenge(challenge);
     }
 
@@ -180,7 +224,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
         }
         challenge.setChallengeStatus(ChallengeStatus.NOT_STARTED);
         challenge.setParticipantType(challengeDTO.getParticipantType());
-        challenge.setDuration(challenge.getDuration());
+        challenge.setDuration(challengeDTO.getDuration());
 
         return challengeRepository.save(challenge);
     }
@@ -198,7 +242,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
             challenge.getChallengeInvitations().add(challengeInvitation);
             invitedUserEmails.add(studentUser.getEmail());
         }
-        challenge.setTotalInvitations(challengeDTO.getChallengeUsers().size());
+        challenge.setTotalInvitations(challenge.getTotalInvitations() + challengeDTO.getChallengeUsers().size());
         challengeRepository.save(challenge);
         sendPushNotificationToParticipants(invitedUserEmails, String.format("%s has invited you to a group challenge. Kindly accept or decline", challenge.getStudentUser().getFullName()));
     }
@@ -261,8 +305,8 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         expirePendingChallengeInvites(challenge);
 
+        challengeRepository.incrementSubmissions(challenge.getId());
         challenge.setSubmissions(challenge.getSubmissions() + 1);
-        challengeRepository.save(challenge);
     }
 
     private void expirePendingChallengeInvites(Challenge challenge) {

@@ -5,8 +5,11 @@ import com.uol.finalproject.edulearn.listeners.AuditingEntityListener;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.sql.Timestamp;
 import java.util.Objects;
@@ -21,12 +24,12 @@ public class BaseAuditableModel {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @CreationTimestamp
+    @Column(name = "created_at")
     private Timestamp createdAt;
 
-    @LastModifiedDate
-    @Column(name = "updated_at", nullable = false)
+    @UpdateTimestamp
+    @Column(name = "updated_at")
     private Timestamp updatedAt;
 
     public Long getId() {

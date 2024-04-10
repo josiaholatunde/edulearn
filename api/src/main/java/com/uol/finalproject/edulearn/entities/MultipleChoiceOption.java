@@ -36,4 +36,14 @@ public class MultipleChoiceOption extends BaseAuditableModel {
         BeanUtils.copyProperties(multipleChoiceOptionDTO, multipleChoiceOption);
         return multipleChoiceOption;
     }
+
+
+    @Override
+    public String toString() {
+        return "MultipleChoiceOption{" +
+                "title='" + title + '\'' +
+                ", value='" + value + '\'' +
+                ", question=" +
+                '}';
+    }
 }

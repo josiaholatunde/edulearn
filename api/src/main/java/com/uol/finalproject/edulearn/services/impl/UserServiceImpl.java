@@ -90,6 +90,12 @@ public class UserServiceImpl implements UserService {
         return UserDTO.fromUser(user);
     }
 
+    @Override
+    public User getLoggedInUserDetailsAndReturnEntity() {
+        String userEmail = getLoggedInUser().getUsername();
+        return userRepository.findByUsername(userEmail).orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+    }
+
     private boolean isLoggedInUserAuthorized(StudentUserDTO studentUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
@@ -140,6 +146,16 @@ public class UserServiceImpl implements UserService {
         String profileImageUrl = documentUploadService.uploadDocument(file);
         studentUser.setImageUrl(profileImageUrl);
         return StudentUserDTO.fromStudentUser(studentUserRepository.save(studentUser));
+    }
+
+    @Override
+    public void updateLoggedInStatus(boolean isLoggedIn, String userEmail) {
+        studentUserRepository.findByEmail(userEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        User user = userRepository.findByUsername(userEmail).orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+        if (!user.isActive()) throw new AuthorizationException("User is not authorized to carry out action");
+
+        studentUserRepository.updateUserLoginStatus(isLoggedIn, userEmail);
     }
 
 }

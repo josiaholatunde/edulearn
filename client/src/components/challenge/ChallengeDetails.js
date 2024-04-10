@@ -4,7 +4,7 @@ import questionBank from "../../utils/questions";
 import AlgorithmQuestionDetail from "../question/AlgorithmQuestionDetail";
 import MultipleChoiceQuestionDetail from "../question/MultipleChoiceQuestionDetail";
 import { useLocation } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { Prompt, useParams } from 'react-router'
 import InstructionDetails from "../question/InstructionDetails";
 import { connect, useDispatch } from "react-redux";
 import { getChallengeDetails, submitChallengeResponse } from "../../redux/actions/challengeActions";
@@ -50,7 +50,11 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (queryParams.has('showInstruction')) {
             setShouldShowInstruction(false)
             setStartChallenge(true)
-            setChallengeEndDate(Date.now() + (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000))
+            let challengeDurationMilliSeconds = (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000)
+            if (challengeDetail?.duration) {
+                challengeDurationMilliSeconds = parseInt(challengeDetail?.duration) * 60 * 1000;
+            }
+            setChallengeEndDate(Date.now() + challengeDurationMilliSeconds)
         }
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
@@ -58,6 +62,11 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (!!challenge) {
             setChallenge(challengeDetail)
             setQuestions(challengeDetail?.challengeQuestions || [])
+            let challengeDurationMilliSeconds = (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000)
+            if (challengeDetail?.duration) {
+                challengeDurationMilliSeconds = parseInt(challengeDetail?.duration) * 60 * 1000;
+            }
+            setChallengeEndDate(Date.now() + challengeDurationMilliSeconds)
         } 
        
         
@@ -134,6 +143,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
                 className="row card mt-5 p-3 flex-row text-left justify-content-center"
                 style={{ height: "192px" }}
             >
+                <Prompt when={startChallenge && type == 'MULTIPLE_CHOICE'} message={location => `Are you sure you want to leave this page ? Your unsaved changes might be lost`} />
                 {
                    loadingChallengeDetails ? (<div className="col-lg-12">
                         <div className='w-100 h-100 d-flex justify-content-center align-items-center'>

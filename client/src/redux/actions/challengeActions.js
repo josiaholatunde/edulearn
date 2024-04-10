@@ -15,6 +15,16 @@ export function fetchChallenges(challenges, total, page, size) {
     }
 }
 
+// export function fetchChallenges(challenges, total, page, size) {
+//     return {
+//         type: GET_CHALLENGES,
+//         challenges,
+//         total,
+//         page,
+//         size
+//     }
+// }
+
 export function handleChallengeDetail(challenge) {
     return {
         type: GET_CHALLENGE_DETAILS,
@@ -29,7 +39,7 @@ export function handleChallengeResult(challengeResult) {
     }
 }
 
-export const getChallenges = ({ page, size }) => dispatch => {
+export const getChallenges = ({ page, size, title, category }) => dispatch => {
     dispatch(showLoading())
     setTimeout(async() => {
         try {
@@ -37,11 +47,34 @@ export const getChallenges = ({ page, size }) => dispatch => {
             page = (page - 1) < 0 ? 0 : (page - 1)
             let pageSize = size || 5
             let queryParams = `page=${page}&size=${pageSize}`
+            if (title) queryParams += `&title=${title}`
+            if (category) queryParams += `&category=${category}`
 
             const { data } = await axios.get(`/challenges?${queryParams}`)
             if (data) {
                 console.log('Data from api', data)
                 dispatch(fetchChallenges(data?.data?.content, data?.data?.totalElements, page, size))
+                dispatch(hideLoading())
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while retrieving challenges')
+        }
+    }, 1000)
+}
+
+
+export const getChallengeSummary = () => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+        
+            const { data } = await axios.get(`/challenges/summary`)
+            if (data) {
+                console.log('Data from api', data)
+                
+                // dispatch(fetchChallenges(data?.data?.content, data?.data?.totalElements, page, size))
                 dispatch(hideLoading())
             }
         } catch (error) {

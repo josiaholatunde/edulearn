@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -41,6 +42,7 @@ public class ChallengeDTO {
     private String friendlyType;
 
     private int level;
+    private Long duration;
 
     private Timestamp startDate;
 
@@ -58,7 +60,7 @@ public class ChallengeDTO {
 
     private ChallengeStatus challengeStatus;
 
-    private List<Question> challengeQuestions = new ArrayList<>();
+    private List<QuestionDTO> challengeQuestions = new ArrayList<>();
 
     private List<Long> challengeUsers = new ArrayList<>();
 
@@ -78,7 +80,7 @@ public class ChallengeDTO {
             if (ChallengeType.ALGORITHMS == challenge.getType()) {
                 populateSampleProgrammingLanguages(challenge);
             }
-            challengeDTO.setChallengeQuestions(challenge.getChallengeQuestions());
+            challengeDTO.setChallengeQuestions(challenge.getChallengeQuestions().stream().map(question -> QuestionDTO.fromQuestion(question)).collect(Collectors.toList()));
         }
         return challengeDTO;
     }
