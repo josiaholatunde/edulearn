@@ -64,17 +64,13 @@ public class ChallengeServiceImpl implements ChallengeService  {
         PageRequest pageRequest = PageRequest.of(specificationSearchCriteria.getPage(), specificationSearchCriteria.getSize());
         RoleType createdBy = specificationSearchCriteria.getCreatedBy();
 
-        if (createdBy == RoleType.ADMIN) {
-            challenges = challengeRepository.findAll(ChallengeSpecification.buildSearchPredicate(specificationSearchCriteria), pageRequest);
-        } else {
+        if (createdBy != RoleType.ADMIN) {
             UserDetails userDetails = userService.getLoggedInUser();
             StudentUser studentUser = studentUserRepository.findByEmail(userDetails.getUsername())
                     .orElseThrow(() -> new ResourceNotFoundException("Invalid user email"));
             specificationSearchCriteria.setStudentUser(studentUser);
-             challenges = challengeRepository
-                    .findAll(ChallengeSpecification.buildSearchPredicate(specificationSearchCriteria), pageRequest);
-//                    .findAll(studentUser, studentUser.getLevel(), RoleType.ADMIN, pageRequest);
         }
+        challenges = challengeRepository.findAll(ChallengeSpecification.buildSearchPredicate(specificationSearchCriteria), pageRequest);
 
 
         List<ChallengeDTO> challengesDTO = challenges
@@ -236,7 +232,7 @@ public class ChallengeServiceImpl implements ChallengeService  {
             challenge.getChallengeInvitations().add(challengeInvitation);
             invitedUserEmails.add(studentUser.getEmail());
         }
-        challenge.setTotalInvitations(challengeDTO.getChallengeUsers().size());
+        challenge.setTotalInvitations(challenge.getTotalInvitations() + challengeDTO.getChallengeUsers().size());
         challengeRepository.save(challenge);
         sendPushNotificationToParticipants(invitedUserEmails, String.format("%s has invited you to a group challenge. Kindly accept or decline", challenge.getStudentUser().getFullName()));
     }
