@@ -15,10 +15,10 @@ import com.uol.finalproject.edulearn.services.QuestionService;
 import com.uol.finalproject.edulearn.services.UserService;
 import com.uol.finalproject.edulearn.specifications.ChallengeSpecification;
 import com.uol.finalproject.edulearn.util.DateUtil;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
@@ -174,8 +174,18 @@ public class ChallengeServiceImpl implements ChallengeService  {
     }
 
     @Override
-    public ChallengeSummaryDTO getChallengesSummary() {
-        return null;
+    public ChallengeSummaryV2DTO getChallengesSummary() {
+        User loggedInUser = userService.getLoggedInUserDetailsAndReturnEntity();
+        if (loggedInUser.getStudentUser() == null) {
+            throw new BadRequestException("You need to be logged in to view your challenge summary");
+        }
+        Tuple challengeSubmissionSummary = challengeSubmissionRepository.getChallengeSubmissionSummary(loggedInUser.getStudentUser().getId());
+
+        return ChallengeSummaryV2DTO.builder()
+                .totalChallenges(challengeSubmissionSummary.get(0, Long.class))
+                .totalChallengesWon(challengeSubmissionSummary.get(1, Long.class))
+                .totalChallengesLost(challengeSubmissionSummary.get(2, Long.class))
+                .build();
     }
 
     @Override

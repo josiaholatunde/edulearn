@@ -29,4 +29,6 @@ public interface UserService {
 
 
     void updateLoggedInStatus(boolean isLoggedIn, String userEmail);
+
+    User getLoggedInUserDetailsAndReturnEntity();
 }

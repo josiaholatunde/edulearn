@@ -3,6 +3,7 @@ package com.uol.finalproject.edulearn.services;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryV2DTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
@@ -20,7 +21,7 @@ public interface ChallengeService {
 
     ChallengeDTO createChallenge(ChallengeDTO challengeDTO);
 
-    ChallengeSummaryDTO getChallengesSummary();
+    ChallengeSummaryV2DTO getChallengesSummary();
 
     ChallengeDTO handleChallengeUpdate(long challengeId, ChallengeDTO challengeDTO);
 

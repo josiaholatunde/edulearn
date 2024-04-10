@@ -5,6 +5,7 @@ import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
+import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryV2DTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
 import com.uol.finalproject.edulearn.entities.enums.RoleType;
@@ -58,7 +59,7 @@ public class ChallengeController {
 
 
     @GetMapping("/summary")
-    public ChallengeSummaryDTO getChallengesSummary() throws Exception {
+    public ChallengeSummaryV2DTO getChallengesSummary() throws Exception {
         return challengeService.getChallengesSummary();
     }
 

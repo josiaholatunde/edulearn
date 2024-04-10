@@ -90,6 +90,12 @@ public class UserServiceImpl implements UserService {
         return UserDTO.fromUser(user);
     }
 
+    @Override
+    public User getLoggedInUserDetailsAndReturnEntity() {
+        String userEmail = getLoggedInUser().getUsername();
+        return userRepository.findByUsername(userEmail).orElseThrow(() -> new ResourceNotFoundException("User with email was not found"));
+    }
+
     private boolean isLoggedInUserAuthorized(StudentUserDTO studentUserDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
