@@ -1,6 +1,6 @@
 import { showNotification } from "../../utils/showNotification"
 import { hideLoading, showLoading } from "./shared"
-import { GET_CHALLENGES, GET_CHALLENGE_DETAILS, GET_CHALLENGE_RESULT } from "./types"
+import { GET_CHALLENGES, GET_CHALLENGE_DETAILS, GET_CHALLENGE_RESULT, GET_CHALLENGE_SUMMARY } from "./types"
 import axios from '../../utils/axiosConfig'
 
 
@@ -15,15 +15,14 @@ export function fetchChallenges(challenges, total, page, size) {
     }
 }
 
-// export function fetchChallenges(challenges, total, page, size) {
-//     return {
-//         type: GET_CHALLENGES,
-//         challenges,
-//         total,
-//         page,
-//         size
-//     }
-// }
+export function fetchChallengeSummary(totalChallenges, totalChallengesWon, totalChallengesLost) {
+    return {
+        type: GET_CHALLENGE_SUMMARY,
+        totalChallenges, 
+        totalChallengesWon, 
+        totalChallengesLost
+    }
+}
 
 export function handleChallengeDetail(challenge) {
     return {
@@ -73,8 +72,8 @@ export const getChallengeSummary = () => dispatch => {
             const { data } = await axios.get(`/challenges/summary`)
             if (data) {
                 console.log('Data from api', data)
-                
-                // dispatch(fetchChallenges(data?.data?.content, data?.data?.totalElements, page, size))
+                const result = data?.data;
+                dispatch(fetchChallengeSummary(result?.totalChallenges, result?.totalChallengesWon, result?.totalChallengesLost))
                 dispatch(hideLoading())
             }
         } catch (error) {

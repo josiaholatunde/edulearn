@@ -17,7 +17,7 @@ class Navbar extends Component {
         return (
             <nav className="navbar navbar-expand-lg navbar-light bg-cool text-white sticky-top" >
                 <div className='container px-0'>
-                    <Link className="navbar-brand" to="/challenges">
+                    <Link className="navbar-brand" to="/">
                         EduLearn
                     </Link>
                     <button className="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
