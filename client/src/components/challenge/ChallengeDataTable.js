@@ -1,7 +1,6 @@
 import React from 'react';
 import { Table } from 'antd';
 import { Link } from 'react-router-dom';
-import data from '../../utils/challenges';
 
 const columns = [
   {
