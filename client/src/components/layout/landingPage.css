@@ -1,0 +1,46 @@
+.main-section {
+    background: radial-gradient(143.67% 142.3% at 39.75% -26.25%, #007BFF 2.53%, #FFF 100%);
+}
+
+.main-section .head-text {
+    font-size: 48px;
+}
+
+.main-section p {
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.separator-section {
+    height: 100px;
+    background: #00346B;
+}
+
+
+
+
+
+
+.secondary-text {
+    color: var(--Grey-grey-500, #333);
+}
+
+.cta-btn {
+    width: 206px;
+    height: 66px;
+    justify-content: center;
+    align-items: center;
+}
+
+.secondary-btn {
+    background: #FD7E14 !important;
+    color: #fff !important;
+}
+
+.btn-white-custom {
+    background: #FFF !important;
+    color: #FD7E14 !important;
+}
+

@@ -361,3 +361,10 @@ iframe[title='Sign in with Google Button'] {
   font-family: 'digital-7' !important;
   font-size: 44px;
 }
+
+
+.container-fluid {
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
