@@ -10,6 +10,7 @@ import HowItWorks from './HowItWorks';
 import './landingPage.css';
 import MainSectionIcons from './MainSectionIcons';
 import TypingAnimation from './TypingAnimation';
+import UserTestimonials from './UserTestimonials';
 
 const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
     const dispatch = useDispatch();
@@ -18,24 +19,12 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
 
     const raindropCount = 30
 
-    const handleUpdateInvite = (challengeInvite, action) => {
-        challengeInvite.status = action;
-        dispatch(updateChallengeInvite(challengeInvite, () => {
-            dispatch(getChallengeInvites({ page: 0, size: 5, status: 'PENDING' }));
-            if (action === 'ACCEPTED') {
-                routeToPath(history, `/challenge-lobby/${challengeInvite.challengeId}?type=${challengeInvite.type}&mode=group`);
-            }
-        }));
-    };
-
     useEffect(() => {
         setTimeout(() => {
             setShowHeaderAnimation(false)
             setShowRain(true)
         }, 5000);
     }, [])
-
-    const levelPercentage = convertToPercentage(user?.level || 10);
 
     return (
         <Fragment>
@@ -48,7 +37,10 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
                             </div>
                             <p className='my-5' style={{ width: '80%', fontSize: '18px', fontWeight: '500', color: 'var(--Grey-grey-500, #333)' }}>Learning is made easy with different ways to upskill through practical and fun challenges.Dive into interactive challenges, compete with peers, and embark on a journey of knowledge discovery like never before. Join us today and start mastering computer science in an exciting new way.</p>
                             <div className='btn-container'>
-                                <button className='btn secondary-btn cta-btn'>Sign up</button>
+                                <button className='btn secondary-btn cta-btn'>
+                                    <i class="bi bi-person-plus-fill mr-2"></i>
+                                    Sign up
+                                </button>
                                 <button className='btn btn-white-custom ml-3 cta-btn'>
                                     <span>Learn More</span>
                                     <i class="bi bi-arrow-up-right ml-4"></i>
@@ -67,7 +59,7 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
            <MainSectionIcons />
            <AboutUs />
             <HowItWorks />
-        
+            <UserTestimonials />
         </Fragment>
     );
 };
