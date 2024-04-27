@@ -33,7 +33,7 @@ const UserTestimonials = () => {
     };
 
 
-    return <div className='testimonials-section py-5 px-3 text-center' style={{ background: '#FFF2E8', position: 'relative'}}>
+    return <div className='testimonials-section pt-5 px-3 text-center' style={{ background: '#FFF2E8', position: 'relative', paddingBottom: '150px'}}>
     <div className='section-content'>
          <div className='main-content mt-3'>
              <h5 className='secondary-text'> Testimonials</h5>

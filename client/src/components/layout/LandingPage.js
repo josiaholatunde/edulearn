@@ -56,10 +56,45 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
                         <div key={index} className="raindrop" style={{ left: `${Math.random() * window.innerWidth}px`, top: `${Math.random() * window.innerHeight}px`, animationDelay: `${Math.random() * 2}s` }} />
                     ))}
             </div>
-           <MainSectionIcons />
-           <AboutUs />
+            <MainSectionIcons />
+            <AboutUs />
             <HowItWorks />
             <UserTestimonials />
+            <div className='footer-section py-5 px-3 text-center text-white' style={{ background: '#00346b', height: '400px'}}>
+                <div className='row'>
+                    <div className='col-md-3'>
+                        <div className='logo-text' style={{ fontWeight: '700', fontSize: '35px'}}>EduLearn</div>
+                    </div>
+                    <div className='col-md-3 text-left'>
+                        <div className='logo-text mt-3' style={{ fontSize: '20px'}}>Quick links</div>
+                        <ul>
+                            <li>Home</li>
+                            <li>About Us</li>
+                            <li>Support</li>
+                            <li>Careers</li>
+                        </ul>
+                    </div>
+                    <div className='col-md-3 text-left'>
+                        <div className='logo-text mt-3' style={{ fontSize: '20px'}}>Contact Us</div>
+                        <ul>
+                            <li className='d-flex'>
+                                <i className="bi bi-telephone-fill mr-2"></i>
+                                <div>+(44) 7393155513</div>
+                            </li>
+
+                            <li className='d-flex pointer'>
+                                <i className="bi bi-envelope-fill mr-2"></i>
+                                <a href='mailto:info@edulearn-uol.com' style={{ color: 'white'}} >info@edulearn-uol.com</a>
+                            </li>
+
+                            <li className='d-flex'>
+                                <i class="bi bi-geo-alt-fill mr-2"></i>
+                                <div>Leicester, United Kingdom </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
         </Fragment>
     );
 };
