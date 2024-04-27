@@ -9,7 +9,7 @@ const HowItWorks = () => {
 
 
 
-    return <div className='how-it-works py-5 px-3'>
+    return <div className='how-it-works py-5 px-3' id='how-it-works'>
     <div className='main-content mb-3'>
         <h5 className='secondary-text'> How It Works</h5>
         <div className='pl-2 text-center' style={{ fontSize: '44px', fontWeight: '600'}}>Simple Steps to <span className='secondary-text'>Success</span></div>

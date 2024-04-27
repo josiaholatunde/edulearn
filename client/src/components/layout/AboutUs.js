@@ -11,7 +11,7 @@ const AboutUs = () => {
 
 
 
-    return <div className='about-section py-5 px-3' style={{ height: '950px'}}>
+    return <div className='about-section py-5 px-3' id='about' style={{ height: '950px'}}>
         <div className='main-content mb-3'>
             <h5 className='secondary-text'> About Us</h5>
             <div className='pl-2 text-center' style={{ fontSize: '44px', fontWeight: '600'}}>Empowering Learning, Empowering Futures: The <span className='secondary-text'>EduLearn</span> Story</div>

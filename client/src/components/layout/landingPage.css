@@ -99,24 +99,7 @@
   }
 
 
-  .custom-btn-sm {
-    display: flex;
-    width: 158px;
-    height: 51px;
-    padding: 16px 10px;
-    justify-content: center;
-    align-items: center;
-    gap: 6px;
-    border-radius: 4px;
-    outline: none !important;
-    border: none;
-  }
-  
-
-  .custom-primary {
-    background: #007BFF;
-    color: #fff;
-  }
+ 
 
 
   .about-card {

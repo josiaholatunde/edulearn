@@ -74,7 +74,7 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
                             <li>Careers</li>
                         </ul>
                     </div>
-                    <div className='col-md-3 text-left'>
+                    <div className='col-md-3 text-left' id='contact'>
                         <div className='logo-text mt-3' style={{ fontSize: '20px'}}>Contact Us</div>
                         <ul>
                             <li className='d-flex'>

@@ -3,7 +3,6 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { logOutUser } from '../../redux/actions/authedActions';
 import { googleLogout } from '@react-oauth/google';
-import { routeToPath } from '../../utils/routeUtil';
 
 class Navbar extends Component {
     handleLogOut = e => {
@@ -13,32 +12,12 @@ class Navbar extends Component {
         googleLogout();
     }
 
-    handleScrollIntoView = (element) => {
-        const { location, history } = this.props;
-        if (location?.pathname === '/') {
-            const elementToScroll = document.getElementById(element);
-            if (elementToScroll) {
-                elementToScroll.scrollIntoView({ behavior: 'smooth' });
-            }
-        } else {
-            history?.push('/');
-            setTimeout(() => {
-                const elementToScroll = document.getElementById(element);
-                if (elementToScroll) {
-                    elementToScroll.scrollIntoView({ behavior: 'smooth' });
-                }
-            }, 100); // Add a small delay to ensure the page has navigated to '/'
-        }
-    }
-
-
-
     render() {
-        const { loggedInUser, history } = this.props;
+        const { loggedInUser } = this.props;
         return (
-            <nav className="navbar navbar-expand-lg navbar-light text-white sticky-top"  style={{ boxShadow: '0px 4px 8px #007BFF' }}>
+            <nav className="navbar navbar-expand-lg navbar-light bg-cool text-white sticky-top" >
                 <div className='container px-0'>
-                    <Link className="navbar-brand secondary-text main-logo-text" to="/">
+                    <Link className="navbar-brand" to="/">
                         EduLearn
                     </Link>
                     <button className="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -46,7 +25,7 @@ class Navbar extends Component {
                     </button>
 
                     <div className="collapse navbar-collapse navbar-rel-links justify-content-center" id="navbarSupportedContent">
-                        {loggedInUser ? (
+                        {loggedInUser && (
                             <ul className="navbar-nav mr-auto">
                                 <li className="nav-item">
                                     <Link className="nav-link" to='/home'>Home</Link>
@@ -62,21 +41,6 @@ class Navbar extends Component {
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to='/leaderboard'>Leaderboard</Link>
-                                </li>
-                            </ul>
-                        ) : ( <ul className="navbar-nav nav-center mx-auto d-flex justify-content-center">
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/' onClick={() => this.handleScrollIntoView('main-section')}>Home</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/' onClick={() => this.handleScrollIntoView('about')}>About</Link>
-                                </li>
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/' onClick={() => this.handleScrollIntoView('how-it-works')}>Features</Link>
-                                </li>
-
-                                <li className="nav-item">
-                                    <Link className="nav-link" to='/?id=contact' onClick={() => this.handleScrollIntoView('contact')}>Contact</Link>
                                 </li>
                             </ul>
                         )}
@@ -110,10 +74,9 @@ class Navbar extends Component {
                                     </li>
                                 </Fragment>
                             ) : (
-                                <Fragment>
-                                    <button className='sign-in-btn sign-up' onClick={() => routeToPath(history, '/register')}>Sign up</button>
-                                    <button className='sign-in-btn sign-in ml-3' onClick={() => routeToPath(history, '/login')}>Sign in</button>
-                                </Fragment>
+                                <li className="nav-item">
+                                    <Link className="nav-link" to='/login'>Login</Link>
+                                </li>
                             )}
                         </ul>
                     </div>

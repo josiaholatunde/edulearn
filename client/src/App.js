@@ -29,11 +29,14 @@ function App({ history }) {
 
   return (
     <div className="App">
+
       <Router>
-        <Navbar />
-        <Notification />
-        <WebSocket history={history} />    
-        <MainApplicationRoutes />
+       
+          <Navbar  />
+          <Notification />
+          <WebSocket history={history} />    
+          <MainApplicationRoutes />
+        
       </Router>
     </div>
   );

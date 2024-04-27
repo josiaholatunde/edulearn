@@ -7,11 +7,11 @@ a {
 }
 
 .navbar a {
-  color: #fff !important;
+  color: #007BFF !important;
 }
 
 .navbar-nav li {
-  margin: 0 .6rem !important;
+  margin: 0 2rem !important;
 }
 
 input, select {
@@ -367,4 +367,62 @@ iframe[title='Sign in with Google Button'] {
   width: 100% !important;
   padding: 0 !important;
   margin: 0 !important;
+}
+
+
+.secondary-text {
+  color: #007BFF !important;
+}
+
+
+.main-logo-text {
+  font-weight: 600;
+}
+
+
+.custom-btn-sm {
+  display: flex;
+  width: 158px;
+  height: 51px;
+  padding: 16px 10px;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  border-radius: 4px;
+  outline: none !important;
+  border: none;
+}
+
+
+.custom-primary {
+  background: #007BFF;
+  color: #fff;
+}
+
+.sign-in-btn {
+  display: flex;
+  padding: 12px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 8px;
+  width: 100px !important;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+  outline: none;
+  height: 45px !important;
+  
+}
+
+.sign-in {
+  border: 1px solid #007BFF;
+  background-color: #007BFF;
+  color: #fff !important;
+}
+
+.sign-up {
+  border: 1px solid #007BFF;
+  background-color: #fff;
+  color: #007BFF !important;
 }
