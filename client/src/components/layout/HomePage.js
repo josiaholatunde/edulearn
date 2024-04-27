@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect } from 'react'
 import { connect, useDispatch } from 'react-redux'
+import { getChallengeSummary } from '../../redux/actions/challengeActions'
 import { getChallengeInvites, updateChallengeInvite } from '../../redux/actions/challengeInviteActions'
 import convertToPercentage from '../../utils/levelCalculation'
 import { getTimeOfDay } from '../../utils/momentUtil'
@@ -8,12 +9,13 @@ import History from '../user-profile/History'
 import StreakCalendar from '../user-profile/StreakCalendar'
 
 
-const HomePage = ({ history, user, challengeInvites }) => {
+const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
 
     const dispatch = useDispatch()
 
     useEffect(() => {
         dispatch(getChallengeInvites({ page: 1, size: 5, status: 'PENDING' }))
+        dispatch(getChallengeSummary())
     }, [])
 
     const handleUpdateInvite = (challengeInvite, action) => {
@@ -46,15 +48,15 @@ const HomePage = ({ history, user, challengeInvites }) => {
                     <div className='col-lg-3 card p-3 text-left'>
                         <div style={{ fontSize: '20px', fontWeight: '500' }}>Challenges</div>
 
-                        <div className='mt-3 total-challenges' style={{ fontSize: '48px', fontWeight: '700' }}>19</div>
+                        <div className='mt-3 total-challenges' style={{ fontSize: '48px', fontWeight: '700' }}>{ challengeSummary?.totalChallenges || 0 }</div>
                         <div className='d-flex justify-content-between mt-3'>
                             <div>
-                                <span style={{ fontWeight: '600' }}>15</span>
+                                <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesWon || 0 }</span>
                                 <div>Won</div>
                             </div>
 
                             <div>
-                                <span style={{ fontWeight: '600' }}>4</span>
+                                <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesLost || 0}</span>
                                 <div>Lost</div>
                             </div>
                         </div>
@@ -106,10 +108,11 @@ const HomePage = ({ history, user, challengeInvites }) => {
 
 }
 
-const mapStateToProps = ({ authedUser, challengeInvites: { challengeInvites } }) => {
+const mapStateToProps = ({ authedUser, challenges: { challengeSummary }, challengeInvites: { challengeInvites } }) => {
     return ({
         user: authedUser?.user?.studentUser,
-        challengeInvites
+        challengeInvites,
+        challengeSummary
     })
 }
 
