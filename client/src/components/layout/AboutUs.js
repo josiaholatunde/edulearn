@@ -17,7 +17,7 @@ const AboutUs = () => {
         <div className='pl-2 text-center' style={{ fontSize: '44px', fontWeight: '600'}}>Empowering Learning, Empowering Futures: The <span className='secondary-text'>EduLearn</span> Story</div>
      </div> 
      
-     <div className='about-body row px-5 mt-5'>
+     <div className='about-body row px-5' style={{ marginTop: '100px'}}>
           <div className='col-lg-7 text-justify'>
              <p style={{ width: '700px'}}>At Edulearn, we are passionate about revolutionizing the way people learn and engage with computer science concepts. Our mission is to make learning accessible, enjoyable, and rewarding for everyone, regardless of their background or experience level.Our platform offers a rich array of innovative features designed to inspire curiosity, foster creativity, and ignite a passion for learning.At Edulearn, we're not just transforming education—we're shaping the future. Join us on this exciting journey and discover the endless possibilities that await. Together, let's unlock the power of learning and empower people around the world to reach their full potential.</p>
              <button className='custom-btn-sm custom-primary mt-4'>Get Started
@@ -36,7 +36,7 @@ const AboutUs = () => {
                          <p className='mt-3 text-justify' style={{ fontWeight: '400'}}>Edulearn combines cutting-edge technology with educational expertise to create a dynamic learning experience.</p>
                      
                      </div>
-                     <div className='card about-card text-left p-3' style={{ background: '#E6F2FF'}}>
+                     <div className='card about-card text-left p-3' style={{ background: '#E6F2FF', border: '1px solid #E6F2FF'}}>
                          <div className='img-container'>
                          <img src='/about-2.png' className='about-img' />
                          </div>
@@ -46,7 +46,7 @@ const AboutUs = () => {
                          </p>
                      
                      </div>
-                     <div className='card about-card text-left mt-4 p-3' style={{ background: '#E6F2FF'}}>
+                     <div className='card about-card text-left mt-4 p-3' style={{ background: '#E6F2FF', border: '1px solid #E6F2FF'}}>
                          <div className='img-container'>
                              <img src='/about-3.png' className='about-img' />
                          </div>
@@ -55,7 +55,7 @@ const AboutUs = () => {
                          Edulearn is committed to making learning accessible to everyone, regardless of background or experience level.
                                                              </p>
                      </div>
-                     <div className='card about-card mt-4 text-left p-3' style={{ background: '#FFF2E8'}}>
+                     <div className='card about-card mt-4 text-left p-3' style={{ background: '#FFF2E8', border: '1px solid #FFF2E8'}}>
                          <div className='img-container'>
                              <img src='/about-4.png' className='about-img' />
                          </div>

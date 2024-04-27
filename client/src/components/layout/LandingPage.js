@@ -6,6 +6,7 @@ import convertToPercentage from '../../utils/levelCalculation';
 import { getTimeOfDay } from '../../utils/momentUtil';
 import { routeToPath } from '../../utils/routeUtil';
 import AboutUs from './AboutUs';
+import HowItWorks from './HowItWorks';
 import './landingPage.css';
 import MainSectionIcons from './MainSectionIcons';
 import TypingAnimation from './TypingAnimation';
@@ -65,7 +66,8 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
             </div>
            <MainSectionIcons />
            <AboutUs />
-           
+            <HowItWorks />
+        
         </Fragment>
     );
 };
