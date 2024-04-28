@@ -37,11 +37,11 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
                             </div>
                             <p className='my-5' style={{ width: '80%', fontSize: '18px', fontWeight: '500', color: 'var(--Grey-grey-500, #333)' }}>Learning is made easy with different ways to upskill through practical and fun challenges.Dive into interactive challenges, compete with peers, and embark on a journey of knowledge discovery like never before. Join us today and start mastering computer science in an exciting new way.</p>
                             <div className='btn-container'>
-                                <button className='btn secondary-btn cta-btn'>
+                                <button className='btn secondary-btn cta-btn' onClick={() => routeToPath(history, '/register')}>
                                     <i class="bi bi-person-plus-fill mr-2"></i>
                                     Sign up
                                 </button>
-                                <button className='btn btn-white-custom ml-3 cta-btn'>
+                                <button className='btn btn-white-custom ml-3 cta-btn' onClick={() => routeToPath(history, '/register')}>
                                     <span>Learn More</span>
                                     <i class="bi bi-arrow-up-right ml-4"></i>
                                 </button>
@@ -57,7 +57,7 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
                     ))}
             </div>
             <MainSectionIcons />
-            <AboutUs />
+            <AboutUs history={history} />
             <HowItWorks />
             <UserTestimonials />
             <div className='footer-section py-5 px-3 text-center text-white' style={{ background: '#00346b', height: '400px'}}>

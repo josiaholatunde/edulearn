@@ -37,7 +37,7 @@ function App({ history }) {
           <Notification />
           <WebSocket history={history} />    
           <MainApplicationRoutes />
-          <ApplicationFooter />
+          {/* <ApplicationFooter /> */}
       </Router>
     </div>
   );

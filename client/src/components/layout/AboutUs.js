@@ -1,9 +1,10 @@
 import React from 'react'
+import { routeToPath } from '../../utils/routeUtil'
 
 import './landingPage.css'
 
 
-const AboutUs = () => {
+const AboutUs = ({ history }) => {
 
 
 
@@ -20,7 +21,7 @@ const AboutUs = () => {
      <div className='about-body row px-5' style={{ marginTop: '100px'}}>
           <div className='col-lg-7 text-justify'>
              <p style={{ width: '700px'}}>At Edulearn, we are passionate about revolutionizing the way people learn and engage with computer science concepts. Our mission is to make learning accessible, enjoyable, and rewarding for everyone, regardless of their background or experience level.Our platform offers a rich array of innovative features designed to inspire curiosity, foster creativity, and ignite a passion for learning.At Edulearn, we're not just transforming education—we're shaping the future. Join us on this exciting journey and discover the endless possibilities that await. Together, let's unlock the power of learning and empower people around the world to reach their full potential.</p>
-             <button className='custom-btn-sm custom-primary mt-4'>Get Started
+             <button className='custom-btn-sm custom-primary mt-4' onClick={() => routeToPath(history, '/register')}>Get Started
                  <i class="bi bi-arrow-up-right ml-2"></i>
              </button>
          </div>

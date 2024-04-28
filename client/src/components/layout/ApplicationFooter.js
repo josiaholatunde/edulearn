@@ -6,7 +6,7 @@ const ApplicationFooter = () => {
 
 
 
-    return <div className='application-footer text-center p-3 mt-5' style={{ height: '55px', borderTop: '1px solid #00346B'}}>
+    return <div className='application-footer text-center p-3 mt-5' style={{ borderTop: '1px solid #00346B'}}>
         <div className='row'>
             <div className='col-md-7 d-flex align-items-center justify-content-center'>
                 <div className='copy-right'>
