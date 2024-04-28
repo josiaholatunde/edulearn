@@ -332,7 +332,7 @@ input[type='email'], input[type='password'], .password-input {
 
 .nav-pills .nav-link.active {
   background-color: #fff !important;
-  color: #161f2e !important;
+  color: #007BFF !important;
 }
 
 .react-calendar__month-view__weekdays__weekday {
