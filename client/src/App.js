@@ -9,6 +9,7 @@ import store from './store'
 import Navbar from './components/layout/Navbar';
 import WebSocket from './components/web-socket/WebSocket';
 import MainApplicationRoutes from './MainApplicationRoutes';
+import ApplicationFooter from './components/layout/ApplicationFooter';
 
 
 const token = localStorage.getItem('token');
@@ -36,7 +37,7 @@ function App({ history }) {
           <Notification />
           <WebSocket history={history} />    
           <MainApplicationRoutes />
-        
+          <ApplicationFooter />
       </Router>
     </div>
   );

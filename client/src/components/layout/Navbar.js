@@ -6,7 +6,13 @@ import { googleLogout } from '@react-oauth/google';
 import { routeToPath } from '../../utils/routeUtil';
 
 class Navbar extends Component {
+
+    state = {
+        activeLink: ''
+    }
+
     handleLogOut = e => {
+        this.setState({ activeLink: ''})
         let user = JSON.parse(localStorage.getItem('user'));
         const { history } = this.props;
         this.props.logOutUser(history, user);
@@ -27,7 +33,7 @@ class Navbar extends Component {
                 if (elementToScroll) {
                     elementToScroll.scrollIntoView({ behavior: 'smooth' });
                 }
-            }, 100); // Add a small delay to ensure the page has navigated to '/'
+            }, 100);
         }
     }
 
@@ -35,10 +41,12 @@ class Navbar extends Component {
 
     render() {
         const { loggedInUser, history } = this.props;
+        const { activeLink } = this.state
+
         return (
             <nav className="navbar navbar-expand-lg navbar-light text-white sticky-top"  style={{ boxShadow: '0px 4px 8px #007BFF' }}>
                 <div className='container px-0'>
-                    <Link className="navbar-brand secondary-text main-logo-text" to="/">
+                    <Link className="navbar-brand secondary-text main-logo-text" to="/" onClick={() => this.setState({ activeLink: ''})}>
                         EduLearn
                     </Link>
                     <button className="navbar-toggler text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -47,36 +55,48 @@ class Navbar extends Component {
 
                     <div className="collapse navbar-collapse navbar-rel-links justify-content-center" id="navbarSupportedContent">
                         {loggedInUser ? (
-                            <ul className="navbar-nav mr-auto">
+                            <ul className="navbar-nav mx-auto">
                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/home'>Home</Link>
+                                    <Link className={`nav-link ${activeLink === 'home' ? 'active-link': ''}`} to='/home' onClick={() => this.setState({ activeLink: 'home'})}>Home</Link>
                                 </li>
                                 <li className="nav-item dropdown">
-                                    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <a className={`nav-link dropdown-toggle ${activeLink === 'challenges' ? '': ''}`} href="#" id="navbarDropdownMenuLink"  data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         Challenges
                                     </a>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                        <Link className="dropdown-item text-cool" to="/challenges" style={{ color: '#212529'}}>My Challenges</Link>
-                                        <Link to='/challenge-invites' className="dropdown-item text-cool"  style={{ color: '#212529'}}>Challenge Invites</Link>
+                                    <div className="dropdown-menu"  aria-labelledby="navbarDropdownMenuLink">
+                                        <Link className={`dropdown-item`}  to="/challenges" style={{ color: '#212529'}} onClick={() => this.setState({ activeLink: 'challenges'})}>My Challenges</Link>
+                                        <Link to='/challenge-invites' className="dropdown-item text-cool"  style={{ color: '#212529'}} onClick={() => this.setState({ activeLink: 'challenges'})}>Challenge Invites</Link>
                                     </div>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/leaderboard'>Leaderboard</Link>
+                                    <Link className={`nav-link ${activeLink === 'leaderboard' ? 'active-link': ''}`} to='/leaderboard' onClick={() => this.setState({ activeLink: 'leaderboard'})}>Leaderboard</Link>
                                 </li>
                             </ul>
                         ) : ( <ul className="navbar-nav nav-center mx-auto d-flex justify-content-center">
                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/' onClick={() => this.handleScrollIntoView('main-section')}>Home</Link>
+                                    <Link className={`nav-link ${activeLink === 'home' ? 'active-link': ''}`} to='/' onClick={() => {
+                                        this.setState({ activeLink: 'home'})
+                                        this.handleScrollIntoView('main-section')
+                                    }}>Home</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/' onClick={() => this.handleScrollIntoView('about')}>About</Link>
+                                    <Link className={`nav-link ${activeLink === 'about' ? 'active-link': ''}`} to='/' onClick={() => {
+                                        this.setState({ activeLink: 'about'})
+                                        this.handleScrollIntoView('about')
+                                    }}>About</Link>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/' onClick={() => this.handleScrollIntoView('how-it-works')}>Features</Link>
+                                    <Link className={`nav-link ${activeLink === 'how-it-works' ? 'active-link': ''}`} to='/' onClick={() => {
+                                        this.setState({ activeLink: 'how-it-works'})
+                                        this.handleScrollIntoView('how-it-works')
+                                    }}>Features</Link>
                                 </li>
 
                                 <li className="nav-item">
-                                    <Link className="nav-link" to='/?id=contact' onClick={() => this.handleScrollIntoView('contact')}>Contact</Link>
+                                    <Link  className={`nav-link ${activeLink === 'contact' ? 'active-link': ''}`} to='/' onClick={() =>{
+                                         this.setState({ activeLink: 'contact'})
+                                        this.handleScrollIntoView('contact')
+                                    } }>Contact</Link>
                                 </li>
                             </ul>
                         )}

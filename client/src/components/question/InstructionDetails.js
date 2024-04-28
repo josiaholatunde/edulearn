@@ -30,7 +30,7 @@ const InstructionDetails = ({ loading, quiz, questionType, setShouldShowInstruct
                         </p>
                     </div>
                     <div className="question-body py-3">
-                        <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}}  onClick={() => {
+                        <button type="button" className="btn custom-btn-primary" style={{ height: '40px', width: '200px'}}  onClick={() => {
                             setLoading(true)
                             setShouldShowInstruction(false)
                         }}>

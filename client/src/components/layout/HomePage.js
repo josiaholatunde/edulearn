@@ -7,6 +7,7 @@ import { getTimeOfDay } from '../../utils/momentUtil'
 import { routeToPath } from '../../utils/routeUtil'
 import History from '../user-profile/History'
 import StreakCalendar from '../user-profile/StreakCalendar'
+import SunShine from './SunShine'
 
 
 const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
@@ -34,9 +35,18 @@ const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
         <div className='row mt-5'>
             <div className='col-lg-5 pl-0'>
                 <div className='content d-flex align-items-center'>
-                    <div className='avatar' style={{ background: 'black', borderRadius: '50%', height: '100px', width: '100px' }}></div>
-                    <div className='greeting-container ml-2 text-left'>
-                        <div style={{ fontSize: '24px', fontWeight: '600' }}>Good { getTimeOfDay()}, <i className="bi bi-sun-fill" style={{ width: '40px', height: '40px' }}></i></div>
+                    {
+                        user?.imageUrl ? (<div className="dashboard-img-container">
+                        <img
+                          src={user?.imageUrl}
+                          alt="avatar"
+                          className="img-fluid rounded-circle"
+                        />
+                      </div>) : <div className='avatar' style={{ background: 'black', borderRadius: '50%', height: '100px', width: '100px' }}></div>
+
+                    }
+                    <div className='greeting-container ml-3 text-left'>
+                        <div style={{ fontSize: '24px', fontWeight: '500' }}>Good { getTimeOfDay()}, <SunShine /></div>
                         <div style={{ fontSize: '30px', fontWeight: '700', fontStyle: 'normal' }}> {user?.fullName} </div>
                     </div>
                 </div>
@@ -52,19 +62,19 @@ const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
                         <div className='d-flex justify-content-between mt-3'>
                             <div>
                                 <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesWon || 0 }</span>
-                                <div>Won</div>
+                                <div style={{ color: '#28A745', fontSize: '14px'}}>Won</div>
                             </div>
 
                             <div>
                                 <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesLost || 0}</span>
-                                <div>Lost</div>
+                                <div style={{ color: '#E57373', fontSize: '14px'}}>Lost</div>
                             </div>
                         </div>
                     </div>
                     <div className='col-lg-8 current-level ml-3 card p-3 text-left'>
                         <h5>Current Level</h5>
                         <div className="progress mt-4 mb-2">
-                            <div className="progress-bar text-cool bg-cool" role="progressbar" style={{ "width": `${levelPercentage}%` }} aria-valuenow={levelPercentage} aria-valuemin="0" aria-valuemax="100"></div>
+                            <div className="progress-bar text-cool" role="progressbar" style={{ "width": `${levelPercentage}%`, background: '#007BFF' }} aria-valuenow={levelPercentage} aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
                         <span> Level {user?.level}</span>
                     </div>
@@ -93,8 +103,8 @@ const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
                                         <li style={{ fontSize: '14px' }}> { challengeInvite.createdBy || 'N/A'} invited you to a challenge</li>
 
                                         <div className='d-flex justify-content-end mb-3' style={{ fontSize: '13px' }}>
-                                            <div className='pointer' onClick={() => handleUpdateInvite(challengeInvite, 'ACCEPTED')}>Accept</div>
-                                            <div className='ml-2 pointer' onClick={() => handleUpdateInvite(challengeInvite, 'DECLINED')}>Decline</div>
+                                            <div className='pointer' style={{ color: '#007BFF'}}  onClick={() => handleUpdateInvite(challengeInvite, 'ACCEPTED')}>Accept</div>
+                                            <div className='ml-2 pointer' style={{ color: '#E57373'}}  onClick={() => handleUpdateInvite(challengeInvite, 'DECLINED')}>Decline</div>
                                         </div>
                                     </Fragment>))) : (<div>You do not have any challenge invites</div>) 
                             }

@@ -10,7 +10,7 @@ const History = () => {
         <div className="history my-2">
             <div className="d-flex justify-content-between">
                 <h5>Implement various sorting algorithms</h5>
-                <span>Won</span>
+                <span style={{ color: '#28A745'}}>Won</span>
             </div>
             <p>Implement the sorting algorithm to sort an array of integers in ascending order. Implement bubble sort algorithm to sort integers in ascending order</p>
             <div className="d-flex justify-content-between">
@@ -27,7 +27,7 @@ const History = () => {
         <div className="history my-2">
             <div className="d-flex justify-content-between">
                 <h5>Implement various sorting algorithms</h5>
-                <span>Won</span>
+                <span style={{ color: '#28A745'}}>Won</span>
             </div>
             <p>Implement the sorting algorithm to sort an array of integers in ascending order. Implement bubble sort algorithm to sort integers in ascending order</p>
             <div className="d-flex justify-content-between">
@@ -44,7 +44,7 @@ const History = () => {
         <div className="history my-2">
             <div className="d-flex justify-content-between">
                 <h5>Implement various sorting algorithms</h5>
-                <span>Won</span>
+                <span style={{ color: '#28A745'}}>Won</span>
             </div>
             <p>Implement the sorting algorithm to sort an array of integers in ascending order. Implement bubble sort algorithm to sort integers in ascending order</p>
             <div className="d-flex justify-content-between">

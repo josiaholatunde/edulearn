@@ -123,7 +123,7 @@ const Challenge = ({ history, loading, total, challenges }) => {
                 <h1 className='f-32 mb-0 d-flex align-items-center'>Challenges</h1>
                 <div className="btn-group">
                     <div className="dropdown mr-3" >
-                        <button className="btn btn-cool dropdown-toggle" style={{ height: '40px' }} type="button" id="dropdownMenuLevel" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <button className="custom-btn sign-up dropdown-toggle" style={{ height: '40px', borderRadius: '4px !important' }} type="button" id="dropdownMenuLevel" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Filter
                         </button>
                         <ul className="dropdown-menu p-3" aria-labelledby="dropdownMenuLevel" style={{ width: '300px'}}>
@@ -133,7 +133,7 @@ const Challenge = ({ history, loading, total, challenges }) => {
                         </ul>
                     </div>
                     <div className='dropdown'>
-                        <button type="button" className="btn btn-cool dropdown-toggle" style={{ height: '40px' }} data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" className="sign-in dropdown-toggle" style={{ height: '40px', borderRadius: '4px' }} data-bs-toggle="dropdown" aria-expanded="false">
                             Start Challenge
                         </button>
                         <ul className="dropdown-menu">

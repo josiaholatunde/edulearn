@@ -140,7 +140,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
     return (
         <Fragment>
             <div
-                className="row card mt-5 p-3 flex-row text-left justify-content-center"
+                className="row card mt-5 p-3 flex-row text-left justify-content-center custom-btn-primary"
                 style={{ height: "192px" }}
             >
                 <Prompt when={startChallenge && type == 'MULTIPLE_CHOICE'} message={location => `Are you sure you want to leave this page ? Your unsaved changes might be lost`} />

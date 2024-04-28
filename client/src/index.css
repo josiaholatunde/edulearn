@@ -7,6 +7,10 @@ a {
 }
 
 .navbar a {
+  color: var(--Grey-grey-500, black);
+}
+
+.navbar a:active, .active-link {
   color: #007BFF !important;
 }
 
@@ -51,6 +55,12 @@ input, select {
   background-color: #161f2e !important;
   color: #fff !important;
   border:  1px solid #161f2e !important;
+}
+
+.btn-cool, .badge-cool {
+  background-color: #007BFF !important;
+  color: #fff !important;
+  border:  1px solid #007BFF !important;
 }
 
 .btn-light {
@@ -182,8 +192,14 @@ input[type='email'], input[type='password'], .password-input {
 }
 
 .profile-img-container {
-  height: 200px;
-  width: 200px;
+  height: 150px;
+  width: 150px;
+  display: flex;
+}
+
+.dashboard-img-container {
+  height: 100px;
+  width: 100px;
   display: flex;
 }
 
@@ -425,4 +441,31 @@ iframe[title='Sign in with Google Button'] {
   border: 1px solid #007BFF;
   background-color: #fff;
   color: #007BFF !important;
+}
+
+.custom-btn-primary {
+  border: 1px solid #007BFF !important;
+  background-color: #007BFF !important;
+  color: #fff !important;
+}
+
+.uni-color {
+  color: #00346B;
+}
+
+
+.custom-btn {
+  display: flex;
+  padding: 12px 12px;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  flex: 1 0 0;
+  border-radius: 4px;
+  width: 100px !important;
+  font-weight: 500;
+  letter-spacing: 0.15px;
+  outline: none;
+  height: 40px !important;
+  
 }
