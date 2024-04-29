@@ -83,6 +83,29 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
                     </ul>
                 </div>
             </div>
+            <div className='row'>
+                <div className='col-md-4 card' style={{ background: '#7EEA7E'}}>
+                    <div className='card-body'>
+                        <div className='row'>
+                            <div className='col-md-12'>
+                                    <div className='img-container'>
+                                    <img src='/user-img.png' />
+                                </div>
+                                <div>
+                                    <h3>Jane Smith</h3>
+                                    <div>Level 10</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className='row'>
+                            <div className='col-md-12'>
+                                <div> 5000 XP</div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <LeaderboardDataTable 
                 users={leaderboardUsers} 
                 currentPage={page}

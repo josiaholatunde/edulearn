@@ -68,7 +68,7 @@ const CERTIFICATION_FORM_MODE = {
                   className="img-fluid rounded-circle"
                 />
               </div>
-              <div className="edit-item-container pointer" style={{ position: 'absolute', bottom: '4%', right: '0%'}} onClick={() => setShowChangeProfileImageModal(true)}>
+              <div className="edit-item-container pointer" style={{ position: 'absolute', bottom: '4%', right: '0%', background: 'rgba(253, 126, 20, 0.10)', borderRadius: '8px'}} onClick={() => setShowChangeProfileImageModal(true)}>
                 <img src="./edit-img.png" />
               </div>
             </div>
