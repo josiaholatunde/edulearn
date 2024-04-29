@@ -197,6 +197,18 @@ input[type='email'], input[type='password'], .password-input {
   display: flex;
 }
 
+.leaderboard-img-container {
+  height: 100px;
+  width: 100px;
+  display: flex;
+
+}
+.leaderboard-img-container img {
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+
 .dashboard-img-container {
   height: 100px;
   width: 100px;
