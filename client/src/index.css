@@ -197,6 +197,18 @@ input[type='email'], input[type='password'], .password-input {
   display: flex;
 }
 
+.leaderboard-img-container {
+  height: 100px;
+  width: 100px;
+  display: flex;
+
+}
+.leaderboard-img-container img {
+  border-radius: 50%;
+  height: 100%;
+  width: 100%;
+}
+
 .dashboard-img-container {
   height: 100px;
   width: 100px;
@@ -470,3 +482,18 @@ iframe[title='Sign in with Google Button'] {
   
 }
 
+
+
+@media only screen and (max-width: 600px) {
+  
+
+  .features-img-container {
+    height: 238px;
+    width: 304px !important;
+  }
+
+  .features-img-container img {
+    height: 100%;
+    width: 100%;
+  }
+}

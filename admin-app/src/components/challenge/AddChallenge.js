@@ -54,12 +54,10 @@ const AddChallenge = ({ history, loading }) => {
         if (!value.trim()) {
             setErrors({ ...errors, [name]: `The ${name} field is required` })
         }
-        console.log('name ', name, 'value ', value, 'errors ', errors)
     }
 
     const handleCreateChallenge = (e) => {
         e?.preventDefault()
-        console.log('i ran oo men from challenge')
         if (questionList && questionList.length == 0) {
             return showNotification('danger', 'Please select one or more questions to add to this challenge')
         }

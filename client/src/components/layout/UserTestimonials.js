@@ -22,6 +22,11 @@ const UserTestimonials = () => {
             comment: "Since I started using EduLearn, I have become more interested in how computer science concepts work. I encourage my friends to embrace this.",
             role: '2nd Year Computer Science Student at De montfort University'
         },
+        {
+            name: 'Omolere Oluwatosin',
+            comment: "EduLearn has been a critical contribution to my research success. Kudos for this amazing tool.",
+            role: 'PhD Student at MIT'
+        },
     ]
 
     const handleCursorClick = (direction) => {

@@ -30,7 +30,7 @@ const AboutUs = ({ history }) => {
              <div className='row'>
                  <div className='col-md-12 d-flex flex-row justify-content-between flex-wrap px-0'>
                      <div className='card about-card text-left p-3' style={{ background: '#FFF2E8', border: '1px solid #FFF2E8'}}>
-                         <div className='img-container'>
+                         <div className='about-img-container'>
                              <img src='/about-1.png' className='about-img' />
                          </div>
                          <div className='mt-2' style={{ fontWeight: '500'}}>Innovation in Learning</div>
@@ -38,7 +38,7 @@ const AboutUs = ({ history }) => {
                      
                      </div>
                      <div className='card about-card text-left p-3' style={{ background: '#E6F2FF', border: '1px solid #E6F2FF'}}>
-                         <div className='img-container'>
+                         <div className='about-img-container'>
                          <img src='/about-2.png' className='about-img' />
                          </div>
                          <div className='mt-2' style={{ fontWeight: '500'}}>Interactive Challenges</div>
@@ -48,7 +48,7 @@ const AboutUs = ({ history }) => {
                      
                      </div>
                      <div className='card about-card text-left mt-4 p-3' style={{ background: '#E6F2FF', border: '1px solid #E6F2FF'}}>
-                         <div className='img-container'>
+                         <div className='about-img-container'>
                              <img src='/about-3.png' className='about-img' />
                          </div>
                          <div className='mt-2' style={{ fontWeight: '500'}}>Inclusivity and Accessibility</div>
@@ -57,7 +57,7 @@ const AboutUs = ({ history }) => {
                                                              </p>
                      </div>
                      <div className='card about-card mt-4 text-left p-3' style={{ background: '#FFF2E8', border: '1px solid #FFF2E8'}}>
-                         <div className='img-container'>
+                         <div className='about-img-container'>
                              <img src='/about-4.png' className='about-img' />
                          </div>
                          <div className='mt-2' style={{ fontWeight: '500'}}>Empowering Futures</div>

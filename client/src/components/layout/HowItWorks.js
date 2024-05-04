@@ -22,7 +22,7 @@ const HowItWorks = () => {
                 Create your Edulearn account in minutes, providing basic information to get started on your learning journey
             </p>
         </div>
-        <div className='offset-lg-3 col-lg-7 img-container px-0'>
+        <div className='offset-lg-3 col-lg-7 features-img-container px-0'>
             <img src='/signup-page.png' alt='Sign up page' />
         </div>
 
@@ -31,7 +31,7 @@ const HowItWorks = () => {
 
     <div className='engage-body row px-0' style={{ marginTop: '113px'}}>
         
-        <div className=' col-lg-7 img-container px-0'>
+        <div className=' col-lg-7 features-img-container px-0'>
             <img src='/challenge.png' alt='Challenges page' />
         </div>
         <div className='col-lg-2 text-justify py-5'>
@@ -49,7 +49,7 @@ const HowItWorks = () => {
                 Monitor your progress, track your achievements, and celebrate your successes as you advance through the curriculum
             </p>
         </div>
-        <div className='offset-lg-3 col-lg-7 img-container px-0'>
+        <div className='offset-lg-3 col-lg-7 features-img-container px-0'>
             <img src='/profile.png' alt='Profile page' />
         </div>
 

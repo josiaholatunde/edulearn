@@ -51,6 +51,7 @@ public class StudentUserDTO {
         BeanUtils.copyProperties(studentUser, studentUserDTO);
         studentUserDTO.setFullName(String.format("%s %s", studentUserDTO.firstName, studentUserDTO.lastName));
         studentUserDTO.setUserLoggedIn(studentUser.isUserLoginStatus());
+        studentUserDTO.setPoints(String.valueOf(studentUser.getPoints()));
         return studentUserDTO;
     }
 }
