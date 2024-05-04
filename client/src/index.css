@@ -482,3 +482,18 @@ iframe[title='Sign in with Google Button'] {
   
 }
 
+
+
+@media only screen and (max-width: 600px) {
+  
+
+  .features-img-container {
+    height: 238px;
+    width: 304px !important;
+  }
+
+  .features-img-container img {
+    height: 100%;
+    width: 100%;
+  }
+}

@@ -17,7 +17,7 @@ import java.util.List;
 @RequestMapping(value = "/api/users")
 @RequiredArgsConstructor
 @WrapResponse
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;

@@ -121,7 +121,7 @@ class Navbar extends Component {
                                         </a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                             <Link to='/profile' className="dropdown-item text-cool"  style={{ color: '#212529'}}>Profile</Link>
-                                            <Link className="dropdown-item text-cool" to="/challenges" style={{ color: '#212529'}}>My Challenges</Link>
+                                            <Link className="dropdown-item text-cool" to="/challenges" style={{ color: '#212529'}} onClick={() => this.setState({ activeLink: 'challenges'})}>My Challenges</Link>
                                             <button  type='button'  className='dropdown-item btn btn-outline-light' onClick={this.handleLogOut} >
                                                 <i className="bi bi-box-arrow-right mr-2"></i>
                                                 Logout

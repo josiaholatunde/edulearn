@@ -45,7 +45,7 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
     }, [page])
 
     const filterLeaderBoard = () => {
-        dispatch(getLeaderBoardUsers({ page, size, level, name }))
+        dispatch(getLeaderBoardUsers({ page: 0, size, level, name }))
     }
 
 
@@ -96,7 +96,7 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
                                         </div>
                                     <div className='ml-3'>
                                         <div style={{ fontSize: '20px', fontWeight: '500', fontStyle: 'normal'}}>{ leaderboardUsers[1].name }</div>
-                                        <div>Level { leaderboardUsers[0].level }</div>
+                                        <div style={{ fontStyle: 'normal', letterSpacing: '0.15px', lineHeight: '24px' }}>Level { leaderboardUsers[0].level }</div>
                                     </div>
                                 </div>
                             </div>
@@ -128,7 +128,7 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
                                         </div>
                                     <div className='ml-3'>
                                         <div style={{ fontSize: '20px', fontWeight: '500', fontStyle: 'normal'}}>{ leaderboardUsers[0].name }</div>
-                                        <div>Level { leaderboardUsers[0].level }</div>
+                                        <div style={{ fontStyle: 'normal', letterSpacing: '0.15px', lineHeight: '24px' }}>Level { leaderboardUsers[0].level }</div>
                                     </div>
                                 </div>
                             </div>
@@ -150,7 +150,7 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
                                         </div>
                                     <div className='ml-3'>
                                         <div style={{ fontSize: '20px', fontWeight: '500', fontStyle: 'normal'}}>{ leaderboardUsers[2].name }</div>
-                                        <div>Level { leaderboardUsers[0].level }</div>
+                                        <div style={{ fontStyle: 'normal', letterSpacing: '0.15px', lineHeight: '24px' }}>Level { leaderboardUsers[0].level }</div>
                                     </div>
                                 </div>
                             </div>
