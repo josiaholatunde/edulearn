@@ -1,21 +1,10 @@
 import React, { Fragment, useEffect, useState } from 'react'
-import ChallengeDataTable from './ChallengeDataTable'
 import Modal from 'react-bootstrap/Modal';
-import OnlineUsersDataTable from '../OnlineUsersDataTable';
-import { QUESTION_TYPE } from '../../utils/constants';
 import { connect, useDispatch } from 'react-redux';
-import { createChallenge, getChallenges } from '../../redux/actions/challengeActions';
+import { getChallenges } from '../../redux/actions/challengeActions';
 import moment from 'moment'
 import Challenge from './Challenge';
 import history from '../../utils/history';
-import { CategoryScale } from 'chart.js';
-
-
-const CHALLENGE_MODE = {
-    INDIVIDUAL: 'INDIVIDUAL',
-    GROUP: 'GROUP'
-}
-
 
 const CHALLENGE_TYPE = {
     MULTIPLE_CHOICE: {
@@ -50,10 +39,6 @@ const mapChallenge = (challenges, currentPage, pageSize) => {
 
 const ChallengeList = ({ loading, total, challenges }) => {
     const [showQuestionStyle, setShowQuestionStyle] = useState(false)
-    const [showOnlineUsers, setShowOnlineUsers] = useState(false)
-    const [challengeMode, setChallengeMode] = useState(CHALLENGE_MODE.INDIVIDUAL)
-    const [selectedOnlineUsersId, setSelectedOnlineUsers] = useState([])
-    const [selectedUserIds, setSelectedUserIds] = useState([])
     const [createChallengeLoader, setCreateChallengeLoader] = useState(false)
     const [title, setTitle] = useState('')
     const [category, setCategory] = useState('')
@@ -66,7 +51,6 @@ const ChallengeList = ({ loading, total, challenges }) => {
 
 
     const handleCloseQuestionStyle = () => setShowQuestionStyle(false)
-    const handleCloseOnlineUsers = () => setShowOnlineUsers(false)
 
 
     useEffect(() => {
@@ -84,7 +68,7 @@ const ChallengeList = ({ loading, total, challenges }) => {
     }
 
 
-    const handleCreateChallenge = (type, friendlyType) => {
+    const handleCreateChallenge = (type) => {
         
         setCreateChallengeLoader(true)
         setTimeout(() => {
@@ -95,7 +79,6 @@ const ChallengeList = ({ loading, total, challenges }) => {
 
     const isFirstInRow = (currentIndex) => currentIndex % 3 === 0
 
-    console.log('from abpve component', selectedUserIds)
     return (
         <div className='mt-4 challenge'>
             <div className='challenge-header d-flex justify-content-between px-3'>

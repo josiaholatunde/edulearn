@@ -37,7 +37,9 @@ public class MultipleChoiceChallengeServiceImpl implements ChallengeEvaluatorSer
             List<MultipleChoiceOption> answerOptions = question.getMultipleChoiceQuestion().getAnswers().stream()
                     .map(MultipleChoiceAnswer::getOption)
                     .collect(Collectors.toList());
-            if (answerOptions.isEmpty()) throw new Exception("Answer not configured for question. Kindly contact admin");
+            if (answerOptions.isEmpty()) {
+                throw new Exception("Answer not configured for question. Kindly contact admin");
+            }
 
             int noOfValidAnswers = (int) entry.getValue().stream()
                     .filter(optionId -> multipleChoiceOptionRepository.existsById(optionId))

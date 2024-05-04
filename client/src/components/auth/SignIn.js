@@ -97,7 +97,7 @@ const SignIn = ({ history, location, loading }) => {
                 <button
                   type="submit"
                   disabled={isLoginFormInvalid()}
-                  className="btn btn-lg btn-block btn-cool"
+                  className="btn btn-lg btn-block custom-btn-primary"
                   style={{ fontSize: '16px'}}
                 >
                 
@@ -122,7 +122,7 @@ const SignIn = ({ history, location, loading }) => {
               <p>
                 Don't have an account ?
                 <Link to="/register">
-                  <span className="text-cool"> Sign up</span>
+                  <span className="secondary-text"> Sign up</span>
                 </Link>
               </p>
             </form>

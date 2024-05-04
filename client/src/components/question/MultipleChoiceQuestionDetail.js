@@ -157,7 +157,7 @@ const MultipleChoiceQuestionDetail = ({ challengeId, questions, setShowSuccessMo
                     {
                         currentQuestion === questions.length - 1 && (<button
                             type="submit"
-                            className="btn btn-lg btn-block btn-cool"
+                            className="btn btn-lg btn-block custom-btn-primary"
                             style={{ fontSize: '16px', width: '200px'}}
                             onClick={submitQuiz}
                             >

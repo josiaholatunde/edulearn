@@ -34,16 +34,16 @@ const ChallengeCompletionModal = ({ challengeResult,  showSuccessModal, showScor
                 <div className="col-lg-12">
                     <div className="d-flex">
                         {
-                            !showScoreDetails && (<button type="button" className="btn" style={{ height: '40px', width: '200px', border: '1px solid #161f2e' }} onClick={handleViewScore} >
+                            !showScoreDetails && (<button type="button" className="btn" style={{ height: '40px', width: '200px', border: '1px solid #007BFF', color: '#007BFF' }} onClick={handleViewScore} >
                                 View Score
                             </button>)
                         }
 
-                        <button type="button" className="btn btn-cool ml-3" style={{ height: '40px', width: '200px' }} onClick={handleViewLeaderBoard}>
+                        <button type="button" className="btn custom-btn-primary  ml-3" style={{ height: '40px', width: '200px' }} onClick={handleViewLeaderBoard}>
                             Leaderboard
                         </button>
                         {
-                            !isAlgorithmView && (<button type="button" className="btn ml-3" style={{ height: '40px', width: '200px', border: '1px solid #161f2e' }} onClick={handleViewSolution}>
+                            !isAlgorithmView && (<button type="button" className="btn ml-3" style={{ height: '40px', width: '200px', border: '1px solid #007BFF',  color: '#007BFF'  }} onClick={handleViewSolution}>
                             View Solution
                         </button>)
                         }

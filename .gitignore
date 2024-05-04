@@ -39,4 +39,7 @@ api/build/
 .DS_Store
 
 client/node_modules
+Client/build
 ./node_modules/
+# Local Netlify folder
+.netlify

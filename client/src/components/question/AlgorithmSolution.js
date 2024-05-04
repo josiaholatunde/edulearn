@@ -39,7 +39,7 @@ const AlgorithmSolution = ({ question: { solutions } }) => {
                             {
                                 solution && solution?.relevantResources && solution?.relevantResources?.length === 0 ? (<h6>There are no relevant resources for this question</h6>) :
                                     (solution?.relevantResources?.split(',').map(resource => (<li>
-                                        <a href={resource} className='text-cool'> {resource} </a>
+                                        <a href={resource} className='secondary-text'> {resource} </a>
                                     </li>)))
                             }
                         </ul>

@@ -6,7 +6,6 @@ import { createChallenge } from '../../redux/actions/challengeActions'
 import { showNotification } from '../../utils/showNotification'
 import { connect } from 'react-redux'
 import AlgorithmStepForm from '../question/AlgorithmStepForm'
-import QuestionsList from '../question/QuestionsList'
 import SearchQuestionsDataTable from '../question/SearchQuestionsDataTable'
 
 const AddChallenge = ({ history, loading }) => {
@@ -231,7 +230,6 @@ const AddChallenge = ({ history, loading }) => {
                         }}
                         placeholder={`Option ${index + 1}`}
                     />
-                    {/* <label className='mb-0 ml-2' htmlFor={`option-${index}`}>{`Option ${index + 1}`}</label> */}
                     <div type="button" className='pointer ml-2 ' onClick={() => handleRemoveOption(index)}>
                         <i class="bi bi-dash-lg"></i>
                     </div>
@@ -291,7 +289,6 @@ const AddChallenge = ({ history, loading }) => {
         }
     }
 
-    console.log('works')
     return <div className='col-lg-12 card my-1 mx-2 p-2'>
         <div className='row my-3'>
             <div className='col-lg-5 d-flex ml-4'>

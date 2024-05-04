@@ -40,9 +40,9 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
   console.log('challenge result', challengeResult)
   return (
     <div className="code-editor" style={{ height: '500px', position: 'relative'}} >
-      <div className="editor-header w-100 pl-3 d-flex justify-content-between"  style={{ width: '9rem', height: '40px', background: '#161f2e', color: '#fff'}}>
+      <div className="editor-header w-100 pl-3 d-flex justify-content-between"  style={{ width: '9rem', height: '40px', background: '#007bff', color: '#fff'}}>
         <select
-            style={{ width: '9rem', background: '#161f2e', color: '#fff', border: 'none', outline: 'none'}}
+            style={{ width: '9rem', background: '#007bff', color: '#fff', border: 'none', outline: 'none'}}
             id="languageSelect"
             className='h-100'
             value={language}
@@ -54,7 +54,7 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
             {/* Add more options for other languages */}
         </select>
         <select
-            style={{ width: '9rem', background: '#161f2e', color: '#fff', border: 'none', outline: 'none'}}
+            style={{ width: '9rem', background: '#007bff', color: '#fff', border: 'none', outline: 'none'}}
             value={theme}
             onChange={({ target }) => setTheme(target.value)}
         >
@@ -91,7 +91,7 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
             }}
         />
         <div className='action-buttons' style={{ position: 'absolute', bottom: '-5%', right: '1%'}}>
-            <button type="button" className="btn btn-cool" style={{ height: '35px', width: '120px'}} onClick={handleRunCode} >
+            <button type="button" className="btn custom-btn-primary" style={{ height: '35px', width: '120px'}} onClick={handleRunCode} >
             { isRunCodeLoading && (<span className="spinner-border spinner-border-sm mr12" id="registerForm-btn-loader" role="status" aria-hidden="true"></span>) }
                 Run Code
             </button>
@@ -101,8 +101,8 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
                 Submit
             </button>
         </div>
-        <div className='result-terminal p-3' style={{ height: '44%', background: '#161f2e', color: '#fff', overflow: 'scroll' }}>
-            <ul className="nav nav-pills bg-cool" style={{ zIndex: '1', position: 'sticky', top: '-15px'}}>
+        <div className='result-terminal p-3' style={{ height: '44%', background: '#007bff', color: '#fff', overflow: 'scroll' }}>
+            <ul className="nav nav-pills bg-white" style={{ zIndex: '1', position: 'sticky', top: '-15px', color: 'black'}}>
             { examples && examples.length > 0 && examples.map((example, index) => 
                 
                 <li className="nav-item" role="presentation" key={example.id}>

@@ -4,16 +4,13 @@ package com.uol.finalproject.edulearn.controllers;
 import com.uol.finalproject.edulearn.annotations.WrapResponse;
 import com.uol.finalproject.edulearn.apimodel.ChallengeDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSubmissionDTO;
-import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryDTO;
 import com.uol.finalproject.edulearn.apimodel.ChallengeSummaryV2DTO;
 import com.uol.finalproject.edulearn.apimodel.request.ChallengeUserResponse;
 import com.uol.finalproject.edulearn.apimodel.specifications.ChallengeSpecificationSearchCriteria;
-import com.uol.finalproject.edulearn.entities.enums.RoleType;
 import com.uol.finalproject.edulearn.services.ChallengeService;
 import com.uol.finalproject.edulearn.services.ChallengeSubmissionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

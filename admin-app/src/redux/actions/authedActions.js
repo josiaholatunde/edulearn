@@ -22,35 +22,31 @@ export function clearUserInLocalStorage() {
 
 
 
-export const handleLoginUser = (userToLogin, { history }) => dispatch => {
+export const handleLoginUser = (userToLogin, { history }) => async dispatch => {
     dispatch(showLoading())
 
-    setTimeout(async () => {
-        try {
-            const { data } = await axios.post('/auth/login', userToLogin)
-            if (data) {
-                const { token, user } = data && data.data
-                setAuthToken(token);
-                dispatch({
-                    type: LOGIN_USER,
-                    payload: {
-                        user,
-                        token
-                    }
-                })
-                storeUserCredentialsInLocalStorage({ user, token });
-                showNotification('success', 'Successfully logged in user')
-                history.push('/home')
-            }
-            dispatch(hideLoading())
-        } catch (error) {
-            dispatch(hideLoading())
-            let errorMessage = error.response && error.response.data.message;
-            showNotification('danger', errorMessage || 'An error occurred while logging in user')
+    try {
+        const { data } = await axios.post('/auth/login', userToLogin)
+        if (data) {
+            const { token, user } = data && data.data
+            setAuthToken(token);
+            dispatch({
+                type: LOGIN_USER,
+                payload: {
+                    user,
+                    token
+                }
+            })
+            storeUserCredentialsInLocalStorage({ user, token });
+            showNotification('success', 'Successfully logged in user')
+            history.push('/home')
         }
-    
-    }, 1000)
-
+        dispatch(hideLoading())
+    } catch (error) {
+        dispatch(hideLoading())
+        let errorMessage = error.response && error.response.data.message;
+        showNotification('danger', errorMessage || 'An error occurred while logging in user')
+    }
 }
 
 

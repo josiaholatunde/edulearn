@@ -270,7 +270,7 @@ class Register extends Component {
                   <button
                     type="submit"
                     disabled={this.isRegisterationFormInvalid()}
-                    className="btn btn-block btn-cool"
+                    className="btn btn-block custom-btn-primary"
                   >
                     {
                         loading ? (<span className="spinner-border spinner-border-sm mr12" id="registerForm-btn-loader" role="status" aria-hidden="true"></span>)
@@ -282,7 +282,7 @@ class Register extends Component {
 
                 <p>
                     Already registered ?
-                    <Link to="/login" className="text-cool"> Sign In</Link>
+                    <Link to="/login" className="secondary-text"> Sign In</Link>
                 </p>
               </form>
             </div>

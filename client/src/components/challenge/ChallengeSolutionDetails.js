@@ -89,7 +89,7 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
     return (
         <Fragment>
             <div
-                className="row card mt-5 p-3 text-left d-flex align-items-center"
+                className="row card mt-5 p-3 text-left d-flex justify-content-center align-items-center custom-btn-primary"
                 style={{ height: "192px" }}
             >
                 <div className="col-lg-9 text-left h-100 d-flex flex-column justify-content-center">
@@ -99,11 +99,11 @@ const ChallengeSolutionDetails = ({ history, challengeDetail, challengeResult, l
                         <span className="f-14">{ challengeDetail?.submissions } submissions received</span>
                     </div>
                 </div>
-                <div className="col-lg-3 mt-5 mr-5 d-flex align-items-center justify-content-end h-100">
+                <div className="col-lg-3 mt-0 mr-5 d-flex align-items-center justify-content-end h-100">
                     <button
                     type="button"
-                    className="btn btn-lg btn-block"
-                    style={{ fontSize: '16px', width: '190px', border: '1px solid #161f2e'}}
+                    className="btn btn-lg btn-block text-white"
+                    style={{ fontSize: '16px', width: '190px', border: '1px solid #fff'}}
                     onClick={handleViewLeaderBoard}
                     >
                         View Leaderboard

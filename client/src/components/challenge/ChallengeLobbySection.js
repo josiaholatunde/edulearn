@@ -75,7 +75,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
                 <h3 className="text-left mt-5">Waiting Lounge</h3>
             </div>
             <div
-                className="row card mt-3 p-3 text-left d-flex align-items-center"
+                className="row card mt-3 p-3 text-left d-flex align-items-center custom-btn-primary"
                 style={{ height: "142px" }}
             >
                 <div className="col-lg-12 text-left h-100 d-flex flex-column justify-content-center">
@@ -101,7 +101,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
 
             <div className="main-cotent text-center my-1 d-flex justify-content-center align-items-center flex-column">
                 {
-                    challengeDetail && challengeDetail.studentUser && (<div className="p-2 my-2" style={{ backgroundColor: '#C0C0C0', width: '320px', borderRadius: '5px' }}> {challengeDetail?.studentUser?.fullName} created this challenge</div>)
+                    challengeDetail && challengeDetail.studentUser && (<div className="p-2 my-2 custom-btn-primary" style={{ backgroundColor: '#C0C0C0', width: '320px', borderRadius: '5px' }}> {challengeDetail?.studentUser?.fullName} created this challenge</div>)
                 }
 
                 <div className="joined-candidates challenge-participants my-2">

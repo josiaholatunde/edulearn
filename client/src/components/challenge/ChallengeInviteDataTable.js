@@ -43,8 +43,8 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
       render: (_, challenge) => (<div className='join-challenge'>
               {
                 !['ACCEPTED', 'DECLINED', 'EXPIRED'].includes(challenge?.status) && (<Fragment>
-                  <i className="mdi mdi-check mdi-24px pointer text-cool" onClick={() => handleUpdateInvite(challenge, 'ACCEPTED')} /> 
-                  <i className="mdi mdi-close mdi-24px pointer text-cool ml-2" onClick={() => handleUpdateInvite(challenge, 'DECLINED')} />
+                  <i className="mdi mdi-check mdi-24px pointer secondary-text" onClick={() => handleUpdateInvite(challenge, 'ACCEPTED')} /> 
+                  <i className="mdi mdi-close mdi-24px pointer ml-2" style={{ color: '#e57373'}} onClick={() => handleUpdateInvite(challenge, 'DECLINED')} />
                 </Fragment>)
               }
       </div>)
