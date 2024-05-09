@@ -14,11 +14,11 @@ const Challenge = () => {
         <div className='mt-6 challenge'>
             <div className='challenge-header d-flex justify-content-between'>
                 <h1 className='f-32'>Challenge</h1>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-cool dropdown-toggle" style={{ height: '40px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                <div className="btn-group">
+                    <button type="button" className="btn btn-cool dropdown-toggle" style={{ height: '40px'}} data-bs-toggle="dropdown" aria-expanded="false">
                         Start Challenge
                     </button>
-                    <ul class="dropdown-menu">
+                    <ul className="dropdown-menu">
                         <li className='pointer' onClick={() => setShowQuestionStyle(true)}>
                             <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
                                Individual Challenge
@@ -41,14 +41,14 @@ const Challenge = () => {
                         <div className='row p-3'>
                             <div className='col-lg-12'>
                                 <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" class="btn btn-cool" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
                                         Multiple Choice
                                     </button>
                                 </div>
                             </div>
                             <div className='col-lg-12 my-3'>
                                 <div className='multiple-choice-container d-flex justify-content-center'>
-                                    <button type="button" class="btn btn-cool" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
+                                    <button type="button" className="btn btn-cool" style={{ height: '40px', width: '200px'}} data-bs-toggle="dropdown" aria-expanded="false">
                                         Algorithms
                                     </button>
                                 </div>

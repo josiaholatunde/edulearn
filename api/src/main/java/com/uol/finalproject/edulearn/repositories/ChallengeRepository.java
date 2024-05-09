@@ -35,4 +35,10 @@ public interface ChallengeRepository extends JpaRepository<Challenge, Long>, Jpa
     @Modifying
     @Query("UPDATE Challenge c SET c.submissions=c.submissions + 1 WHERE c.id=?1")
     void incrementSubmissions(Long challengeId);
+
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE Challenge c SET c.winnerStatusDecided=?2 WHERE c.id=?1")
+    void updateWinnerDecisionStatus(Long challengeId, boolean winnerDecisionStatus);
 }

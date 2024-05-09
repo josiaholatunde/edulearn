@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/api/questions")
 @RequiredArgsConstructor
 @WrapResponse
-@CrossOrigin(origins = "http://localhost:3000")
 public class QuestionController {
 
     private final QuestionService questionService;

@@ -17,7 +17,6 @@ import java.util.List;
 @RequestMapping(value = "/api/leaderboard")
 @RequiredArgsConstructor
 @WrapResponse
-@CrossOrigin(origins = "http://localhost:3000")
 public class LeaderBoardController {
 
     private final LeaderboardService leaderboardService;

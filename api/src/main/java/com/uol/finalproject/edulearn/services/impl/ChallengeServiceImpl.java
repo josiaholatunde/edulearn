@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,13 +49,9 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final AlgorithmChallengeServiceImpl algorithmChallengeService;
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
     private final StompNotificationService stompNotificationService;
-    private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
-    private final AlgorithmQuestionRepository algorithmQuestionRepository;
-    private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
-    private final AlgorithmSolutionRepository algorithmSolutionRepository;
-    private final MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
-    private final MultipleChoiceAnswerRepository multipleChoiceAnswerRepository;
     private final QuestionService questionService;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
@@ -307,6 +305,22 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         challengeRepository.incrementSubmissions(challenge.getId());
         challenge.setSubmissions(challenge.getSubmissions() + 1);
+        
+        assignUserPointsForIndividualChallenge(challenge, challengeSubmission);
+    }
+
+    private void assignUserPointsForIndividualChallenge(Challenge challenge, ChallengeSubmission challengeSubmission) {
+        if (challenge.getCreatedBy() == RoleType.ADMIN) {
+            Optional<ChallengeSubmission> challengeSubmissionOptional = challengeSubmissionRepository.findFirstByChallengeOrderByScoreDesc(challenge);
+            if (challengeSubmissionOptional.isPresent()) {
+                ChallengeSubmission topSubmission = challengeSubmissionOptional.get();
+                if (challengeSubmission.getScore() >= topSubmission.getScore() || challengeSubmission.getScore() > 0) {
+                    studentUserRepository.updateUserPointsById(challengeSubmission.getStudentUser().getId(), challengeSubmission.getScore() >= topSubmission.getScore() ? 100L : 50L);
+                }
+            } else if (challengeSubmission.getScore() > 0)  {
+                studentUserRepository.updateUserPointsById(challengeSubmission.getStudentUser().getId(), 50l);
+            }
+        }
     }
 
     private void expirePendingChallengeInvites(Challenge challenge) {

@@ -1,5 +1,6 @@
 .main-section {
-    background: #E6F2FF;;
+    background: #E6F2FF;
+    height: 100vh;
 }
 
 .main-section .head-text {
@@ -104,8 +105,7 @@
 
   .about-card {
     height: 245px !important;
-    width: 258px !important;
-    
+    width: 258px !important; 
   }
 
 
@@ -128,4 +128,78 @@
     color: #fff !important;
     text-decoration: none;
   }
-  
+
+  .about-body {
+    margin-top: 100px;
+    padding-left: 48px;
+    padding-right: 48px;
+  }
+
+  .testimonials-section .users {
+    margin-top: 320px;
+  } 
+
+  .how-it-works-body {
+    margin-top: 103px;
+  }
+
+  .main-section .content p {
+    font-weight: 500;
+  }
+
+
+  .footer-section {
+    padding: 48px 16px;
+  }
+
+
+  @media only screen and (max-width: 600px) {
+    .about-card {
+      width: 348px !important; 
+    }
+
+    .about-body {
+      margin-top: 30px;
+      padding-left: 28px;
+      padding-right: 28px;
+    }
+
+    .testimonials-section .users {
+      margin-top: 70px;
+    } 
+
+    .how-it-works-body {
+      margin-top: 30px;
+    }
+
+    .main-section {
+      height: 80vh;
+    }
+
+    .main-section .content p {
+      font-weight: 400;
+    }
+
+    .how-it-works .secondary-text {
+      font-size: 24px;
+    }
+
+    .engage-img-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .engage-body h5, .engage-body p {
+      margin: 0 16px;
+      padding: 16px 30px;
+    }
+
+    .engage-body h5 {
+      margin-bottom: 16px;
+      padding: 48px 48px 0 30px;
+    }
+
+    .footer-section {
+      padding: 48px 48px;
+    }
+  }

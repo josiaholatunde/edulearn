@@ -140,27 +140,27 @@ const CERTIFICATION_FORM_MODE = {
 
                       {
                         user && user.socialProfile && user.socialProfile.githubUrl && (<div className="d-flex align-items-center mb-2">
-                          <i class="bi bi-github mr-2"></i>
+                          <i className="bi bi-github mr-2"></i>
                           <a href={user.socialProfile.githubUrl} className="links-font-size">{user.socialProfile.githubUrl}</a>
                         </div>)
                       }
                       {
                         user && user.socialProfile && user.socialProfile.linkedInUrl && (<div className="d-flex align-items-center mb-2">
-                          <i class="bi bi-linkedin mr-2"></i>
+                          <i className="bi bi-linkedin mr-2"></i>
                           <a href={user.socialProfile.linkedInUrl} className="links-font-size">{user.socialProfile.linkedInUrl}</a>
                         </div>)
                       }
 
                       {
                         user && user.socialProfile && user.socialProfile.twitterUrl && (<div className="d-flex align-items-center mb-2">
-                          <i class="bi bi-twitter mr-2"></i>
+                          <i className="bi bi-twitter mr-2"></i>
                           <a href={user.socialProfile.twitterUrl} className="links-font-size">{user.socialProfile.twitterUrl}</a>
                         </div>)
                       }
 
                       {
                         user && user.socialProfile && user.socialProfile.discordUrl && (<div className="d-flex align-items-center mb-2">
-                          <i class="bi bi-discord mr-2"></i>
+                          <i className="bi bi-discord mr-2"></i>
                           <a href={user.socialProfile.discordUrl} className="links-font-size">{user.socialProfile.discordUrl}</a>
                         </div>)
                       }

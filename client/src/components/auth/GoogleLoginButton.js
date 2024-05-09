@@ -12,7 +12,8 @@ const GoogleLoginButton = ({ handleSuccess, handleFailure }) => {
     // });
 
     return (
-        <GoogleLogin
+        <div style={{ marginRight: '95px'}}>
+            <GoogleLogin
             width='24px'
             clientId={clientId}
             onSuccess={handleSuccess}
@@ -22,9 +23,10 @@ const GoogleLoginButton = ({ handleSuccess, handleFailure }) => {
             responseType="id_token"
             render={renderProps => (
                 // <BiGoogle className="google-icon pointer" onClick={renderProps.onClick} />
-                <i className="bi bi-google google-icon pointer" style={{ display: 'inline', fontSize: '24px', width: '28px' }} onClick={renderProps.onClick} ></i>
+                <i className="bi bi-google google-icon pointer g_id_signin" style={{ display: 'inline', fontSize: '24px', width: '28px' }} onClick={renderProps.onClick} ></i>
             )}
-        />
+            />
+        </div>
     );
 };
 

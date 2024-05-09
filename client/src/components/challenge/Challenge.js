@@ -97,7 +97,8 @@ const Challenge = ({ history, loading, total, challenges }) => {
             participantType: challengeMode,
             totalParticipants: selectedOnlineUsersId.length,
             challengeUsers: selectedOnlineUsersId || [],
-            category: 'random'
+            category: 'random',
+            createdBy: 'STUDENT_USER'
         }
         setCreateChallengeLoader(true)
         setTimeout(() => {

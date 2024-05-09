@@ -65,6 +65,9 @@ public class Challenge extends BaseAuditableModel {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private StudentUser studentUser;
 
+    @Column(name = "winner_status_decided", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean winnerStatusDecided;
+
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL })
     @JoinTable(name = "challenge_questions", joinColumns = @JoinColumn(name = "challenge_id"),
     inverseJoinColumns = @JoinColumn(name = "question_id"))
