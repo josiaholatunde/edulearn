@@ -108,23 +108,26 @@ public class ChallengeServiceImpl implements ChallengeService  {
         if (challengeRepository.existsByTitle(challengeDTO.getTitle())) throw new BadRequestException("Challenge title has been taken");
     }
 
-    private void saveChallengeAnswers(Challenge challenge, ChallengeDTO challengeDTO) {
-        for (Question question: challenge.getChallengeQuestions()) {
-            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
-                List<MultipleChoiceOption> optionAnswers = challengeDTO.getOptionAnswers().get(question.getTitle());
-                if (optionAnswers != null && !optionAnswers.isEmpty()) {
-                    List<MultipleChoiceAnswer> multipleChoiceAnswers = optionAnswers.stream()
-                            .map(optionAnswer -> MultipleChoiceAnswer.builder()
-                                    .option(optionAnswer)
-                                    .question(question.getMultipleChoiceQuestion())
-                                    .build())
-                            .collect(Collectors.toList());
+    @Override
+    @Transactional
+    public ChallengeDTO editChallengeAndQuestions(ChallengeDTO challengeDTO) {
+        Challenge challenge = challengeRepository.findById(challengeDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
 
-                    question.getMultipleChoiceQuestion().getAnswers().addAll(multipleChoiceAnswers);
-                    questionRepository.save(question);
-                }
-            }
-        }
+        updateChallenge(challengeDTO, challenge);
+
+        saveChallengeQuestions(challenge, challengeDTO);
+
+        return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void updateChallenge(ChallengeDTO challengeDTO, Challenge challenge) {
+        challenge.setTitle(challengeDTO.getTitle());
+        challenge.setCategory(challengeDTO.getCategory());
+        challenge.setParticipantType(challengeDTO.getParticipantType());
+        challenge.setDuration(challengeDTO.getDuration());
+        challenge.setLevel(challengeDTO.getLevel());
+        challenge.setInstruction(challengeDTO.getInstruction());
+        challengeRepository.save(challenge);
     }
 
     private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {

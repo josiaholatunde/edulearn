@@ -12,6 +12,7 @@ import QuestionsList from './components/question/QuestionsList';
 import AddChallenge from './components/challenge/AddChallenge';
 import LeaderboardList from './components/leaderboard/LeaderboardList';
 import CategoryList from './components/categories/CategoryList';
+import EditChallenge from './components/challenge/EditChallenge';
 
 
 
@@ -29,6 +30,7 @@ function AuthenticatedApp({ history}) {
             <PrivateRoute path="/categories" exact component={CategoryList} />
             <PrivateRoute path="/challenges" exact component={ChallengeList} />
             <PrivateRoute path="/challenges/add" exact component={AddChallenge} />
+            <PrivateRoute path="/challenges/:challengeId/edit" exact component={EditChallenge} />
             <PrivateRoute path="/questions" exact component={QuestionsList} />
             <PrivateRoute path="/settings" exact component={Settings} />
             <PrivateRoute component={NotFound} />

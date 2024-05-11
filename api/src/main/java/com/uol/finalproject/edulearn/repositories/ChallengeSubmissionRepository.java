@@ -23,14 +23,15 @@ public interface ChallengeSubmissionRepository extends JpaRepository<ChallengeSu
 
     Optional<ChallengeSubmission> findFirstByChallengeOrderByScoreDesc(Challenge challenge);
 
-    @Query("SELECT cs FROM ChallengeSubmission cs " +
-            "JOIN (SELECT cs2.studentUser as studentUser, MAX(cs2.score) as maxScore " +
-            "      FROM ChallengeSubmission cs2 " +
-            "      WHERE cs2.challenge = ?1 " +
-            "      GROUP BY cs2.studentUser) csMax " +
-            "ON cs.studentUser = csMax.studentUser AND cs.score = csMax.maxScore " +
-            "WHERE cs.challenge = ?1 ORDER BY cs.score DESC")
-    Page<ChallengeSubmission> findTopChallengeSubmissionByChallengeOrderByScoreDesc(Challenge challenge, Pageable pageable);
+    @Query(value="SELECT id, student_user_id, score " +
+            "FROM (" +
+            "    SELECT cs.*, ROW_NUMBER() OVER (PARTITION BY cs.student_user_id ORDER BY cs.score DESC) AS submission_rank " +
+            "    FROM challenge_submissions cs " +
+            "    WHERE cs.challenge_id=?1 " +
+            ") rankedSubmissions " +
+            "WHERE submission_rank=1 and student_user_id IS NOT NULL " +
+            "ORDER BY rankedSubmissions.score DESC", nativeQuery = true)
+    Page<Tuple> findTopChallengeSubmissionByChallengeOrderByScoreDesc(long challengeId, Pageable pageable);
 
 
     @Query(value = "SELECT COALESCE(COUNT(DISTINCT cs.challenge_id), 0) AS total_challenges, \n" +

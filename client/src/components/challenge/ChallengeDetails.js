@@ -59,11 +59,12 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
         } 
-        if (!!challenge) {
+        if (!!challengeDetail) {
             setChallenge(challengeDetail)
             setQuestions(challengeDetail?.challengeQuestions || [])
             let challengeDurationMilliSeconds = (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000)
             if (challengeDetail?.duration) {
+                console.log('duration ', challengeDetail?.duration)
                 challengeDurationMilliSeconds = parseInt(challengeDetail?.duration) * 60 * 1000;
             }
             setChallengeEndDate(Date.now() + challengeDurationMilliSeconds)

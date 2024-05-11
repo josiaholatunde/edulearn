@@ -56,23 +56,23 @@ export const getChallenges = ({ page, size, createdBy, title, category }) => dis
 }
 
 
-export const getChallengeDetails = (challengeId) => dispatch => {
+export const getChallengeDetails = (challengeId) => async dispatch => {
     dispatch(showLoading())
-    setTimeout(async() => {
-        try {
-            
-            const { data } = await axios.get(`/challenges/${challengeId}`)
-            if (data) {
-                console.log('immm after call', data)
-                dispatch(handleChallengeDetail(data?.data))
-                dispatch(hideLoading())
-            }
-        } catch (error) {
+   
+    try {
+        
+        const { data } = await axios.get(`/challenges/${challengeId}`)
+        if (data) {
+            console.log('immm after call', data)
+            dispatch(handleChallengeDetail(data?.data))
             dispatch(hideLoading())
-            let errorMessage = error.response && error.response.data.message;
-            // showNotification('danger', errorMessage || 'Error occurred while retrieving challenge details')
         }
-    }, 1000)
+    } catch (error) {
+        dispatch(hideLoading())
+        let errorMessage = error.response && error.response.data.message;
+        // showNotification('danger', errorMessage || 'Error occurred while retrieving challenge details')
+    }
+
 }
 
 
@@ -110,6 +110,28 @@ export const createChallenge = (challengeRequest, callBack) => dispatch => {
                 console.log('immm after call', data)
                 const challengeId = data?.data?.id
                 dispatch(hideLoading())
+                if (callBack) callBack(challengeId)
+            }
+        } catch (error) {
+            dispatch(hideLoading())
+            let errorMessage = error.response && error.response.data.message;
+            showNotification('danger', errorMessage || 'Error occurred while creating challenge')
+        }
+    }, 1000)
+}
+
+
+export const editChallenge = (challengeRequest, callBack) => dispatch => {
+    dispatch(showLoading())
+    setTimeout(async() => {
+        try {
+            
+            const { data } = await axios.put(`admin/challenges/${challengeRequest?.id}`, challengeRequest)
+            if (data) {
+                console.log('immm after call', data)
+                const challengeId = data?.data?.id
+                dispatch(hideLoading())
+                dispatch(handleChallengeDetail(null))
                 if (callBack) callBack(challengeId)
             }
         } catch (error) {

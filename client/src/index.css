@@ -530,6 +530,11 @@ iframe[title='Sign in with Google Button'] {
   display: none;
 }
 
+.cta-btn,.learn-more-btn {
+  width: 145px !important;
+  height: 46px !important;
+}
+
 @media only screen and (max-width: 600px) {
   
 
@@ -564,10 +569,7 @@ iframe[title='Sign in with Google Button'] {
     display: none;
   }
 
-  .cta-btn,.learn-more-btn {
-    width: 115px !important;
-    height: 46px !important;
-  }
+ 
 
 
 

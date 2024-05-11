@@ -11,6 +11,7 @@ import com.uol.finalproject.edulearn.repositories.ChallengeRepository;
 import com.uol.finalproject.edulearn.repositories.ChallengeSubmissionRepository;
 import com.uol.finalproject.edulearn.repositories.StudentUserRepository;
 import com.uol.finalproject.edulearn.services.LeaderboardService;
+import jakarta.persistence.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.uol.finalproject.edulearn.specifications.StudentUserSpecification.buildSearchPredicate;
@@ -52,11 +54,14 @@ public class LeaderboardServiceImpl implements LeaderboardService {
     public Page<StudentUserDTO> getLeaderBoardForChallenge(long challengeId) {
         Challenge challenge = challengeRepository.findById(challengeId).orElseThrow(() -> new ResourceNotFoundException("Invalid challenge id"));
         PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<ChallengeSubmission> challengeSubmissions = challengeSubmissionRepository.findTopChallengeSubmissionByChallengeOrderByScoreDesc(challenge, pageRequest);
+        Page<Tuple> challengeSubmissions = challengeSubmissionRepository.findTopChallengeSubmissionByChallengeOrderByScoreDesc(challenge.getId(), pageRequest);
         List<StudentUserDTO> studentUserDTOS = challengeSubmissions.stream().map(submission -> {
-            StudentUserDTO studentUserDTO = StudentUserDTO.fromStudentUser(submission.getStudentUser());
-            studentUserDTO.setPoints(String.valueOf(submission.getScore()));
+            float score = submission.get(2, Float.class);
+            StudentUser studentUser = studentUserRepository.findById(submission.get(1, Long.class)).orElseThrow(() -> new ResourceNotFoundException("One or more invalid user id"));
+            StudentUserDTO studentUserDTO = StudentUserDTO.fromStudentUser(studentUser);
+            studentUserDTO.setPoints(String.valueOf(score));
             return studentUserDTO;
+
         }).collect(Collectors.toList());
         return new PageImpl<>(studentUserDTOS, pageRequest,  challengeSubmissions.stream().count());
     }

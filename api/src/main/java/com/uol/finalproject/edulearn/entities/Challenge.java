@@ -24,6 +24,9 @@ public class Challenge extends BaseAuditableModel {
 
     private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String instruction;
+
     private String category;
 
     @Enumerated(EnumType.STRING)
