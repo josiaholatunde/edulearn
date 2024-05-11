@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Limit;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -30,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,13 +49,9 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final AlgorithmChallengeServiceImpl algorithmChallengeService;
     private final MultipleChoiceChallengeServiceImpl multipleChoiceChallengeService;
     private final StompNotificationService stompNotificationService;
-    private final MultipleChoiceOptionRepository multipleChoiceOptionRepository;
-    private final AlgorithmQuestionRepository algorithmQuestionRepository;
-    private final AlgorithmQuestionExampleRepository algorithmQuestionExampleRepository;
-    private final AlgorithmSolutionRepository algorithmSolutionRepository;
-    private final MultipleChoiceQuestionRepository multipleChoiceQuestionRepository;
-    private final MultipleChoiceAnswerRepository multipleChoiceAnswerRepository;
     private final QuestionService questionService;
+
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
@@ -110,23 +108,26 @@ public class ChallengeServiceImpl implements ChallengeService  {
         if (challengeRepository.existsByTitle(challengeDTO.getTitle())) throw new BadRequestException("Challenge title has been taken");
     }
 
-    private void saveChallengeAnswers(Challenge challenge, ChallengeDTO challengeDTO) {
-        for (Question question: challenge.getChallengeQuestions()) {
-            if (question.getType() == QuestionType.MULTIPLE_CHOICE) {
-                List<MultipleChoiceOption> optionAnswers = challengeDTO.getOptionAnswers().get(question.getTitle());
-                if (optionAnswers != null && !optionAnswers.isEmpty()) {
-                    List<MultipleChoiceAnswer> multipleChoiceAnswers = optionAnswers.stream()
-                            .map(optionAnswer -> MultipleChoiceAnswer.builder()
-                                    .option(optionAnswer)
-                                    .question(question.getMultipleChoiceQuestion())
-                                    .build())
-                            .collect(Collectors.toList());
+    @Override
+    @Transactional
+    public ChallengeDTO editChallengeAndQuestions(ChallengeDTO challengeDTO) {
+        Challenge challenge = challengeRepository.findById(challengeDTO.getId()).orElseThrow(() -> new ResourceNotFoundException("Challenge with id was not found"));
 
-                    question.getMultipleChoiceQuestion().getAnswers().addAll(multipleChoiceAnswers);
-                    questionRepository.save(question);
-                }
-            }
-        }
+        updateChallenge(challengeDTO, challenge);
+
+        saveChallengeQuestions(challenge, challengeDTO);
+
+        return ChallengeDTO.fromChallenge(challenge);
+    }
+
+    private void updateChallenge(ChallengeDTO challengeDTO, Challenge challenge) {
+        challenge.setTitle(challengeDTO.getTitle());
+        challenge.setCategory(challengeDTO.getCategory());
+        challenge.setParticipantType(challengeDTO.getParticipantType());
+        challenge.setDuration(challengeDTO.getDuration());
+        challenge.setLevel(challengeDTO.getLevel());
+        challenge.setInstruction(challengeDTO.getInstruction());
+        challengeRepository.save(challenge);
     }
 
     private Challenge saveChallengeQuestions(Challenge challenge, ChallengeDTO challengeDTO) {
@@ -307,6 +308,22 @@ public class ChallengeServiceImpl implements ChallengeService  {
 
         challengeRepository.incrementSubmissions(challenge.getId());
         challenge.setSubmissions(challenge.getSubmissions() + 1);
+        
+        assignUserPointsForIndividualChallenge(challenge, challengeSubmission);
+    }
+
+    private void assignUserPointsForIndividualChallenge(Challenge challenge, ChallengeSubmission challengeSubmission) {
+        if (challenge.getCreatedBy() == RoleType.ADMIN) {
+            Optional<ChallengeSubmission> challengeSubmissionOptional = challengeSubmissionRepository.findFirstByChallengeOrderByScoreDesc(challenge);
+            if (challengeSubmissionOptional.isPresent()) {
+                ChallengeSubmission topSubmission = challengeSubmissionOptional.get();
+                if (challengeSubmission.getScore() >= topSubmission.getScore() || challengeSubmission.getScore() > 0) {
+                    studentUserRepository.updateUserPointsById(challengeSubmission.getStudentUser().getId(), challengeSubmission.getScore() >= topSubmission.getScore() ? 100L : 50L);
+                }
+            } else if (challengeSubmission.getScore() > 0)  {
+                studentUserRepository.updateUserPointsById(challengeSubmission.getStudentUser().getId(), 50l);
+            }
+        }
     }
 
     private void expirePendingChallengeInvites(Challenge challenge) {

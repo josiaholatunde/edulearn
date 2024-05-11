@@ -28,22 +28,22 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
 
     return (
         <Fragment>
-            <div className='row mt-0 main-section ml-0 pl-0' style={{ height: '100vh' }}>
+            <div className='row mt-0 main-section ml-0 pl-0'>
                 <div className='col-lg-12 pl-0 h-100 w-100'>
                     <div className='content d-flex flex-column justify-content-center align-items-center h-100'>
                         <div className='d-flex justify-content-center flex-column align-items-center'>
                             <div className={`head-text text-center ${showHeaderAnimation ? 'head-text-animation': ''}`} style={{ width: '70%', color: 'var(--Grey-grey-500, #333)', fontWeight: '700'}}>
                                 <TypingAnimation />
                             </div>
-                            <p className='my-5' style={{ width: '80%', fontSize: '18px', fontWeight: '500', color: 'var(--Grey-grey-500, #333)' }}>Learning is made easy with different ways to upskill through practical and fun challenges.Dive into interactive challenges, compete with peers, and embark on a journey of knowledge discovery like never before. Join us today and start mastering computer science in an exciting new way.</p>
+                            <p className='my-5' style={{ width: '80%', fontSize: '18px', color: 'var(--Grey-grey-500, #333)' }}>Learning is made easy with different ways to upskill through practical and fun challenges.Dive into interactive challenges, compete with peers, and embark on a journey of knowledge discovery like never before. Join us today and start mastering computer science in an exciting new way.</p>
                             <div className='btn-container'>
                                 <button className='btn secondary-btn cta-btn' onClick={() => routeToPath(history, '/register')}>
-                                    <i class="bi bi-person-plus-fill mr-2"></i>
+                                    <i className="bi bi-person-plus-fill mr-2"></i>
                                     Sign up
                                 </button>
-                                <button className='btn btn-white-custom ml-3 cta-btn' onClick={() => routeToPath(history, '/register')}>
+                                <button className='btn btn-white-custom ml-3 learn-more-btn' onClick={() => routeToPath(history, '/register')}>
                                     <span>Learn More</span>
-                                    <i class="bi bi-arrow-up-right ml-4"></i>
+                                    <i className="bi bi-arrow-up-right ml-3"></i>
                                 </button>
                             </div>
                         </div>
@@ -60,7 +60,7 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
             <AboutUs history={history} />
             <HowItWorks />
             <UserTestimonials />
-            <div className='footer-section py-5 px-3 text-center text-white' style={{ background: '#00346b', height: '400px'}}>
+            <div className='footer-section text-center text-white' style={{ background: '#00346b', minHeight: '400px'}}>
                 <div className='row'>
                     <div className='col-md-3'>
                         <div className='logo-text' style={{ fontWeight: '700', fontSize: '35px'}}>EduLearn</div>
@@ -88,7 +88,7 @@ const LandingPage = ({ history, user, challengeInvites, challengeSummary }) => {
                             </li>
 
                             <li className='d-flex'>
-                                <i class="bi bi-geo-alt-fill mr-2"></i>
+                                <i className="bi bi-geo-alt-fill mr-2"></i>
                                 <div>Leicester, United Kingdom </div>
                             </li>
                         </ul>

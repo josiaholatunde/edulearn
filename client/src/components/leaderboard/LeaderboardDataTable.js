@@ -45,6 +45,7 @@ const LeaderboardDataTable = ({ users, currentPage, setCurrentPage, loading, tot
               total: totalItems
              }} 
             loading={loading}
+            scroll={{ x: 600 }}
              
         />
         </div>

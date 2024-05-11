@@ -35,7 +35,7 @@ function App({ history }) {
        
           <Navbar  />
           <Notification />
-          {/* <WebSocket history={history} />     */}
+          <WebSocket history={history} />    
           <MainApplicationRoutes />
           {/* <ApplicationFooter /> */}
       </Router>

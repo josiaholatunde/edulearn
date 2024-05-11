@@ -38,6 +38,7 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
     private final CodeJudgeRestService codeJudgeRestService;
     private final PythonParserExecutorServiceImpl pythonParserExecutorService;
     private final JavascriptParserExecutorServiceImpl javascriptParserExecutorService;
+    private final JavaParserExecutorServiceImpl javaParserExecutorService;
 
     @Override
     public ChallengeSubmissionDTO saveChallengeQuestionResponses(ChallengeSubmission challengeSubmission, Challenge challenge, ChallengeUserResponse challengeUserResponse) throws Exception {
@@ -141,7 +142,7 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new ResourceNotFoundException("Invalid question id"));
         switch (language) {
             case JAVA:
-                return appendMainMethodToUserSolution(question.getAlgorithmQuestion(), userSolution);
+                return javaParserExecutorService.appendMainMethodToUserSolution(question.getAlgorithmQuestion(), userSolution);
             case PYTHON:
                 return pythonParserExecutorService.appendMainMethodToUserSolution(question.getAlgorithmQuestion(), userSolution);
             case JAVASCRIPT:
@@ -149,71 +150,5 @@ public class AlgorithmChallengeServiceImpl implements ChallengeEvaluatorService 
             default:
                 throw new BadRequestException("Language is not currently supported");
         }
-    }
-
-    private List<Pair<AlgorithmQuestionExample, String>> appendMainMethodToUserSolution(AlgorithmQuestion question, String userSolution) throws Exception {
-        ParseResult<CompilationUnit> cu = new JavaParser().parse(userSolution);
-
-        cu.getResult().orElseThrow(() -> new AlgorithmQuestionResultException("Failed to parse user solution"));
-
-        List<Pair<AlgorithmQuestionExample, String>> allExamplesForCodeJudge = new ArrayList<>();
-
-        // Add example input arguments
-        for (AlgorithmQuestionExample example : question.getExamples()) {
-            ParseResult<CompilationUnit> cuExample = new JavaParser().parse(userSolution);
-            CompilationUnit compilationUnitExample = cuExample.getResult().orElseThrow(() -> new Exception("Failed to parse user solution"));
-
-            TypeDeclaration<?> mainClass = compilationUnitExample.getClassByName("Main")
-                    .orElseThrow(() -> new AlgorithmQuestionResultException("Main class not found", example.getId()));
-
-            MethodDeclaration mainMethodExample = new MethodDeclaration();
-            mainMethodExample.setName("main");
-            mainMethodExample.addModifier(Modifier.publicModifier().getKeyword());
-            mainMethodExample.addModifier(Modifier.staticModifier().getKeyword());
-            mainMethodExample.setType(void.class);
-            mainMethodExample.addParameter("String[]", "args");
-
-            BlockStmt mainMethodBodyExample = new BlockStmt();
-
-            // Add necessary imports
-            compilationUnitExample.addImport("java.util.*");
-            compilationUnitExample.addImport("java.lang.System");
-
-            // Create variables
-            mainMethodBodyExample.addStatement("Main soln = new Main();");
-
-            // Add parameters
-            for (Map.Entry<String, Object> entry : example.getInputArguments().entrySet()) {
-                String paramName = entry.getKey();
-                String paramValue = entry.getValue().toString();
-                mainMethodBodyExample.addStatement(String.format("var %s = %s;", paramName, paramValue));
-            }
-
-            // Add method call
-            mainMethodBodyExample.addStatement(String.format("var actualResult = soln.%s(%s);", question.getMethodName(), String.join(",", example.getInputArguments().keySet())));
-
-            StringBuilder conditionalStatement = new StringBuilder();
-            conditionalStatement.append("if (actualResult.getClass().isArray()) {");
-            conditionalStatement.append("    if (actualResult.getClass().getComponentType().isArray()) {"); // Check if it's a multi-dimensional array
-            conditionalStatement.append("        System.out.println(\"IsCorrect = \" + Arrays.deepEquals((Object[]) actualResult, " + example.getOutput() + "));");
-            conditionalStatement.append("    } else {");
-            conditionalStatement.append("        System.out.println(\"IsCorrect = \" + Arrays.equals((Object[]) actualResult, " + example.getOutput() + "));"); // For single-dimensional arrays
-            conditionalStatement.append("    }");
-            conditionalStatement.append("    System.out.println(\"UserOutput = \" + Arrays.deepToString((Object[]) actualResult));");
-            conditionalStatement.append("} else {");
-            conditionalStatement.append("    System.out.println(\"IsCorrect = \" + actualResult.equals(" + example.getOutput() + "));");
-            conditionalStatement.append("    System.out.println(\"UserOutput = \" + actualResult);");
-            conditionalStatement.append("}");
-
-            mainMethodBodyExample.addStatement(conditionalStatement.toString());
-
-
-            mainMethodExample.setBody(mainMethodBodyExample);
-            mainClass.addMember(mainMethodExample);
-
-            allExamplesForCodeJudge.add(Pair.of(example, compilationUnitExample.toString()));
-        }
-        log.info("print statement {} {}", allExamplesForCodeJudge);
-        return allExamplesForCodeJudge;
     }
 }

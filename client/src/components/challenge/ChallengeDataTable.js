@@ -60,6 +60,7 @@ const ChallengeDataTable = ({ challenges, currentPage, setCurrentPage, loading, 
               total: totalItems
              }}  
              loading={loading}
+             scroll={{ x: 600 }}
         />
         </div>
     </div>

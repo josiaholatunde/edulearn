@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect, useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { submitChallengeResponse } from '../../redux/actions/challengeActions';
+import { getChallengeDetails, submitChallengeResponse } from '../../redux/actions/challengeActions';
 import questionBank from '../../utils/questions';
 import { showNotification } from '../../utils/showNotification';
 import ChallengeCompletionModal from '../challenge/ChallengeCompletionModal';
@@ -40,14 +40,16 @@ const AlgorithmChallengeAttemptDetails = ({ history, challengeDetail, challengeR
     };
 
     const populateUserCodeInput = (question) => {
-        let userCodeInput = localStorage.getItem(`${question.id}-${language}`)
-        if (!userCodeInput || userCodeInput == 'null') {
-            if (language === supportedLanguages.JAVASCRIPT) userCodeInput = question?.javascriptSampleCode
-            else if (language === supportedLanguages.JAVA) userCodeInput = question?.javaSampleCode
-            else if (language === supportedLanguages.PYTHON) userCodeInput = question?.pythonSampleCode
-            else userCodeInput = question?.pythonSampleCode
+        if (question?.id) {
+            let userCodeInput = localStorage.getItem(`${question.id}-${language}`)
+            if (!userCodeInput || userCodeInput == 'null') {
+                if (language === supportedLanguages.JAVASCRIPT) userCodeInput = question?.javascriptSampleCode
+                else if (language === supportedLanguages.JAVA) userCodeInput = question?.javaSampleCode
+                else if (language === supportedLanguages.PYTHON) userCodeInput = question?.pythonSampleCode
+                else userCodeInput = question?.pythonSampleCode
+            } 
+            setUserCodeInput(userCodeInput)
         } 
-        setUserCodeInput(userCodeInput)
     }
 
     const storeUserCodeInLocalStorage = () => {
@@ -55,20 +57,29 @@ const AlgorithmChallengeAttemptDetails = ({ history, challengeDetail, challengeR
     }
 
     useEffect(() => {
-        const questionId = pathParams?.id;
-        const question = challengeDetail?.challengeQuestions[0]?.algorithmQuestion
-        setQuestion(question)
-        setQuestionLevel(challengeDetail?.challengeQuestions[0]?.level)
-        populateUserCodeInput(question)
-
-        if (challengeResult?.userOutput) {
-            setUserCodeOutput(challengeResult?.userOutput)
+        const challengeId = pathParams?.id;
+        if (!question?.id && challengeId) {
+            dispatch(getChallengeDetails(challengeId))
         }
+    }, [question?.id]) 
 
-        if (!!queryParams.get('mode')) {
-            setChallengeMode(queryParams.get('mode'))
+    useEffect(() => {
+        console.log('challenge detail ', challengeDetail)
+        if (challengeDetail && challengeDetail?.challengeQuestions && challengeDetail?.challengeQuestions?.length > 0) {
+            const question = challengeDetail?.challengeQuestions[0]?.algorithmQuestion
+            setQuestion(question)
+            setQuestionLevel(challengeDetail?.challengeQuestions[0]?.level)
+            populateUserCodeInput(question)
+
+            if (challengeResult?.userOutput) {
+                setUserCodeOutput(challengeResult?.userOutput)
+            }
+
+            if (!!queryParams.get('mode')) {
+                setChallengeMode(queryParams.get('mode'))
+            }
+            if (queryParams.get('tab') == 'solution') setActiveTab('solution')
         }
-        if (queryParams.get('tab') == 'solution') setActiveTab('solution')
     }, [language, challengeDetail?.title, challengeResult?.score])
 
     const handleRunCode = () => {

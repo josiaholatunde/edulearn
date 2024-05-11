@@ -32,7 +32,7 @@ const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
     const levelPercentage = convertToPercentage(user?.level || 10)
 
     return <Fragment>
-        <div className='row mt-5'>
+        <div className='profile-container row mt-5'>
             <div className='col-lg-5 pl-0'>
                 <div className='content d-flex align-items-center'>
                     {
@@ -47,46 +47,50 @@ const HomePage = ({ history, user, challengeInvites, challengeSummary }) => {
                     }
                     <div className='greeting-container ml-3 text-left'>
                         <div style={{ fontSize: '24px', fontWeight: '500' }}>Good { getTimeOfDay()}, <SunShine /></div>
-                        <div style={{ fontSize: '30px', fontWeight: '700', fontStyle: 'normal' }}> {user?.fullName} </div>
+                        <div className='user-name' style={{ fontWeight: '700', fontStyle: 'normal' }}> {user?.fullName} </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div className='row mt-5'>
-            <div className='col-lg-8 pr-0'>
-                <div className='row pr-0'>
-                    <div className='col-lg-3 card p-3 text-left'>
-                        <div style={{ fontSize: '20px', fontWeight: '500' }}>Challenges</div>
+        <div className='home-section row mt-5'>
+            <div className='col-lg-8 pr-0 pl-0'>
+                <div className='row mx-0 px-0'>
+                    <div className='col-lg-12 px-0 mx-0'>
+                        <div className='challenge-card-container row'>
+                            <div className='challenge-card card p-3 text-left'>
+                                <div style={{ fontSize: '20px', fontWeight: '500' }}>Challenges</div>
 
-                        <div className='mt-3 total-challenges' style={{ fontSize: '48px', fontWeight: '700' }}>{ challengeSummary?.totalChallenges || 0 }</div>
-                        <div className='d-flex justify-content-between mt-3'>
-                            <div>
-                                <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesWon || 0 }</span>
-                                <div style={{ color: '#28A745', fontSize: '14px'}}>Won</div>
+                                <div className='mt-3 total-challenges' style={{ fontSize: '48px', fontWeight: '700' }}>{ challengeSummary?.totalChallenges || 0 }</div>
+                                <div className='d-flex justify-content-between mt-3'>
+                                    <div>
+                                        <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesWon || 0 }</span>
+                                        <div style={{ color: '#28A745', fontSize: '14px'}}>Won</div>
+                                    </div>
+
+                                    <div>
+                                        <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesLost || 0}</span>
+                                        <div style={{ color: '#E57373', fontSize: '14px'}}>Lost</div>
+                                    </div>
+                                </div>
                             </div>
-
-                            <div>
-                                <span style={{ fontWeight: '600' }}>{ challengeSummary?.totalChallengesLost || 0}</span>
-                                <div style={{ color: '#E57373', fontSize: '14px'}}>Lost</div>
+                            <div className='current-level ml-3 card p-3 text-left'>
+                                <h5>Current Level</h5>
+                                <div className="progress mt-4 mb-2">
+                                    <div className="progress-bar text-cool" role="progressbar" style={{ "width": `${levelPercentage}%`, background: '#007BFF' }} aria-valuenow={levelPercentage} aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                                <span> Level {user?.level}</span>
                             </div>
                         </div>
-                    </div>
-                    <div className='col-lg-8 current-level ml-3 card p-3 text-left'>
-                        <h5>Current Level</h5>
-                        <div className="progress mt-4 mb-2">
-                            <div className="progress-bar text-cool" role="progressbar" style={{ "width": `${levelPercentage}%`, background: '#007BFF' }} aria-valuenow={levelPercentage} aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                        <span> Level {user?.level}</span>
                     </div>
                 </div>
-                <div className='row mt-4 pr-0'>
-                    <div className='col-lg-11 card pl-3 py-3 text-left mr-0'>
+                <div className='history-container row'>
+                    <div className='col-lg-11 card pl-3 py-3 text-left'>
                         <History />
                     </div>
                 </div>
 
             </div>
-            <div className='col-lg-4'>
+            <div className='streak-container col-lg-4'>
                 <div className='row card p-3'>
                     <div className='col-lg-12'>
                         <h5>Streak</h5>

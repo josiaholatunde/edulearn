@@ -59,11 +59,12 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         if (challengeIdentifier && mode) {
             getChallenge(challengeIdentifier)
         } 
-        if (!!challenge) {
+        if (!!challengeDetail) {
             setChallenge(challengeDetail)
             setQuestions(challengeDetail?.challengeQuestions || [])
             let challengeDurationMilliSeconds = (DEFAULT_CHALLENGE_DURATION_MINUTES * 60 * 1000)
             if (challengeDetail?.duration) {
+                console.log('duration ', challengeDetail?.duration)
                 challengeDurationMilliSeconds = parseInt(challengeDetail?.duration) * 60 * 1000;
             }
             setChallengeEndDate(Date.now() + challengeDurationMilliSeconds)
@@ -122,7 +123,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
         } loading={loading} setLoading={setLoading} challenge={challengeDetail}  />
         else {
             return type === QUESTION_TYPE.MULTIPLE_CHOICE ? (<MultipleChoiceQuestionDetail userResponse={userResponse} setUserResponses={setUserResponses} challengeId={challengeDetail?.id} questions={challengeDetail?.challengeQuestions} setShowSuccessModal={setShowSuccessModal} setStartChallenge={setStartChallenge} />) 
-            : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} setStartChallenge={setStartChallenge} />)
+            : (<AlgorithmQuestionDetail questions={challengeQuestions} history={history} challengeMode={mode} setStartChallenge={setStartChallenge} challengeId={challengeDetail?.id} />)
         }
     }
 
@@ -163,7 +164,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
                         </div>
                         <div className="col-lg-4">
                             {
-                                (startChallenge && !!challengeEndDate && type == QUESTION_TYPE.MULTIPLE_CHOICE) &&  (<div className="count-down-timer w-100 h-100 d-flex justify-content-end align-items-center">
+                                (startChallenge && !!challengeEndDate && type == QUESTION_TYPE.MULTIPLE_CHOICE) && challengeDetail?.challengeQuestions?.length > 0 && (<div className="count-down-timer w-100 h-100 d-flex justify-content-end align-items-center">
                                     <Countdown date={challengeEndDate} renderer={renderer} onComplete={handleOnComplete} />
                                 </div>)
                             }

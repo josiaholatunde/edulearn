@@ -26,4 +26,6 @@ public interface ChallengeService {
     ChallengeDTO handleChallengeUpdate(long challengeId, ChallengeDTO challengeDTO);
 
     ChallengeDTO createChallengeAndQuestions(ChallengeDTO challengeDTO);
+
+    ChallengeDTO editChallengeAndQuestions(ChallengeDTO challengeDTO);
 }

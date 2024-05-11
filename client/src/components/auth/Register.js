@@ -6,6 +6,8 @@ import { redirectUserBackToHomeIfLoggedIn } from "../../utils/api";
 import { showNotification } from "../../utils/showNotification";
 import isValidEmail from "../../utils/EmailUtil";
 import PasswordRequirements from "./PasswordRequirements";
+import GoogleLoginButton from "./GoogleLoginButton";
+import { handleGoogleLogin } from "../../redux/actions/oauthActions";
 
 class Register extends Component {
   state = {
@@ -37,7 +39,12 @@ class Register extends Component {
     this.setState({ [name]: value });
   }
 
-  
+  login = tokenResponse => {
+    const { history, handleGoogleLogin } = this.props
+    handleGoogleLogin(tokenResponse, history)
+  }
+
+
   registerUser = (e) => {
     e.preventDefault();
     const { firstName, lastName, email, password, confirmPassword, showModal } = this.state;
@@ -155,7 +162,7 @@ class Register extends Component {
               <div className="social-login">
                 <i className="bi bi-github github-icon"></i>
                 <i className="bi bi-facebook facebook-icon mx-3 my-3"></i>
-                <i className="bi bi-google google-icon"></i>
+                <GoogleLoginButton handleSuccess={this.login} />
               </div>
               <div className="or-signup-section">
                 <hr className="custom-header"/> <span style={{ fontSize: '14px'}}>or signup with</span><hr className="custom-header"/>
@@ -299,4 +306,4 @@ const mapStateToProps = ({ loading }) => {
     }
 }
 
-export default connect(mapStateToProps, { handleRegisterUser })(withRouter(Register));
+export default connect(mapStateToProps, { handleRegisterUser, handleGoogleLogin })(withRouter(Register));

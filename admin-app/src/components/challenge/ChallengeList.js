@@ -37,7 +37,7 @@ const mapChallenge = (challenges, currentPage, pageSize) => {
 }
 
 
-const ChallengeList = ({ loading, total, challenges }) => {
+const ChallengeList = ({ loading, total, challenges, history }) => {
     const [showQuestionStyle, setShowQuestionStyle] = useState(false)
     const [createChallengeLoader, setCreateChallengeLoader] = useState(false)
     const [title, setTitle] = useState('')
@@ -107,7 +107,7 @@ const ChallengeList = ({ loading, total, challenges }) => {
                     <span className="spinner-border spinner-border-lg mr12" id="login-btn-loader" role="status" aria-hidden="true"></span>
                 </div>) : (
                     challenges && challenges.length > 0 ? 
-                        challenges.map((challenge, index) => (<Challenge challenge={challenge} isFirstInRow={isFirstInRow(index)} />)) : (
+                        challenges.map((challenge, index) => (<Challenge history={history} challenge={challenge} isFirstInRow={isFirstInRow(index)} />)) : (
                             <div className='col-lg-12 d-flex text-center p-3'>No challenge was found...Kindly create a challenge or change your filter</div>
                         ))
                 }

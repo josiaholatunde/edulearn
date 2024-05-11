@@ -21,6 +21,12 @@ public class AdminController {
     }
 
 
+    @PutMapping("/challenges/{challengeId}")
+    public ChallengeDTO adminEditChallenge(@RequestBody ChallengeDTO challengeDTO) {
+        return challengeService.editChallengeAndQuestions(challengeDTO);
+    }
+
+
     @PostMapping("/questions")
     public QuestionDTO adminCreateQuestion(@RequestBody QuestionDTO questionDTO) {
         return questionService.createQuestion(questionDTO);

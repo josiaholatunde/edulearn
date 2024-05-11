@@ -24,6 +24,9 @@ public class Challenge extends BaseAuditableModel {
 
     private String title;
 
+    @Column(columnDefinition = "LONGTEXT")
+    private String instruction;
+
     private String category;
 
     @Enumerated(EnumType.STRING)
@@ -64,6 +67,9 @@ public class Challenge extends BaseAuditableModel {
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private StudentUser studentUser;
+
+    @Column(name = "winner_status_decided", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean winnerStatusDecided;
 
     @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.ALL })
     @JoinTable(name = "challenge_questions", joinColumns = @JoinColumn(name = "challenge_id"),

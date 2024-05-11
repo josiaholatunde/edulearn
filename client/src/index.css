@@ -482,6 +482,78 @@ iframe[title='Sign in with Google Button'] {
   
 }
 
+.about-body p {
+  width: 90%;
+}
+
+.how-it-works-body p {
+  width: 350px;
+}
+
+.how-it-works .main-content div {
+  font-size: 44px;
+}
+
+.about-section .empowering-learning {
+  font-size: 44px;
+}
+
+.engage-body p {
+  width: 350px;
+}
+
+.track-progress-body p {
+  width: 350px;
+}
+
+.testimonials-section .main-text {
+  font-size: 44px;
+}
+
+.testimonials-section .users p {
+  width: 582px;
+}
+
+.about-section {
+  padding: 48px 16px;
+}
+
+.track-progress-body {
+  margin-top: 113px;
+}
+
+.g_id_signin > div > div:first-child{
+  display: none;
+}
+
+.g_id_signin > div > div:last-child{
+  display: none;
+}
+
+.cta-btn,.learn-more-btn {
+  width: 145px !important;
+  height: 46px !important;
+}
+
+.home-section .challenge-card {
+  width: 30%;
+  padding: 15px;
+  text-align: left;
+}
+
+.home-section .current-level {
+  width: 60%;
+  margin-left: 15px;
+}
+
+.history-container {
+  margin-top: 24px;
+}
+
+.profile-container .greeting-container .user-name {
+  font-size: 30px;
+}
+
 
 
 @media only screen and (max-width: 600px) {
@@ -496,4 +568,124 @@ iframe[title='Sign in with Google Button'] {
     height: 100%;
     width: 100%;
   }
+
+  .about-body p {
+    width: 100%;
+  }
+
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  .main-section .head-text {
+    font-size: 36px !important;
+  }
+
+  .how-it-works-body p {
+    width: 100%;
+  }
+
+  .how-it-works .main-content div {
+    font-size: 30px;
+    display: none;
+  }
+
+ 
+
+
+
+  .about-section .empowering-learning {
+    font-size: 32px;
+    width: 100%;
+  }
+
+  .custom-btn-sm {
+    width: 128px;
+    font-size: 15px;
+  }
+
+  .about-section .card-section {
+    margin-top: 40px;
+  }
+
+  .interactive-challenges {
+    margin-top: 24px;
+  }
+
+  .engage-body p {
+    width: 90%;
+  }
+
+  .track-progress-body {
+    margin-top: 20px;
+  }
+
+  .track-progress-body p {
+    width: 100%;
+  }
+
+  .testimonials-section .main-text {
+    font-size: 32px;
+  }
+
+  .testimonials-section .users p {
+    width: 80%;
+  }
+
+  .about-section {
+    padding-right: 0 !important;
+  }
+
+  .footer-section .logo-text {
+    text-align: left;
+  }
+
+  .features-img-container img {
+    height: 100%;
+    width: 100%;
+  }
+
+  .learn-more-btn {
+    width: 148px !important;
+    height: 46px !important;
+  }
+
+  .home-section .challenge-card-container {
+    justify-content: center;
+  }
+
+  .home-section .challenge-card {
+    width: 77%;
+    padding: 15px;
+    text-align: left;
+  }
+
+  .home-section .current-level {
+    width: 80%;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    margin-left: 0px;
+  }
+
+  .history-container {
+    padding-left: 48px;
+    padding-right: 48px;
+    margin-top: 0;
+  }
+
+  .profile-container {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  .profile-container .greeting-container .user-name {
+    font-size: 24px;
+  }
+
+  .streak-container {
+    padding-left: 48px !important;
+    padding-right: 48px !important; 
+    margin-top: 32px;
+  }
+
 }
