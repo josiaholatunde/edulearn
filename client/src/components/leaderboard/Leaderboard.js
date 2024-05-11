@@ -84,7 +84,7 @@ const Leaderboard = ({ leaderboardUsers, loading, total }) => {
                     </ul>
                 </div>
             </div>
-            <div className='row' style={{ marginTop: '100px'}}>
+            <div className='row hide-on-mobile' style={{ marginTop: '100px'}}>
                 <div className={`col-md-12 d-flex justify-content-between`}>
                     {
                        leaderboardUsers && leaderboardUsers.length >= 2 && (<div className='card text-left' style={{ background: '#7EEA7E', height: '200px', width: '328px', outline: 'none', border: '1px solid #7EEA7E'}}>

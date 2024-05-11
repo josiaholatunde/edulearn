@@ -73,6 +73,7 @@ const ChallengeInviteDataTable = ({ history, challenges, currentPage, setCurrent
               total: totalItems
              }}  
              loading={loading}
+             scroll={{ x: 600 }}
         />
         </div>
     </div>
