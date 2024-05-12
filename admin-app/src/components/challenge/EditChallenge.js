@@ -121,7 +121,7 @@ const EditChallenge = ({ history, loading, challengeDetails }) => {
 
         if (optionType === 'RADIO' && checked) {
             setCheckedOption(value);
-        } else if (optionType === 'CHECKBOX') {
+        } else if (optionType === 'CHECK_BOX') {
             const updatedOptions = options.map((option, currentIndex) =>
                 currentIndex === optionIndex ? { ...option, checked: checked } : option
             );
@@ -132,6 +132,8 @@ const EditChallenge = ({ history, loading, challengeDetails }) => {
     const clearInput = () => {
         setQuestionTitle('')
         setQuestionCategory('')
+        setOptionType('RADIO')
+        setDifficultyLevel('EASY')
         setOptions([{ value: '', title: '' }])
     }
 
@@ -221,7 +223,7 @@ const EditChallenge = ({ history, loading, challengeDetails }) => {
                     onChange={({ target }) => setOptionType(target.value)}
                 >
                     <option value="RADIO">Radio</option>
-                    <option value="CHECKBOX">Checkbox</option>
+                    <option value="CHECK_BOX">Checkbox</option>
                 </select>
 
                 <span className="text-danger"> {errors[questionCategory] && errors[questionCategory]}</span>

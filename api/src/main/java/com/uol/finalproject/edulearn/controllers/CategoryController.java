@@ -27,7 +27,8 @@ public class CategoryController {
     }
 
     @PostMapping
-    public Category createCategory(@RequestBody Category category) {
+    public Category createCategory(@RequestBody Category category) throws Exception {
+
         return categoryService.createCategory(category);
     }
 
