@@ -46,7 +46,7 @@ public class SecurityConfig {
     private String[] allowedOrigins;
 
     private final String[] APPLICATION_OPEN_APIS = new String[] {
-            "/api/auth/login", "/api/auth/register"
+            "/api/auth/login", "/api/auth/register", "/api/health-check"
     };
     private static final String[] AUTH_WHITELIST = {
             "/swagger-resources/**",

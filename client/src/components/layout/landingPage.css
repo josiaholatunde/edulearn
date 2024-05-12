@@ -105,7 +105,8 @@
 
   .about-card {
     height: 245px !important;
-    width: 258px !important; 
+    width: 47% !important; 
+    /* width: 258px !important;  */
   }
 
 

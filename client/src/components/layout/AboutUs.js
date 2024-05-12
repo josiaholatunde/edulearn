@@ -19,14 +19,14 @@ const AboutUs = ({ history }) => {
         </div> 
      
      <div className='about-body row'>
-          <div className='col-lg-7 col-md-12 text-justify'>
+          <div className='col-lg-6 col-md-12 text-justify'>
              <p >At Edulearn, we are passionate about revolutionizing the way people learn and engage with computer science concepts. Our mission is to make learning accessible, enjoyable, and rewarding for everyone, regardless of their background or experience level.Our platform offers a rich array of innovative features designed to inspire curiosity, foster creativity, and ignite a passion for learning.At Edulearn, we're not just transforming education—we're shaping the future. Join us on this exciting journey and discover the endless possibilities that await. Together, let's unlock the power of learning and empower people around the world to reach their full potential.</p>
              <button className='custom-btn-sm custom-primary mt-4' onClick={() => routeToPath(history, '/register')}>Get Started
                  <i className="bi bi-arrow-up-right ml-2"></i>
              </button>
          </div>
 
-         <div className='card-section col-lg-5 col-sm-12'>
+         <div className='card-section col-lg-6 col-sm-12'>
              <div className='row mx-0'>
                  <div className='col-md-12 d-flex flex-row justify-content-between flex-wrap px-0'>
                      <div className='card about-card text-left p-3' style={{ background: '#FFF2E8', border: '1px solid #FFF2E8'}}>
