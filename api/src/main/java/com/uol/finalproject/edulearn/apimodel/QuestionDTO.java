@@ -23,6 +23,8 @@ public class QuestionDTO {
 
     private String category;
 
+    private String imageUrl;
+
     private QuestionType type;
 
     private String difficultyLevel;
