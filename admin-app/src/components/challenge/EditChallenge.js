@@ -28,6 +28,7 @@ const EditChallenge = ({ history, loading, challengeDetails }) => {
     const [options, setOptions] = useState([{ value: '', title: '' }]);
     const [algorithmQuestion, setAlgorithmQuestion] = useState({})
     const [selectedQuestions, setSelectedQuestions] = useState([])
+    const [stateChallengeId, setStateChallengeId] = useState('')
 
     const DEFAULT_CHALLENGE_INSTRUCTION = 'Welcome to the Time Complexity Quiz! Test your knowledge of algorithm time complexities with these multiple-choice questions. Choose the correct answer for each question and see how well you understand.';
 
@@ -48,15 +49,12 @@ const EditChallenge = ({ history, loading, challengeDetails }) => {
 
 
     useEffect(() => {
-        if (queryParams.has('type')) {
-            setType(queryParams.get('type'))
-        }
         if (challengeDetails == null && challengeId) {
             dispatch(getChallengeDetails(challengeId))
         }
         
         console.log('challenge details', challengeDetails)
-        if (challengeDetails && challengeDetails?.title != title) {
+        if (challengeDetails && challengeDetails?.id != null) {
             setTitle(challengeDetails?.title)
             setType(challengeDetails?.type)
             setInstruction(challengeDetails?.instruction || DEFAULT_CHALLENGE_INSTRUCTION)
@@ -65,8 +63,9 @@ const EditChallenge = ({ history, loading, challengeDetails }) => {
             setDifficultyLevel(challengeDetails?.difficultyLevel)
             setDuration(challengeDetails?.duration || 5)
             setQuestionList(challengeDetails?.challengeQuestions || [])
+            setStateChallengeId(challengeDetails?.id)
         }
-    }, [challengeDetails?.id, challengeId, queryParams])
+    }, [challengeDetails?.id, challengeId])
 
 
     const setErrorIfEmpty = (name, value) => {
