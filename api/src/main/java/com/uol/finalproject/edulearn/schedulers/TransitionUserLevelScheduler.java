@@ -14,7 +14,7 @@ public class TransitionUserLevelScheduler {
 
     private final StudentUserRepository studentUserRepository;
 
-    @Scheduled(fixedDelay = 180000)
+    @Scheduled(fixedDelay = 900000)
     public void scheduleFixedRateWithInitialDelayTask() {
         log.info("About to execute transition user level scheduler");
         studentUserRepository.updateAllUsersLevelByPoints();
