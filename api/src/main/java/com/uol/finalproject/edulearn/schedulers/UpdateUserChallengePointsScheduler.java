@@ -20,7 +20,7 @@ public class UpdateUserChallengePointsScheduler {
     private final ChallengeRepository challengeRepository;
     private final StudentUserRepository studentUserRepository;
 
-    @Scheduled(fixedDelay = 50000)
+    @Scheduled(fixedDelay = 900000)
     public void scheduleFixedRateWithInitialDelayTask() {
         log.info("About to execute transition user challenge points scheduler");
 
