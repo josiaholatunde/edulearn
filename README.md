@@ -1,23 +1,41 @@
 # EduLearn 
-Server - Spring Boot (Java)
-Client - React (Javascript)
-
 An Educational Learning Platform for Computer Science Concepts aims to provide an engaging and competitive environment for users to enhance their understanding of computer science through interactive games and online code challenges. The platform encourages learning by enabling users to compete individually or against others in various types of questions, spanning both multiple-choice and algorithmic problem-solving styles.
 
-## Features (Role based)
-Admin
-- **User Authentication**: Admins can log in and monitor election.
-- **View Profile**: Admins can see election poll results grouped by constituencies as well as overall results via a Bar chart one the election ends.
-- **Manage Questions and Competitions**: Admins can start, and stop elections. Only after starting an election would candidates be able to vote for candidates
+## Technologies
+Server - Spring Boot (Java)
+Student User Client Application - React (Javascript)
+Admin/Lecturer Client Application - React (Javascript)
+Database - MySQL
+Deployment - AWS EC2 (Spring Server), AWS Amplify (React Application), AWS RDS (MySQL Instance), Namecheap (Domain Name Provider)
 
-- User
-- **User Authentication**: Register and log in securely to vote.
-- **Participate in Challenges**: Users can scan a unique 8 digit QR code or manually enter their unique voter code.
-- **Participate in Competitions**: Users can only vote for candidates within their constituencies and can not edit their votes after voting.
-- **ACL**: Only logged in voters can vote and view the voters dashboard. 
-Also, logged in voters can only see the option to vote for candidates within their constituency
-- 
-- 
+
+
+## Application Features/Requirements
+**Essential**
+- User Registration/Login - Users can easily register and log in to their accounts to access the platform's features.
+- Admin/Lecturer Login- Admin/Lecturer can log in to their accounts to manage questions, competitions or application settings.
+- Profile View - Users can view their personalised profiles showcasing their history of answered questions, badges earned, competitions won, and streaks.
+- Leaderboard View- Users can view the leaderboard section which displays top users based on answered questions, departments, date joined, etc.
+- Question Management - Admin can upload/create questions, assigning levels and difficulty ratings to each question.
+- Competition Management - Admin can create specific competitions with unique challenges, allowing users to join and participate.
+- Question Categories - Admin/Lecturer can manage question categories
+- Configuration/System Settings- Admin/Lecturer can configure time limits for competitions/challenges, enable/disable leaderboard visibility for competitions, configure community rules.
+- Game Types - Users can participate in two types of games: competitive sessions against other users with timed questions and individual challenges
+- Learning Support - Users can view recommended solutions, receive feedback on compilation/runtime errors (for algorithm style questions), and access links to relevant learning resources
+
+**Recommended**
+- User/Admin Login - Additional functionality to login via OAuth/university login credentials
+- User Progression Levels: Upon registration, users are automatically allocated an initial level of 10 and have the opportunity to advance to higher levels (1) by either answering a designated minimum of questions or achieving success in competitions.
+- Admins can upload/create questions, assigning levels and difficulty ratings
+- Admins can create specific competitions with unique challenges, allowing users to join and participate
+
+**Optional**
+- Multiple-choice style questions provide options to display answers immediately after each question or at the end
+- A dedicated leaderboard section displays top users based on criteria such as answered questions, number of competitions, departments, current student year, date joined, etc
+Badges, achievements, and rewards for user accomplishments to incentivize participation and engagement.
+- Integration with social media platforms to allow users to share their achievements and invite friends to join the platform.
+
+
 **General**
 - The application handles validation form checks. Appropriate errors are displayed on the client when user enters an incorrect or invalid value
 - The application also ensures that the voter id is unique during registration, validates that the user's date of birth isn't in
@@ -30,20 +48,12 @@ no party fails to secure majority win in the number of seats.
 
 ## Installation
 
-1. **Import the database schema file (ojo9.sql) into your preferred database**: This should create an MySQL database with the required 
-default records. The default schema file contains 2 voters with user login credentials below
+1. **Clone a working copy of the repository on SVN**
+**Import the database schema file (ojo9_edulearn.sql) into your preferred database**: This should create a MySQL database with the required 
+schema and default admin user credentials. This should also create an admin with user login credentials below
 ```agsl
-username/voter_id: kola@gmail.com
+username: admin@edulearn.ng
 password: password
-
-username/voter_id: amao@gmail.com
-password: password
-```
-
-This should also create an admin with user login credentials below
-```agsl
-username: election@shangrila.gov.sr
-password: shangrila2024$
 ```
 2. **Database Setup**: Verify that the database credentials in the `application.properties` file within the `api` directory are valid.
    If not, kindly modify the database name, database user credentials as required. The application by default connects to a MySQL database
@@ -60,6 +70,8 @@ password: shangrila2024$
     d. Execute the command `mvn clean install spring-boot:run -DskipTests` in the project directory.
 2. **Access the Application**: Open a web browser and visit `http://localhost:3000` to use the application. 
 Also verify that the server is running on port 9990 (default configurable port in application.properties)
+
+4. **Deployment**: The application has also been deployed to the internet and can be accessed through https://edulearn-uol.com/ (Edulearn Student User Application) and https://admin.edulearn-uol.com (Edulearn Admin Application)
  
 
 ## Dependencies

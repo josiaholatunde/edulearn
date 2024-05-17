@@ -77,7 +77,9 @@ public class AlgorithmQuestion extends BaseAuditableModel {
 
     public static AlgorithmQuestion fromAlgorithmQuestionDTO(AlgorithmQuestionDTO algorithmQuestionDTO) {
         AlgorithmQuestion algorithmQuestion = AlgorithmQuestion.builder().build();
-        BeanUtils.copyProperties(algorithmQuestionDTO, algorithmQuestion);
+        if (algorithmQuestionDTO != null) {
+            BeanUtils.copyProperties(algorithmQuestionDTO, algorithmQuestion);
+        }
         return algorithmQuestion;
     }
 }

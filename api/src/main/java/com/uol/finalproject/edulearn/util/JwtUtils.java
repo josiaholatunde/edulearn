@@ -21,7 +21,7 @@ public class JwtUtils {
     @Value("${auth.jwt-secret:AHHSHSGSGSGSGSSGSGSG}")
     private String jwtSecret;
 
-    @Value("${auth.jwt-expiry-duration:1}")
+    @Value("${auth.jwt-expiry-duration:4}")
     private int jwtExpiryMs;
 
     private static final long TOKEN_VALIDITY_REMEMBER = 2592000000L;

@@ -6,6 +6,8 @@ import com.uol.finalproject.edulearn.entities.enums.QuestionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import java.util.List;
+
 public interface QuestionService {
     Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type);
 
@@ -17,4 +19,6 @@ public interface QuestionService {
 
 
     Question createQuestionAndReturnEntity(QuestionDTO questionDTO);
+
+    List<Question> assignRandomQuestionsByQuestionType(QuestionType questionType);
 }
