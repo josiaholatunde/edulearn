@@ -61,7 +61,7 @@ const ChallengeLobby = ({ history, challengeParticipants, challengeDetail, loadi
             id: challengeId
         }
         dispatch(handleChallengeUpdate(request, (res) => {
-            setTimeout(() => redirectToChallengeDetails(), 1551.5)
+            setTimeout(() => redirectToChallengeDetails(), 1551.05)
         }))
         
     }
