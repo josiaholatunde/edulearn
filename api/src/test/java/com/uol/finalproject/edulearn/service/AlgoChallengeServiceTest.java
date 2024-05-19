@@ -84,7 +84,7 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
                     put("nums", "[ 2,7,11,15 ]");
                     put("target", 9);
                 }})
-                .output("new int[] {0, 1 }")
+                .output("[0, 1 ]")
                 .build();
         questionExample.setId(2l);
         doReturn(Optional.ofNullable(Question.builder()
@@ -115,11 +115,11 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
                 "class Main { public int[][] merge(int[][] intervals) { if (intervals == null || intervals.length == 0) return new int[][] {}; Arrays.sort(intervals, (a, b) -> a[0] - b[0]); for (int[] res: intervals) System.out.println(Arrays.toString(res)); List<int[]> result = new ArrayList<>(); result.add(intervals[0]); for (int i = 1; i < intervals.length; i++) { int[] currentInterval = intervals[i]; int[] prevInterval = result.get(result.size() - 1); if (currentInterval[0] <= prevInterval[1]) { int[] newInterval = new int[] { prevInterval[0], Math.max(prevInterval[1], currentInterval[1]) }; result.set(result.size() - 1, newInterval); } else result.add(currentInterval); } return result.toArray(new int[result.size()][2]); } }"
                 );
 
-        String jsonArray = "[{\"name\":\"nums\",\"type\":\"intArray\"}]";
+        String jsonArray = "[{\"name\":\"nums\",\"type\":\"multiIntArray\"}]";
         AlgorithmQuestionExample questionExample = AlgorithmQuestionExample
                 .builder()
                 .inputArguments(new LinkedHashMap<>() {{
-                    put("nums", "new int[][] { new int[] {1, 3}, new int[] {2, 6}, new int[] {8, 10}, new int[] {15, 18} }");
+                    put("nums", "[ [1, 3], [2, 6], [8, 10], [15, 18] ]");
                 }})
                 .output("new int[][] { new int[] {1, 6}, new int[] {8, 10}, new int[] {15, 18} }")
                 .build();

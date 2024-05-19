@@ -70,25 +70,12 @@ public class JavaParserExecutorServiceImpl {
                 mainMethodBodyExample.addStatement(String.format("var %s = %s;", paramName, paramValue));
             }
 
-            // Add method call
-            mainMethodBodyExample.addStatement(String.format("var actualResult = soln.%s(%s);", question.getMethodName(), String.join(",", example.getInputArguments().keySet())));
+            String methodCall = String.format("Object actualResult = soln.%s(%s);", question.getMethodName(), String.join(", ", example.getInputArguments().keySet()));
+            mainMethodBodyExample.addStatement(methodCall);
 
-            StringBuilder conditionalStatement = new StringBuilder();
-            conditionalStatement.append("if (actualResult.getClass().isArray()) {");
-            conditionalStatement.append("  if (actualResult.getClass().getComponentType().isPrimitive()) {");
-            conditionalStatement.append("    int[] expectedOutput = (int[])" + example.getOutput() + ";");
-            conditionalStatement.append("    System.out.println(\"IsCorrect = \" + Arrays.equals(actualResult, expectedOutput));");
-            conditionalStatement.append("  } else {");
-            conditionalStatement.append("    System.out.println(\"IsCorrect = \" + Arrays.deepEquals((Object[]) actualResult," + example.getOutput()+ "));");
-            conditionalStatement.append("  }");
-            conditionalStatement.append("  System.out.println(\"UserOutput = \" + Arrays.deepToString((Object[]) actualResult));");
-            conditionalStatement.append("} else {");
-            conditionalStatement.append("    System.out.println(\"IsCorrect = \" + actualResult.equals(" + example.getOutput() + "));");
-            conditionalStatement.append("  System.out.println(\"UserOutput = \" + actualResult);");
-            conditionalStatement.append("}");
-
-            mainMethodBodyExample.addStatement(conditionalStatement.toString());
-
+            // Conditional output based on the type of actualResult
+            String outputHandling = generateOutputHandlingCode(example);
+            mainMethodBodyExample.addStatement(outputHandling);
 
             mainMethodExample.setBody(mainMethodBodyExample);
             mainClass.addMember(mainMethodExample);
@@ -97,6 +84,23 @@ public class JavaParserExecutorServiceImpl {
         }
         log.info("print statement {} {}", allExamplesForCodeJudge);
         return allExamplesForCodeJudge;
+    }
+
+
+    private String generateOutputHandlingCode(AlgorithmQuestionExample example) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("if (actualResult instanceof int[]) {\n");
+        builder.append("    int[] expectedOutput = (int[]) " + example.getOutput() + ";\n");
+        builder.append("    System.out.println(\"IsCorrect = \" + Arrays.equals((int[]) actualResult, expectedOutput));\n");
+        builder.append("    System.out.println(\"UserOutput = \" + Arrays.toString((int[]) actualResult));\n");
+        builder.append("} else if (actualResult instanceof Object[]) {\n");
+        builder.append("    System.out.println(\"IsCorrect = \" + Arrays.deepEquals((Object[]) actualResult, new Object[] {" + example.getOutput() + "}));\n");
+        builder.append("    System.out.println(\"UserOutput = \" + Arrays.deepToString((Object[]) actualResult));\n");
+        builder.append("} else {\n");
+        builder.append("    System.out.println(\"IsCorrect = \" + actualResult.equals(" + example.getOutput() + "));\n");
+        builder.append("    System.out.println(\"UserOutput = \" + actualResult);\n");
+        builder.append("}");
+        return builder.toString();
     }
 
     private String convertToIntArray(String input) {

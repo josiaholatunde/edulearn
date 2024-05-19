@@ -58,6 +58,7 @@ password: password
 2. **Database Setup**: Verify that the database credentials in the `application.properties` file within the `api` directory are valid.
    If not, kindly modify the database name, database user credentials as required. The application by default connects to a MySQL database
    and has the dependency for the required driver to connect to the database.
+   Also,if you are running the server locally, ensure that this config app.cors.allowedOrigins contains the url of the client e.g. http://localhost:3000 (for the client or admin react app) else the server would return CORS error which is a standard for cross origin requests
 
 3. **Install/Download Dependencies and Start Application**: Please check the usage section for more details.
    N.B. The application uses Maven package manager, so ensure that it is installed before starting up the application.
@@ -70,6 +71,7 @@ password: password
     d. Execute the command `mvn clean install spring-boot:run -DskipTests` in the project directory.
 2. **Access the Application**: Open a web browser and visit `http://localhost:3000` to use the application. 
 Also verify that the server is running on port 9990 (default configurable port in application.properties)
+To build a production version of the react app, please run the command `npm run build`
 
 4. **Deployment**: The application has also been deployed to the internet and can be accessed through https://edulearn-uol.com/ (Edulearn Student User Application) and https://admin.edulearn-uol.com (Edulearn Admin Application)
  

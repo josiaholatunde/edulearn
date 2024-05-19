@@ -108,17 +108,6 @@ const SignIn = ({ history, location, loading }) => {
                     Login
                 </button>
               </div>
-              <div className="or-signup-section">
-                <hr className="custom-header"/> <span style={{ fontSize: '14px'}}>or login with</span><hr className="custom-header"/>
-              </div>
-              <div className="social-login my-3">
-                <i className="bi bi-github github-icon"></i>
-                {/* <GithubLoginButton /> */}
-                <i className="bi bi-facebook facebook-icon mx-3 my-3"></i>
-                {/* <i className="bi bi-google google-icon pointer" onClick={login} ></i> */}
-                <GoogleLoginButton handleSuccess={login} />
-               
-              </div>
               <p>
                 Don't have an account ?
                 <Link to="/register">
