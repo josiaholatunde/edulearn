@@ -19,14 +19,6 @@ const Sidebar = ({ history }) => {
       <div style={{ width: '280px', color: '#fff', padding: '20px 20px 0 20px', height: '100vh' }} className='bg-cool sidebar-container d-flex flex-column justify-content-between' >
         <div className='nav-links'>
             <ul style={{ listStyleType: 'none', padding: 0 , textAlign: 'left'}}>
-            <li className='side-nav-link'> 
-                <NavLink activeclassName='active-link text-cool' className='text-white' to={'/dashboard'}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#fff">
-                        <path d="M13 9V3H21V9H13ZM3 13V3H11V13H3ZM13 21V11H21V21H13ZM3 21V15H11V21H3Z" fill="#fff"/>
-                    </svg>
-                    <span>Dashboard</span>
-                </NavLink>
-            </li>
             <li className='side-nav-link'>
                 <NavLink activeclassName='active-link text-white' to={'/leaderboard'} className='text-white'>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

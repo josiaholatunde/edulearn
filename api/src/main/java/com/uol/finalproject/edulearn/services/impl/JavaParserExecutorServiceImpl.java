@@ -8,6 +8,7 @@ import com.github.javaparser.ast.Modifier;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.stmt.BlockStmt;
+import com.google.gson.Gson;
 import com.uol.finalproject.edulearn.entities.AlgorithmQuestion;
 import com.uol.finalproject.edulearn.entities.AlgorithmQuestionExample;
 import com.uol.finalproject.edulearn.exceptions.AlgorithmQuestionResultException;
@@ -54,7 +55,7 @@ public class JavaParserExecutorServiceImpl {
 
             // Add necessary imports
             compilationUnitExample.addImport("java.util.*");
-            compilationUnitExample.addImport("java.lang.System");
+//            compilationUnitExample.addImport("java.lang.System");
 
             // Create variables
             mainMethodBodyExample.addStatement("Main soln = new Main();");
@@ -66,6 +67,8 @@ public class JavaParserExecutorServiceImpl {
                 String paramValue = entry.getValue().toString();
                 if ("intArray".equals(parameterType)) {
                     paramValue = convertToIntArray(paramValue);
+                } else if ("multiIntArray".equals(parameterType)) {
+                    paramValue = convertToMultiDimensionalIntArray(paramValue);
                 }
                 mainMethodBodyExample.addStatement(String.format("var %s = %s;", paramName, paramValue));
             }
@@ -89,17 +92,21 @@ public class JavaParserExecutorServiceImpl {
 
     private String generateOutputHandlingCode(AlgorithmQuestionExample example) {
         StringBuilder builder = new StringBuilder();
-        builder.append("if (actualResult instanceof int[]) {\n");
-        builder.append("    int[] expectedOutput = (int[]) " + example.getOutput() + ";\n");
-        builder.append("    System.out.println(\"IsCorrect = \" + Arrays.equals((int[]) actualResult, expectedOutput));\n");
-        builder.append("    System.out.println(\"UserOutput = \" + Arrays.toString((int[]) actualResult));\n");
-        builder.append("} else if (actualResult instanceof Object[]) {\n");
-        builder.append("    System.out.println(\"IsCorrect = \" + Arrays.deepEquals((Object[]) actualResult, new Object[] {" + example.getOutput() + "}));\n");
-        builder.append("    System.out.println(\"UserOutput = \" + Arrays.deepToString((Object[]) actualResult));\n");
-        builder.append("} else {\n");
-        builder.append("    System.out.println(\"IsCorrect = \" + actualResult.equals(" + example.getOutput() + "));\n");
-        builder.append("    System.out.println(\"UserOutput = \" + actualResult);\n");
-        builder.append("}");
+        if ("multiIntArray".equals(example.getOutputType())) {
+            String output = convertToMultiDimensionalObjectArray(example.getOutput());
+            builder.append(" if (true) {  System.out.println(\"IsCorrect = \" + Arrays.deepEquals((Object[]) actualResult, new Object[]" + output + "));\n");
+            builder.append("    System.out.println(\"UserOutput = \" + Arrays.deepToString((Object[]) actualResult));\n }");
+        } else if ("intArray".equals(example.getOutputType())) {
+            String output = convertToIntArray(example.getOutput());
+            builder.append("if (true) {  int[] expectedOutput = (int[]) " + output + ";\n");
+            builder.append("    System.out.println(\"IsCorrect = \" + Arrays.equals((int[]) actualResult, expectedOutput));\n");
+            builder.append("    System.out.println(\"UserOutput = \" + Arrays.toString((int[]) actualResult));\n }");
+        } else {
+            builder.append("if (true) {\n");
+            builder.append("    System.out.println(\"IsCorrect = \" + actualResult.equals(" + example.getOutput() + "));\n");
+            builder.append("    System.out.println(\"UserOutput = \" + actualResult);\n");
+            builder.append("}");
+        }
         return builder.toString();
     }
 
@@ -112,6 +119,50 @@ public class JavaParserExecutorServiceImpl {
                 .toArray();
 
         return "new int[] { " + Arrays.toString(nums).replaceAll("[\\[\\]]", "") + " }";
+    }
+
+    private String convertToMultiDimensionalIntArray(String input) {
+        Gson gson = new Gson();
+        int[][] result = gson.fromJson(input, int[][].class);
+        StringBuilder sb = new StringBuilder();
+        sb.append("new int[][] {");
+        for (int i = 0; i < result.length; i++) {
+            sb.append(" new int[] { ");
+            for (int j = 0; j < result[i].length; j++) {
+                sb.append(result[i][j]);
+                if (j < result[i].length - 1) {
+                    sb.append(", ");
+                }
+            }
+            sb.append(" }");
+            if (i < result.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append(" }");
+        return sb.toString();
+    }
+
+    private String convertToMultiDimensionalObjectArray(String input) {
+        Gson gson = new Gson();
+        int[][] result = gson.fromJson(input, int[][].class);
+        StringBuilder sb = new StringBuilder();
+        sb.append("{");
+        for (int i = 0; i < result.length; i++) {
+            sb.append(" new int[] { ");
+            for (int j = 0; j < result[i].length; j++) {
+                sb.append(result[i][j]);
+                if (j < result[i].length - 1) {
+                    sb.append(", ");
+                }
+            }
+            sb.append(" }");
+            if (i < result.length - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append(" }");
+        return sb.toString();
     }
 
     private String getInputArgumentType(String paramName, JsonNode methodArguments) {

@@ -8,6 +8,7 @@ import challengeInvitesReducer from './challengeInviteReducer.js'
 import challengeParticipantsReducer from './challengeParticipantsReducer.js'
 import questionReducer from './questionReducer.js'
 import categoryReducer from './categoryReducer.js'
+import applicationSettingReducer from './applicationSettingReducer.js'
 
 
 export default combineReducers({
@@ -19,5 +20,6 @@ export default combineReducers({
     challengeInvites: challengeInvitesReducer,
     challengeParticipants: challengeParticipantsReducer,
     questions: questionReducer,
-    categories: categoryReducer
+    categories: categoryReducer,
+    applicationSettings: applicationSettingReducer
 })

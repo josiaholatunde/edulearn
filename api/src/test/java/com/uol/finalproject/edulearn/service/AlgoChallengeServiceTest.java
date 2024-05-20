@@ -85,6 +85,7 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
                     put("target", 9);
                 }})
                 .output("[0, 1 ]")
+                .outputType("intArray")
                 .build();
         questionExample.setId(2l);
         doReturn(Optional.ofNullable(Question.builder()
@@ -121,7 +122,8 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
                 .inputArguments(new LinkedHashMap<>() {{
                     put("nums", "[ [1, 3], [2, 6], [8, 10], [15, 18] ]");
                 }})
-                .output("new int[][] { new int[] {1, 6}, new int[] {8, 10}, new int[] {15, 18} }")
+                .output("[ [1, 6],[8, 10], [15, 18] ]")
+                .outputType("multiIntArray")
                 .build();
         questionExample.setId(2l);
 

@@ -24,7 +24,6 @@ function AuthenticatedApp({ history}) {
           <Sidebar history={history}/>
           <div className='py-3 px-4' style={{ width: '80%'}}>
           <Switch>
-            <PrivateRoute path='/home' exact component={HomePage} />
             <PrivateRoute path="/dashboard" exact component={HomePage} />
             <PrivateRoute path="/leaderboard" exact component={LeaderboardList} />
             <PrivateRoute path="/categories" exact component={CategoryList} />
