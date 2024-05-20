@@ -53,7 +53,9 @@ public class MultipleChoiceQuestion extends BaseAuditableModel {
 
     public static MultipleChoiceQuestion fromMultipleChoiceQuestionDTO(MultipleChoiceQuestionDTO multipleChoiceQuestionDTO) {
         MultipleChoiceQuestion multipleChoiceQuestion = MultipleChoiceQuestion.builder().build();
-        BeanUtils.copyProperties(multipleChoiceQuestionDTO, multipleChoiceQuestion);
+        if (multipleChoiceQuestionDTO != null) {
+            BeanUtils.copyProperties(multipleChoiceQuestionDTO, multipleChoiceQuestion);
+        }
         return multipleChoiceQuestion;
     }
 }

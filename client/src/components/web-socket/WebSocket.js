@@ -18,23 +18,25 @@ const WebSocketComponent = ({ user }) => {
         stompClient.connect({}, () => {
             console.log('connected')
             const userId = user?.email;
-            stompClient.subscribe(`/topic/user/${userId}/challenge-invite/notification`, (message) => {
-              const notification = JSON.parse(message.body);
-              console.log('Received notification:', notification);
-                showNotification('success', notification?.message);
-            });
-
-            stompClient.subscribe(`/topic/user/${userId}/challenge-started/notification`, (message) => {
-              const challengeNotification = JSON.parse(message.body);
-              console.log('Received challenge started notification:', challengeNotification);
-                const challengeObject = JSON.parse(challengeNotification?.message);
-                routeToPath(history, `/challenge/${challengeObject?.challengeId}/details?type=${challengeObject?.type}&mode=group&showInstruction=false`)
-            });
+            if (!!userId) {
+              stompClient.subscribe(`/topic/user/${userId}/challenge-invite/notification`, (message) => {
+                const notification = JSON.parse(message.body);
+                console.log('Received notification:', notification);
+                  showNotification('success', notification?.message);
+              });
+  
+              stompClient.subscribe(`/topic/user/${userId}/challenge-started/notification`, (message) => {
+                const challengeNotification = JSON.parse(message.body);
+                console.log('Received challenge started notification:', challengeNotification);
+                  const challengeObject = JSON.parse(challengeNotification?.message);
+                  routeToPath(history, `/challenge/${challengeObject?.challengeId}/details?type=${challengeObject?.type}&mode=group&showInstruction=false`)
+              });
+            }
           });
 
 
         return () => {
-            stompClient.disconnect();
+            stompClient?.disconnect();
         };
     }, [user?.email]);
 

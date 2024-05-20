@@ -18,9 +18,6 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
     const editorRef = useRef();
     const wrapper = useRef();
 
-    const handleChange = (editor, data, value) => {
-        onChange(value);
-    };
 
 
   const editorWillUnmount = () => {
@@ -71,7 +68,6 @@ const CodeEditor = ({ language, setLanguage, displayName, value, onChange, examp
             ref={wrapper}
             editorDidMount={(e) => editorRef.current = e}
             editorWillUnmount={editorWillUnmount}
-            onBeforeChange={handleChange}
             value={value}
             className="code-mirror-wrapper"
             options={{

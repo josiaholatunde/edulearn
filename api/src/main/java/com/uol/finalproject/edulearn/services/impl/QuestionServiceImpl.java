@@ -10,6 +10,7 @@ import com.uol.finalproject.edulearn.services.QuestionService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,10 @@ public class QuestionServiceImpl implements QuestionService {
     private final AlgorithmSolutionRepository algorithmSolutionRepository;
     private final ChallengeRepository challengeRepository;
     private final UserChallengeAnswerRepository userChallengeAnswerRepository;
+
+
+    @Value("${default.multiple.choice.questions:10}")
+    private int defaultMultipleChoiceQuestions;
 
     @Override
     public Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type) {
@@ -81,7 +86,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     private void removeQuestionFromChallengeIfExists(Question question) {
-        if (!question.getChallenges().isEmpty()) {
+        if (question != null && !question.getChallenges().isEmpty()) {
             for (Challenge challenge: question.getChallenges()) {
                 challenge.getChallengeQuestions().remove(question);
                 challengeRepository.save(challenge);
@@ -291,5 +296,10 @@ public class QuestionServiceImpl implements QuestionService {
         }
 
         return algorithmQuestion;
+    }
+
+
+    public List<Question> assignRandomQuestionsByQuestionType(QuestionType questionType) {
+        return questionRepository.findRandomQuestionsByType(questionType.toString(), defaultMultipleChoiceQuestions);
     }
 }

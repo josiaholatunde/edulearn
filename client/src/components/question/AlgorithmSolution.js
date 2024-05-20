@@ -29,7 +29,7 @@ const AlgorithmSolution = ({ question: { solutions } }) => {
                             </div>
                         </div>
                         <div className='pt-3'>
-                            <code >{solution?.code}</code>
+                            <pre><code >{solution?.code}</code></pre>
                         </div>
                     </div>
 

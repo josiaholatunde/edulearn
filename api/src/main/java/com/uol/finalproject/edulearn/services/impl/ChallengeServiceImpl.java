@@ -51,8 +51,6 @@ public class ChallengeServiceImpl implements ChallengeService  {
     private final StompNotificationService stompNotificationService;
     private final QuestionService questionService;
 
-    private final ApplicationEventPublisher applicationEventPublisher;
-
     @Value("${default.multiple.choice.questions:10}")
     private int defaultMultipleChoiceQuestions;
 
@@ -249,18 +247,15 @@ public class ChallengeServiceImpl implements ChallengeService  {
     }
 
     private static String deduceChallengeTitle(ChallengeDTO challengeDTO, StudentUser studentUser) {
-        return String.format("%s Random %s Challenge %s", studentUser.getFirstName(), challengeDTO.getParticipantType(), studentUser.getChallenges().size() + 1);
+        return String.format("%s's Random %s Challenge %s", studentUser.getFirstName(), challengeDTO.getParticipantType(), studentUser.getChallenges().size() + 1);
     }
 
     private void assignChallengeQuestions(Challenge challenge) {
         QuestionType questionType = challenge.getType() == ChallengeType.ALGORITHMS ? QuestionType.ALGORITHMS : QuestionType.MULTIPLE_CHOICE;
-        challenge.getChallengeQuestions().addAll(assignQuestionsByQuestionType(questionType));
+        challenge.getChallengeQuestions().addAll(questionService.assignRandomQuestionsByQuestionType(questionType));
         challengeRepository.save(challenge);
     }
 
-    private List<Question> assignQuestionsByQuestionType(QuestionType questionType) {
-        return questionRepository.findAllByTypeOrderByNoOfUsersLikedDesc(questionType, Limit.of(defaultMultipleChoiceQuestions));
-    }
 
     private StudentUser retrieveStudentUser() {
         UserDetails userDetails = userService.getLoggedInUser();

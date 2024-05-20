@@ -40,6 +40,7 @@ public class Question extends BaseAuditableModel {
 
     @ManyToMany(mappedBy = "challengeQuestions")
     @JsonIgnore
+    @Builder.Default
     private List<Challenge> challenges = new ArrayList<>();
 
     @OneToOne(mappedBy = "question", cascade = CascadeType.ALL)

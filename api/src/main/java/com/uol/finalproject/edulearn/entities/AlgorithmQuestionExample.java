@@ -25,6 +25,8 @@ public class AlgorithmQuestionExample extends BaseAuditableModel {
     private String output;
     private String explanation;
 
+    private String outputType;
+
     @Column(name = "input_arguments")
     @Convert(converter = LinkedHashMapConverter.class)
     private LinkedHashMap<String, Object> inputArguments;

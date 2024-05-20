@@ -92,38 +92,15 @@ const ChallengeInvite = ({ history, loading, total, challengeInvites }) => {
         <div className='mt-6 challenge'>
             <div className='challenge-header d-flex justify-content-between'>
                 <h1 className='f-32'>Challenge Invites</h1>
-                <div className="btn-group">
-                    <button type="button" className="btn btn-cool dropdown-toggle" style={{ height: '40px'}} data-bs-toggle="dropdown" aria-expanded="false">
-                        Filter Invites
-                    </button>
-                    <ul className="dropdown-menu">
-                        <li className='pointer' onClick={() => {
-                            setShowQuestionStyle(true)
-                            setChallengeMode(CHALLENGE_MODE.INDIVIDUAL)
-                        }}>
-                            <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
-                               Individual Challenge
-                            </div>
-                        </li>
-                        <li className='pointer' onClick={() => {
-                            setShowOnlineUsers(true)
-                            setChallengeMode(CHALLENGE_MODE.GROUP)
-                        }}>
-                            <div className="dropdown-item form-group mb-3 d-flex flex-column align-items-start">
-                               Group Challenge
-                            </div>
-                        </li>
-                    </ul>
-                    </div>
-                </div>
-                <ChallengeInviteDataTable
-                    challenges={challengeInvites} 
-                    currentPage={page}
-                    setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
-                    loading={loading}
-                    totalItems={total}
-                    history={history}
-                 />  
+            </div>
+            <ChallengeInviteDataTable
+                challenges={challengeInvites} 
+                currentPage={page}
+                setCurrentPage={(pageNumber) => setCurrentPage(pageNumber)}
+                loading={loading}
+                totalItems={total}
+                history={history}
+                />  
         </div>
     )
 }

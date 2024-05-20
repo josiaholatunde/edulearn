@@ -25,6 +25,7 @@ input, select {
 .img-fluid {
   height: 100% !important;
   width: 100% !important;
+  object-fit: cover !important;
 }
 
 .pointer {
@@ -213,12 +214,14 @@ input[type='email'], input[type='password'], .password-input {
   height: 100px;
   width: 100px;
   display: flex;
+  object-fit: cover;
 }
 
 .navbar-img-container {
   height: 30px;
   width: 30px;
   display: flex;
+  object-fit: cover;
 }
 
 .profile-container h5 {
@@ -643,6 +646,7 @@ iframe[title='Sign in with Google Button'] {
   .features-img-container img {
     height: 100%;
     width: 100%;
+    object-fit: cover;
   }
 
   .learn-more-btn {

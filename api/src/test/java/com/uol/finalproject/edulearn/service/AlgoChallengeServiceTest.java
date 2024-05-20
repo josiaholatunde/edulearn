@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,7 +40,7 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
     @Autowired
     private ChallengeRepository challengeRepository;
 
-    @SpyBean
+    @Mock
     private CodeJudgeRestService codeJudgeRestService;
 
     @SpyBean
@@ -77,20 +78,21 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
         algoResponse.put(1l, "class Main { public int[] twoSums(int[] nums, int target) { for (int i = 0; i < nums.length; i++) { for (int j = i + 1; j < nums.length; j++) { if (nums[j] == target - nums[i]) { return new int[] { i, j }; } } } return null; } }\n");
 
         String jsonArray = "[{\"name\":\"nums\",\"type\":\"intArray\"},{\"name\":\"target\",\"type\":\"int\"}]";
+        AlgorithmQuestionExample questionExample = AlgorithmQuestionExample
+                .builder()
+                .inputArguments(new LinkedHashMap<>() {{
+                    put("nums", "[ 2,7,11,15 ]");
+                    put("target", 9);
+                }})
+                .output("[0, 1 ]")
+                .outputType("intArray")
+                .build();
+        questionExample.setId(2l);
         doReturn(Optional.ofNullable(Question.builder()
                 .algorithmQuestion(AlgorithmQuestion.builder()
                         .methodArguments(new ObjectMapper().readTree(jsonArray))
                         .methodName("twoSums")
-                        .examples(List.of(
-                                AlgorithmQuestionExample
-                                        .builder()
-                                        .inputArguments(new LinkedHashMap<>() {{
-                                            put("nums", "[ 2,7,11,15 ]");
-                                            put("target", 9);
-                                        }})
-                                        .output("new int[] {0, 1 }")
-                                        .build())
-                        )
+                        .examples(List.of(questionExample))
                         .build())
                 .build()))
                 .when(questionRepository).findById(anyLong());
@@ -114,13 +116,14 @@ public class AlgoChallengeServiceTest extends BaseIntegrationTest {
                 "class Main { public int[][] merge(int[][] intervals) { if (intervals == null || intervals.length == 0) return new int[][] {}; Arrays.sort(intervals, (a, b) -> a[0] - b[0]); for (int[] res: intervals) System.out.println(Arrays.toString(res)); List<int[]> result = new ArrayList<>(); result.add(intervals[0]); for (int i = 1; i < intervals.length; i++) { int[] currentInterval = intervals[i]; int[] prevInterval = result.get(result.size() - 1); if (currentInterval[0] <= prevInterval[1]) { int[] newInterval = new int[] { prevInterval[0], Math.max(prevInterval[1], currentInterval[1]) }; result.set(result.size() - 1, newInterval); } else result.add(currentInterval); } return result.toArray(new int[result.size()][2]); } }"
                 );
 
-        String jsonArray = "[{\"name\":\"nums\",\"type\":\"intArray\"}]";
+        String jsonArray = "[{\"name\":\"nums\",\"type\":\"multiIntArray\"}]";
         AlgorithmQuestionExample questionExample = AlgorithmQuestionExample
                 .builder()
                 .inputArguments(new LinkedHashMap<>() {{
-                    put("nums", "new int[][] { new int[] {1, 3}, new int[] {2, 6}, new int[] {8, 10}, new int[] {15, 18} }");
+                    put("nums", "[ [1, 3], [2, 6], [8, 10], [15, 18] ]");
                 }})
-                .output("new int[][] { new int[] {1, 6}, new int[] {8, 10}, new int[] {15, 18} }")
+                .output("[ [1, 6],[8, 10], [15, 18] ]")
+                .outputType("multiIntArray")
                 .build();
         questionExample.setId(2l);
 
