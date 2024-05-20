@@ -30,7 +30,7 @@ const ChallengeDetails = ({ history, challengeDetail, challengeResult, loadingCh
     const [challengeEndDate, setChallengeEndDate] = useState(null)
     const [firstTimePageLoad, setFirstTimePageLoad] = useState(true)
     const DEFAULT_CHALLENGE_TITLE = 'Time Complexity Quiz'
-    const DEFAULT_CHALLENGE_DURATION_MINUTES = 1;
+    const DEFAULT_CHALLENGE_DURATION_MINUTES = 15;
 
     const pathParams = useParams();
     const challengeIdentifier = pathParams.identifier;
