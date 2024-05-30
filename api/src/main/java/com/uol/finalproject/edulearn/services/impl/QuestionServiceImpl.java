@@ -42,7 +42,7 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public Page<QuestionDTO> getQuestions(PageRequest pageRequest, QuestionType type) {
         Page<Question> questionPage = type != null ?
-                questionRepository.findAllByTypeOrderByNoOfUsersLikedDesc(type, pageRequest) :
+                questionRepository.findAllByTypeOrderById(type, pageRequest) :
                 questionRepository.findAll(pageRequest);
 
         List<QuestionDTO> questionDTOS = questionPage.getContent()

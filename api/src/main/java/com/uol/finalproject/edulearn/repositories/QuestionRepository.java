@@ -17,6 +17,7 @@ public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     List<Question> findAllByTypeOrderByNoOfUsersLikedDesc(QuestionType questionType, Limit limit);
     Page<Question> findAllByTypeOrderByNoOfUsersLikedDesc(QuestionType questionType, Pageable pageable);
+    Page<Question> findAllByTypeOrderById(QuestionType questionType, Pageable pageable);
 
 
     @Query(value = "SELECT * FROM questions WHERE type=:type ORDER BY RAND() LIMIT :limit", nativeQuery = true)

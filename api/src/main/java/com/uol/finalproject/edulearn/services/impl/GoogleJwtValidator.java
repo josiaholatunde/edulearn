@@ -57,6 +57,9 @@ public class GoogleJwtValidator implements JwtValidator {
             if (!userRepository.existsByUsername(payload.getEmail())) {
                 registerUserIfNotPresent(payload.getEmail(), payload.get("given_name").toString(),  payload.get("family_name").toString());
             }
+            if (studentUserRepository.existsByEmail(payload.getEmail())) {
+                studentUserRepository.updateUserLoginStatus(true, payload.getEmail());
+            }
             return payload.getEmail();
         } catch (IOException e) {
             log.error(e.getMessage(), e);
